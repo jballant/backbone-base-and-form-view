@@ -1,0 +1,116 @@
+<! DOCTYPE html>
+<html>
+<head>
+	<title>Backbone BaseView Table Example</title>
+	<style>
+		#wrapper { margin: 10%; }
+		.form-field-row { float: left; width: 50%; min-width: 430px; }
+		.clear { clear: both; }
+		input[type="text"] { height: 30px; }
+		.output { display: inline-block; }
+	</style>
+	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="wrapper">
+	</div>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+	<!-- load BaseView -->
+	<script type="text/javascript" src="../backbone-baseview.js"></script>
+	<!-- load FormView -->
+	<script type="text/javascript" src="../backbone-formview.js"></script>
+		<script type="text/template" id="form-template">
+		<div data-fields=""></div>
+		<div class="form-actions clear">
+			<button class="btn submit">Save changes</button>
+			<div class="output"></div>
+		</div>
+	</script>
+	<script type="text/javascript">
+		// First create a test model
+		var person = new Backbone.Model({
+				firstName: 'John',
+				lastName: 'Doe',
+				status: 'REG'
+			});
+		// Create a backbone form. For many
+		// cases, extending the FormView isn't
+		// nessecary and just passing options 
+		// works fine.
+		var form = new Backbone.FormView({
+			model: person,
+			templateSrc: $('#form-template').html(),
+			// schema is used to describe the fields
+			schema: {
+				// first name is a simple text input with
+				// a label 'First Name'. It will automatically
+				// be assigned the model attribute firstName
+				// (which we could override with fieldName option)
+				firstName: {
+					type: 'Text',
+					options: { label: 'First Name' }
+				},
+				lastName: {
+					type: 'Text',
+					options : { label: 'Last Name' }
+				},
+				// bio is a textarea, which is a text input
+				// with the elementType option 'textarea'
+				bio: {
+					type: 'Text',
+					options: {
+						elementType: 'textarea',
+						label: 'Biography',
+						placeholder: 'Type here to add a bio.'
+					}
+				},
+				// A list of radio buttons, created from the
+				// possibleVals option. The key is what get's
+				// set on the model, and the value is what
+				// is displayed to the user.
+				gender: {
+					type: 'RadioList',
+					options: {
+						label: 'Gender',
+						possibleVals: {
+							'M' : 'Male',
+							'F' : 'Female'
+						}
+					}
+				},
+				// Select type works like RadioList,
+				// but obviously uses a select element
+				// instead of radio buttons, and has some
+				// different options
+				status: {
+					type: 'Select',
+					options: { 
+						label: 'User Status',
+						placeholder: 'Select status...',
+						possibleVals: {
+							'REG' : 'Registered',
+							'PEN' : 'Pending',
+							'SUS' : 'Suspended',
+							'CLO' : 'Closed'
+						}
+					}
+				}
+			},
+			events: {
+				// The FormView does not presume how to handle submissions,
+				// That's up to the user to set up a template and handle click events.
+				// In a real world situation, this could be used to save the model and
+				// display messages to the user about the save status.
+				'click .submit' : function (e) {
+					e.preventDefault();
+					var output = 'You submitted a model. Here it is, stringified : ' + JSON.stringify(this.model.toJSON());
+					this.$('.output').html(output);
+				}
+			}
+		}).render();
+		$('#wrapper').html(form.$el);
+	</script>
+</body>
+</html>

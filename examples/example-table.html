@@ -1,0 +1,43 @@
+<! DOCTYPE html>
+<html>
+<head>
+	<title>Backbone BaseView Table Example</title>
+	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body>
+	<div id="wrapper">
+	</div>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+	<script type="text/javascript" src="../backbone-baseview.js"></script>
+
+	<!-- Load the example-table.js file which loads all the views used in this demo -->
+	<script type="text/javascript" src="example-table.js"></script>
+	<script type="text/javascript">
+		var who = new Backbone.Collection([
+			{
+				firstName: 'Pete',
+				lastName: 'Townshend'
+			},
+			{
+				firstName: 'Roger',
+				lastName: 'Daltry'
+			},
+			{
+				firstName: 'Keith',
+				lastName: 'Moon'
+			},
+			{
+				firstName: 'John',
+				lastName: 'Entwistle'
+			}
+		]);
+		var table = new TableView({
+			collection: who,
+			className: 'table'
+		}).render();
+		$('#wrapper').html(table.$el);
+	</script>
+</body>
+</html>

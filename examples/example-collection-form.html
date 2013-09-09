@@ -1,0 +1,111 @@
+<! DOCTYPE html>
+<html>
+<head>
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+
+	<title>Backbone BaseView Table Example</title>
+	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+	<style>
+		#wrapper{margin:10%}
+		.row-fields .form-field{display:inline-block;margin-right:10px}
+		.row-fields{float:left}
+		.delete-row{margin-top:24px}
+		.clear{clear:both}
+		input[type=text]{height:28px}
+		.output{display:inline-block}
+	</style>
+</head>
+<body>
+	<!-- Create empty container div -->
+	<div id="wrapper">
+	</div>
+
+	<!-- Dependencies: jQuery, underscore, backbone -->
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+	
+	<!-- load BaseView -->
+	<script type="text/javascript" src="../backbone-baseview.js"></script>
+	<!-- load FormView -->
+	<script type="text/javascript" src="../backbone-formview.js"></script>
+	
+	<!-- create underscore template with simple add and submit buttons -->
+	<script type="text/template" id="form-template">
+	    <h3>Collection Form View Example</h3>
+		<div data-rows=""></div>
+		<div class="form-actions clear">
+			<button class="btn submit">Save changes</button>
+			<button class="btn add">Add User</button>
+			<div class="output"></div>
+		</div>
+	</script>
+	<script type="text/javascript">
+		var users = new Backbone.Collection([
+			{
+				firstName: 'John',
+				lastName: 'Doe',
+				status: 'REG'
+			},
+			{
+				firstName: 'Jane',
+				lastName: 'Brown',
+				status: 'PEN'
+			}
+		]);
+		var form = new Backbone.CollectionFormView({
+			collection: users,
+			templateSrc: $('#form-template').html(),
+			rowSchema: {
+				firstName: {
+					type: 'Text',
+					options: { 
+						label: 'First Name' 
+					}
+				},
+				lastName: {
+					type: 'Text',
+					options : { label: 'Last Name' }
+				},
+				status: {
+					type: 'Select',
+					options: { 
+						label: 'User Status',
+						placeholder: 'Select status...',
+						possibleVals: {
+							'REG' : 'Registered',
+							'PEN' : 'Pending',
+							'SUS' : 'Suspended',
+							'CLO' : 'Closed'
+						}
+					}
+				}
+			},
+			rowOptions: {
+				templateSrc: '<div class="row-fields" data-fields=""></div>' +
+					'<div class="btn delete-row"><i class="icon-trash"></i> Delete</div>',
+				events: {
+					'click .delete-row' : function () {
+						this.parentView.deleteRow(this);
+					}
+				}
+			},
+			events: {
+				'click .add': function (e) {
+					e.preventDefault();
+					this.addRow();
+				},
+				'click .submit' : function (e) {
+					e.preventDefault();
+					var output = '';
+					this.collection.each(function (model) {
+						output += 'You submitted a person named ' + model.get('firstName') + ' ' + model.get('lastName') + ' with the status ' + model.get('status') + ' <br />';
+					});
+					this.$('.output').html(output);
+				},
+			}
+		}).render();
+		$('#wrapper').html(form.$el);
+	</script>
+</body>
+</html>

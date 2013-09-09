@@ -1,0 +1,179 @@
+<! DOCTYPE html>
+<html>
+<head>
+	<title>Backbone BaseView Table Example</title>
+	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+	<style>
+		#wrapper { margin: 1%; }
+		.form-field-row .form-field { float: left; }
+		.clear { clear: both; }
+		input[type="text"] { height: 30px; }
+		.output { display: inline-block; }
+	</style>
+</head>
+<body>
+	<div id="wrapper">
+	</div>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+	
+	<!-- Loading Bacbone Associations to make a complex model -->
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone-associations/0.5.1/backbone-associations-min.js"></script>
+	
+	<script type="text/javascript" src="../backbone-baseview.js"></script>
+	<script type="text/javascript" src="../backbone-formview.js"></script>
+		<script type="text/template" id="form-template">
+		<h3>Example Advanced Form</h3>
+		<div data-fields=""></div>
+		<div class="form-actions clear">
+			<button class="btn submit">Save changes</button>
+			<div class="output"></div>
+		</div>
+	</script>
+	<script type="text/javascript">
+
+		/**
+		 * Item Model, with a related models for a 'creator'
+		 * attribute and a related collection for a materials
+		 * attribute.
+		 */
+		var Item = Backbone.AssociatedModel.extend({
+			relations: [
+				{
+					key: 'creator',
+					type: Backbone.One,
+					relatedModel: Backbone.AssociatedModel
+				},
+				{
+					key: 'materials',
+					type: Backbone.Many,
+					relatedModel: Backbone.AssociatedModel,
+					collectionType: Backbone.Collection
+				}
+			]
+		});
+
+		// create an instance of the item model with fake data
+		var item = new Item({
+			title: 'Superior Widget',
+			description: 'Truly a marvelous widget, this is.',
+			creator: {
+				name: 'Superior Widgets, inc.',
+				type: 'MNF',
+				city: 'Wigeta'
+			},
+			materials: [
+				{
+					name: 'Pine',
+					type: 'Wood'
+				},
+				{
+					name: 'Steel',
+					type: 'Metal'
+				}
+			]
+		});
+
+		// Create an instance of the form view with a schema 
+		// with two regular fields and two fieldsets that 
+		// act as 'sub' forms.
+		var form = new Backbone.FormView({
+			model: item,
+			templateSrc: $('#form-template').html(),
+			schema: {
+				title: {
+					type: 'Text',
+					options: { label: 'Title' }
+				},
+				description: {
+					type: 'Text',
+					options: { 
+						label: 'Description', 
+						elementType: 'textarea' 
+					}
+				},
+				isAvailable: {
+					type: 'Checkbox',
+					options: {
+						label: 'Is this item available?'
+					}
+				},
+				// The creator field in the model gets
+				// fieldset because the creator is actually
+				// a nested model and has multiple fields
+				// needed to modify it. The FormView
+				// automatically will look for a creator
+				// model or collection when creating fields
+				// on an attribute that matches the key,
+				// and pass it to the Fieldset View.
+				creator: {
+					type: 'FieldSet',
+					options: {
+						label: 'Creator',
+						model: 'creator',
+						schema: {
+							name: {
+								type: 'Text',
+								options: { label: 'Creator Name' }
+							},
+							type: {
+								type: 'RadioList',
+								options: { 
+									label: 'Creator Type', 
+									possibleVals: {
+										ART: 'Artist',
+										MNF: 'Manufacturer',
+										DSG: 'Designer'
+									}
+								}	
+							}
+						}
+					}
+				},
+				// This is a CollectionField, which uses the rowSchema
+				// option to take a backbone collection and create
+				// a form for each member of the collection. It is
+				// essentially the CollectionFormView as a fieldset.
+				materials: {
+					type: 'CollectionField',
+					options: {
+						label: 'Materials',
+						rowSchema: {
+							name: {
+								type: 'Text',
+								options: { label : 'Material Name' },
+							},
+							type: {
+								type: 'Select',
+								options: {
+									label: 'Material Type',
+									possibleVals: {
+										'Metal': 'Metal (Steel, Aluminium, etc)',
+										'Wood': 'Wood (Pine, Mahogany, etc)',
+										'Plastic': 'Plastic'
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			events: {
+				'click .submit' : function (e) {
+					e.preventDefault();
+					var output = 'You submitted a model. Here it is, stringified : ' + JSON.stringify(this.model.toJSON());
+					this.$('.output').html(output);
+				},
+			},
+			viewEvents: {
+				'change model' : function () {
+					var changed = this.model.changedAttributes();
+					console.log('model changed', changed);
+				}
+			}
+		}).render();
+		$('#wrapper').html(form.$el);
+	</script>
+</body>
+</html>
