@@ -138,7 +138,7 @@
 <p>Adds some additional functionality on top of <a href="http://backbonejs.org">Backbone's</a> native View constructor, and most of this is around <em>subview</em> management and managing a hierarchy of views. This can be useful for things like having a view for a collection and then subviews for each model in the collection, but also for a structure where you have nested models and collections within the model you are building a view for. It adds some useful methods in relation to the interaction between parent views and subviews.</p>
 <p><strong>Why??</strong> </p>
 <p>'Sub-Views' are a concept used often in Backbone without an official way to actually manage them. Backbone is nice enough to let you do pretty much whatever you want, but as a result it doesn't really provide that many structures to help you deal with a more complicated application -- it lets you decide what you want to do. Backbone.BaseView adds the SubViewManager component to standardize a little bit what can often end up being a wild west in terms of what people are doing deal with all the moving pieces inside their views.</p>
-<p><strong>Example scenario</strong>: Say you want to make a table view based on a collection and it's models. You can make a TableView, then RowView sub views for it's rows, and then CellView sub views for each column cell in the RowView instance. (See <a href="examples/example-table.html">our basic implementation</a> as an example.)</p>
+<p><strong>Example scenario</strong>: Say you want to make a table view based on a collection and it's models. You can make a TableView, then RowView sub views for it's rows, and then CellView sub views for each column cell in the RowView instance. (See <a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/example-table.html">our basic implementation</a> as an example.)</p>
 <p>This allows you to focus only on the functionality of the ColView and it's UI in isolation of the TableView. With Backbone.BaseView, any BaseView can publish events that 'bubble' up or 'descend' down the hierarchy of views, not to mention a set of other functions to help you standardize how your views instantiate each other and communicate with one another.</p>
 <p>This means you can write some nice semantic code like this:</p>
 <p> <code>tableView.subs.add('row', { model: new RowModel(); });</code></p>
@@ -149,6 +149,8 @@
 <p><strong>Why??</strong></p>
 <p>If you make a lot of Forms with just vanilla Backbone, it's very easy to write a lot of very similar code. You write a template for the form, then write a view that renders the form, then event handlers to take UI form changes and set associated values on the view's model.</p>
 <p>Worse, a lot of code could be better standardized but often isn't when people write with vanilla Backbone, not through an issue with Backbone but out of fast development needs superseding organization. A lot of that repetitiveness / unintentional obscurity can be taken away using a Backbone.FormView, not to mention less confusing. A javascript schema object can be used to build the form, and this schema is formatted in a way that is very readable and pretty concise.</p>
+<h3>Project Page with 'Class' documentation:</h3>
+<p><a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/">Go to the project page</a></p>
 <h2>Getting Started</h2>
 <h3>Dependencies</h3>
 <p><a href="http://jquery.com">jQuery</a></p>
