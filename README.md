@@ -44,6 +44,8 @@ Getting Started
 
 ### Installation
 
+[Download the source code from Github](https://github.com/1stdibs/backbone-base-and-form-view)
+
 **BaseView** - If you just want to use Backbone.BaseView, first load it on your page after Backbone.
 
 **FormView** - To use Backbone.FormView, load Backbone.BaseView after Backbone, and then load Backbone.FormView
