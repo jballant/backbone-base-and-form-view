@@ -1,0 +1,4190 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Backbone BaseView and FormView Class: SubViewManager</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+    <link href='//fonts.googleapis.com/css?family=Tenor+Sans' rel='stylesheet' type='text/css'>
+
+	
+	<link type="text/css" rel="stylesheet" href="styles/site.dibsy-bootstrap.css">
+	
+    <link href='http://fonts.googleapis.com/css?family=Tenor+Sans' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+		  .page-wrapper {
+		    margin-top: 60px;
+		  }
+	      .row-fluid .nav-tabs [class*="span"] {
+		    width: 97.87%;
+		  }
+		  .method {
+		  	padding-top: 45px;
+		  	margin-top: -30px;
+		  }
+		  h4 {
+		  	border-bottom: 1px solid #ddd;
+		  	padding-bottom: 5px
+		  }
+    </style>
+
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="navbar navbar-fixed-top navbar-inverse">
+		<div class="navbar-inner">
+			<a class="brand" href="index.html">Backbone BaseView and FormView</a>
+			<ul class="nav">
+				
+				<li class="dropdown">
+					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="Backbone.BaseView.html">BaseView</a>
+						</li>
+						
+						<li>
+							<a href="Backbone.CollectionFieldSetView.html">CollectionFieldSetView</a>
+						</li>
+						
+						<li>
+							<a href="Backbone.CollectionFormView.html">CollectionFormView</a>
+						</li>
+						
+						<li>
+							<a href="Backbone.fields.CheckBoxView.html">CheckBoxView</a>
+						</li>
+						
+						<li>
+							<a href="Backbone.fields.CheckListView.html">CheckListView</a>
+						</li>
+						
+						<li>
+							<a href="Backbone.fields.FieldView.html">FieldView</a>
+						</li>
+						
+						<li>
+							<a href="Backbone.fields.RadioListView.html">RadioListView</a>
+						</li>
+						
+						<li>
+							<a href="Backbone.fields.SelectListView.html">SelectListView</a>
+						</li>
+						
+						<li>
+							<a href="Backbone.FieldSetView.html">FieldSetView</a>
+						</li>
+						
+						<li>
+							<a href="Backbone.FormView.html">FormView</a>
+						</li>
+						
+						<li>
+							<a href="SubViewManager.html">SubViewManager</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid page-wrapper">
+
+		
+		<div class="span8">
+			
+				<div id="main">
+					
+
+
+	<h1 class="page-title"><p>SubViewManager</p></h1>
+<section>
+
+<!--
+<header>
+    <h2>
+    SubViewManager
+    </h2>
+     
+        <div class="class-description"><p>SubViewManager</p></div>
+    
+</header>
+-->
+<article>
+    <div class="container-overview">
+    
+
+    
+        
+<dt class="method" id="SubViewManager">
+    <h4 class="class">
+        <span class="name">
+            <span class="type-signature"></span>new SubViewManager
+        </span><span class="signature">(subViewCfg, parent, <span class="optional">options</span>)</span><span class="type-signature"></span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Local constructor intended for use by <a href="Backbone.BaseView.html">Backbone.BaseView</a>. Creates an object specifically
+for manipulating subviews. Is created automatically by the BaseView instance and accessed through the
+'.subs' property of the the instance.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>subViewCfg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An object with a configuration to add for subviews (see addConfig(map))</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>parent</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The parent BaseView instance</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt class="method" id="add">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>add
+        </span><span class="signature">(map, <span class="optional">singleton</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Adds a subView or subViews to the View's list of subViews. Calling
+function must provide instances of views or configurations.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>map</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An object with key's to refer to subViews and values that
+     are View instances, options to pass to the constructor, or
+     an array of either the previous two to add multiple subViews.
+     If you pass options or an array of options, the SubViewManager
+     will look for a configuration matching the key for these options
+     and will initialize subviews based on the config, passing options
+     to the constructor.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>singleton</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>True if the instances mapped to the keys should be singletons.
+     If you pass options, the singleton param will be ignored.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-55">line 55</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="add">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>add
+        </span><span class="signature">(name, arr, <span class="optional">singleton</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Adds a subView or subViews to the View's list of subViews. Calling
+function must provide instances of views or configurations.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A string key to refer to the subViews with. Should match
+     a key in the subView configuration. If not, a configuration
+     will be set up with default values based on the instance
+     passed.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>arr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Backbone.View></span>
+|
+
+<span class="param-type">Array.&lt;object></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of View instances or options. Instances will be
+     appropriately associated with the key, options will be
+     used to instantiate a subView based on the configuration
+     matching the key</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>singleton</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>True if the added views should be singletons</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-56">line 56</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="add">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>add
+        </span><span class="signature">(arr)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Adds a subView or subViews to the View's list of subViews. Calling
+function must provide instances of views or configurations.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>arr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Backbone.View[]</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An array of View instances. These will not be accessible
+     by a type or key</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="add">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>add
+        </span><span class="signature">(name, instance, <span class="optional">singleton</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Adds a subView or subViews to the View's list of subViews. Calling
+function must provide instances of views or configurations.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A string key to refer to the subView with</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>instance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Backbone.View</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A View instance</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>singleton</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If you want the view matching this key to be a singleton</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="add">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>add
+        </span><span class="signature">(name, <span class="optional">options</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Adds a subView or subViews to the View's list of subViews. Calling
+function must provide instances of views or configurations.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A string key to refer to the subView with. Without an instance
+     as the second param, this variant requires that a configuration
+     to have been specified matching the 'name' with a constructor to
+     initialize.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An object that will be passed as the options parameter to the
+     view on initialization.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="add">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>add
+        </span><span class="signature">(instance)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Adds a subView or subViews to the View's list of subViews. Calling
+function must provide instances of views or configurations.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>instance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Backbone.View</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A Backbone.View instance to add as the subview</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="addConfig">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>addConfig
+        </span><span class="signature">(name, construct, <span class="optional">options</span>, <span class="optional">location</span>, <span class="optional">singleton</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Add an configuration for a subview to the SubViewManager.
+It can be instantiated later with the add function.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The name or type that you would like use to refer to subViews
+     created with this config</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>construct</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The constructor function for this subView. If its a string, the
+     string must resolve to a global name-spaced function in dot notation.
+     (e.g. 'Backbone.imageUpload.View')</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The options or base options you would like to pass to the constructor
+     whenever it is initialized.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If you want to be able to automatically place a subView's DOM element
+     somewhere in the parent view, pass a selector or DOM element or $ instance
+     here that can be used by jquery as a wrapper to append the subView $el</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>singleton</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If you want this view to be a singleton subView. A singleton subView
+     will only allow one instance of it to be created.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-202">line 202</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="addConfig">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>addConfig
+        </span><span class="signature">(map)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Add an configuration for a subview to the SubViewManager.
+It can be instantiated later with the add function.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>map</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A object of key names/types to config objects, so you can add multiple configs</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-203">line 203</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">// A config object should have the following format:
+     {
+         construct:  // Constructor function or string version (i.e. "Backbone.BaseView")
+         options:    // Any options you want to pass to the initialize function
+         singleton:  // if the object should be configured as a singleton or not
+         location:   // A string or jQuery instance in the parent view element.
+                     // The subview el will be appended to that location
+     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt class="method" id="addConfig">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>addConfig
+        </span><span class="signature">(name, config)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Add an configuration for a subview to the SubViewManager.
+It can be instantiated later with the add function.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name or type that you would like use to refer to subViews
+     created with this config</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The configuration object (uses the format described above)</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-204">line 204</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="at">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>at
+        </span><span class="signature">(index)</span><span class="type-signature"> &rarr; {Backbone.View}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Get the subview at a specific index, based on the order
+that the subViews were added or a custom sorted order.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The index of the sub view</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-516">line 516</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type">Backbone.View</span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="clear">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>clear
+        </span><span class="signature">(<span class="optional">preserveElems</span>, <span class="optional">clearConfigs</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Clears all subViews and subView data off of the SubViewManager instance</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>preserveElems</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If true, view $els are left on the DOM</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>clearConfigs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If true, resets the subView configs as well</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-396">line 396</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="clearLocations">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>clearLocations
+        </span><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Clears the html in all locations specified in the subview configs</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-525">line 525</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="descend">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>descend
+        </span><span class="signature">(func, <span class="optional">args</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Iterate through every subView, calling a function or invoking a method on
+each of them. If a subView has it's own subViews, then it will recursively
+iterate over those as well. The context is switched to the subView calling
+the function/method.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A string name of a method to call in the subviews or a function that
+       will be called for each view</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of arguments to pass to the method/function</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-369">line 369</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="filteredSubs">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>filteredSubs
+        </span><span class="signature">(key)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Returns a new SubViewManager instance with filtered list of subviews.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;Backbone.View></span>
+|
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The key or type used to refer to a subview or subviews, or a list
+     of subViews with a type found in this SubViewManager config, or a function
+     that will iterate over the subviews and return true if a subview
+     should be included in the filtered SubViewManager instance.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-345">line 345</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="get">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>get
+        </span><span class="signature">(<span class="optional">key</span>)</span><span class="type-signature"> &rarr; {Backbone.View|Array.&lt;Backbone.View>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Get a subView instance or an array if multiple instances
+match your key.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The key to a subView singleton, the view's cid
+     the associated model cid, the associated model itself,
+     or the associated view itself. If your key is a
+     string, you can use</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-471">line 471</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type">Backbone.View</span>
+|
+
+<span class="param-type">Array.&lt;Backbone.View></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="getByType">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>getByType
+        </span><span class="signature">(type)</span><span class="type-signature"> &rarr; {Backbone.View[]}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Returns all views that match a type key, guarantees an array.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-491">line 491</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type">Backbone.View[]</span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="getSubViewType">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>getSubViewType
+        </span><span class="signature">(subview)</span><span class="type-signature"> &rarr; {String|Number}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Get the subviews type or key</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>subview</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-504">line 504</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Number</span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="remove">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>remove
+        </span><span class="signature">(key, <span class="optional">preserveElems</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Remove a subView</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Backbone.View</span>
+|
+
+<span class="param-type">Backbone.Model</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>preserveElems</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If true, the View's element will not be removed from the DOM</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-421">line 421</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="removeElems">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>removeElems
+        </span><span class="signature">(subViews)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Removes all subView '.el' element from the dom, or if passed a
+list of subViews, removes only the elements in those.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>subViews</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-449">line 449</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="render">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>render
+        </span><span class="signature">(<span class="optional">options</span>, <span class="optional">clearLocations</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Render all Subviews.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>[options.appendTo] A selector, HTMLElement, or $ instance to append the subViews to
+     [options.useLocation] 
+         True if you want to append the subviews to the locations in their config if they 
+         have one.
+     [options.clearLocations]
+         True if you want to use empty on the configured locations</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>clearLocations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>True if you want to remove all subView elements from the DOM before rendering</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-285">line 285</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="renderAppend">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>renderAppend
+        </span><span class="signature">(<span class="optional">appendTo</span>, <span class="optional">options</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Renders subviews and appends them to their 'locations' if they have one.
+If you pass a appendTo param, views are appended to that location instead.
+This is just a shortcut version of renderAppend({})</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>appendTo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">HTMLElement</span>
+|
+
+<span class="param-type">$</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Location to append the rendered subiews to</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Other options (clearLocations)</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-301">line 301</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="renderByKey">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>renderByKey
+        </span><span class="signature">(key, <span class="optional">useLocation</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Render a subView specified by a key (from their configuration key). The key will
+retrieve subViews by looking for a type and then looking for singletons or
+specific instance using the Model/View cid</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Backbone.Model</span>
+|
+
+<span class="param-type">Backbone.View</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A key, type, View/Model cid, Model, or View to refer to a specific subView
+     or subViews. For example, passing the view cid 'view4' will render only
+     the view with that cid, and passing the type 'creatorNames' will render
+     views matching the type 'creatorNames'.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>useLocation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+|
+
+<span class="param-type">String</span>
+|
+
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>True if you want to use the subView's configuration 'location' to place the
+     element the subView elems automatically. You can also pass a selector or
+     DOM element that all subviews matched by the 'key' will be appended to</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-329">line 329</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="underscore_methods">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>underscore_methods
+        </span><span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Partial applications of underscore (or lodash if you use that instead) functions 
+of the same name (operates on the subViews array).
+List of available underscore methods:
+each, initial, rest, last, first, find, filter, sortBy, groupBy, where, findWhere, some, every, and invoke</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-679">line 679</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="http://underscorejs.org">http://underscorejs.org</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Examples</h5>
+        
+    <pre class="sunlight-highlight-javascript">myBaseView.subs.each(function (subView) {
+    console.log('A subView of myBaseView', subView);
+});</pre>
+
+    <pre class="sunlight-highlight-javascript">var view = myBaseView.subs.findWhere({ collection : testCollection });
+view.collection === test.collection // returns true</pre>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+					
+					
+		<span class="copyright">
+		Backbone.BaseView and Backbone.FormView Copyright © 2013 The contributors to the JSDoc3 and DocStrap projects.
+		</span>
+					<br />
+					
+		<span class="jsdoc-message">
+		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a>
+		using a custom fork of the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		</span>
+				</footer>
+			</div>
+
+			
+			<div class="span3">
+				<div id="toc"></div>
+			</div>
+			
+			<br clear="both">
+		</div>
+
+	</div>
+	<script src="scripts/sunlight.js"></script>
+	<script src="scripts/sunlight.javascript.js"></script>
+	<script src="scripts/sunlight-plugin.doclinks.js"></script>
+	<!-- // <script src="scripts/sunlight-plugin.linenumbers.js"></script> -->
+	<script src="scripts/sunlight-plugin.menu.js"></script>
+	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/jquery.scrollTo.js"></script>
+	<script src="scripts/jquery.localScroll.js"></script>
+	<script src="scripts/bootstrap-dropdown.js"></script>
+	<script src="scripts/toc.js"></script>
+
+
+	<script>  Sunlight.highlightAll({lineNumbers:true,  showMenu: true, enableDoclinks :true}); </script>
+
+	<script>
+		$( function () {
+			$( "#toc" ).toc({
+				selectors   : "h1,h3,h4:not(.class) .name",
+				showAndHide : false,
+				scrollTo    : 60
+			}).children().css({ overflowY:'auto', height: '80%', width: '31%' });
+			$( "#toc>ul" ).addClass( "nav nav-tabs affix nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+		} );
+	</script>
+
+	
+
+</body>
+</html>
