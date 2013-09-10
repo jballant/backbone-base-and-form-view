@@ -11,7 +11,7 @@ Adds some additional functionality on top of [Backbone's](http://backbonejs.org)
 
 'Sub-Views' are a concept used often in Backbone without an official way to actually manage them. Backbone is nice enough to let you do pretty much whatever you want, but as a result it doesn't really provide that many structures to help you deal with a more complicated application -- it lets you decide what you want to do. Backbone.BaseView adds the SubViewManager component to standardize a little bit what can often end up being a wild west in terms of what people are doing deal with all the moving pieces inside their views.
 
-**Example scenario**: Say you want to make a table view based on a collection and it's models. You can make a TableView, then RowView sub views for it's rows, and then CellView sub views for each column cell in the RowView instance. (See [our basic implementation](https://github.com/1stdibs/backbone-base-and-form-view/blob/master/examples/example-table.html) as an example.)
+**Example scenario**: Say you want to make a table view based on a collection and it's models. You can make a TableView, then RowView sub views for it's rows, and then CellView sub views for each column cell in the RowView instance. (See [our basic implementation](examples/example-table.html) as an example.)
 
 This allows you to focus only on the functionality of the ColView and it's UI in isolation of the TableView. With Backbone.BaseView, any BaseView can publish events that 'bubble' up or 'descend' down the hierarchy of views, not to mention a set of other functions to help you standardize how your views instantiate each other and communicate with one another.
 
@@ -399,3 +399,14 @@ A variant of Backbone.FormView that works in a very similar manner, except that 
 Effectively, this renders a modified FormView for each model in the collection, and adds some methods to make it easier to modify the collection form like 'addRow', 'deleteRow', and 'reset'.
 
 What this means is that each field in schema will have a subview created for each model in the collection, and will be grouped into by a wrapper element that possesses a 'data-row' attribute.
+
+Example FormView Demos
+----------------------
+
+All of these form's are pretty bare-bones -- just to illustrate the concepts in a simple manner.
+
+* [Example simple form](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-simple-form.html)
+
+* [Example collection form](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-collection-form.html)
+
+* [Example advanced form](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-advanced-form.html)
