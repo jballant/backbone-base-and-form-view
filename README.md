@@ -33,7 +33,7 @@ If you make a lot of Forms with just vanilla Backbone, it's very easy to write a
 Worse, a lot of code could be better standardized but often isn't when people write with vanilla Backbone, not through an issue with Backbone but out of fast development needs superseding organization. A lot of that repetitiveness / unintentional obscurity can be taken away using a Backbone.FormView, not to mention less confusing. A javascript schema object can be used to build the form, and this schema is formatted in a way that is very readable and pretty concise.
 
 ### Project Page with 'Class' documentation:
-[Go to the project page](http://1stdibs.github.io/backbone-base-and-form-view/examples/)
+[Go to the project page](http://1stdibs.github.io/backbone-base-and-form-view/)
 
 Getting Started
 ---------------
