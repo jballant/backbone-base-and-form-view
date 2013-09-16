@@ -413,8 +413,8 @@ if (!Backbone || !Backbone.BaseView) {
             construct: Backbone.CollectionFormRowView
         },
         initialize: function () {
-            this.templateSrc = this.options.templateSrc || this.templateSrc;
-            this.template = this.options.template || _.template(this.templateSrc || '');
+            this.templateSrc = !isUndefined(this.options.templateSrc) ? this.options.templateSrc : this.templateSrc;
+            this.template = this.options.template || this.template || _.template(this.templateSrc || '');
             this.setupOnInit = !isUndefined(this.options.setupOnInit) ? this.options.setupOnInit : this.setupOnInit;
             this.rowOptions = this.options.rowOptions || this.rowOptions;
             this.templateVars = defaults(this.options.templateVars || {}, { label: this.options.label });
@@ -456,7 +456,7 @@ if (!Backbone || !Backbone.BaseView) {
             if (!this.subs.get('row') || !this.subs.get('row').length) {
                 this.setupRows();
             }
-            this.subs.renderAppend(this.getRowWrapper());
+            this.subs.renderByKey('row', { appendTo: this.getRowWrapper() });
             return this;
         },
         /**
