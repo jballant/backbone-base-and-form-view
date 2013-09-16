@@ -6,12 +6,12 @@
 //     https://github.com/1stdibs/backbone-base-and-form-view
 
 /*global Backbone, jQuery, _, window */
-if (!Backbone || !Backbone.BaseView) {
-    throw new Error('Backbone and Backbone.BaseView required');
-}
-
 (function ($, Backbone, _) {
     "use strict";
+
+    if (!Backbone || !Backbone.BaseView) {
+        throw new Error('Backbone and Backbone.BaseView required');
+    }
 
     var
         // Local copies
