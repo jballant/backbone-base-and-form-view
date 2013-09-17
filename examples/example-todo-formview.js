@@ -71,8 +71,8 @@
             // Make this a large bootstrap input
             inputClass: 'input-xxlarge',
 
-            render: function () {
-                TodoTextFieldView.__super__.render.call(this);
+            renderInput: function () {
+                TodoTextFieldView.__super__.renderInput.call(this);
                 if (this.model.get('done')) {
                     this.markDone();
                 }
@@ -81,7 +81,8 @@
 
             // Change the text of the view to be a read only div with the mark done class
             markDone: function () {
-                return this.$el.addClass('mark-done').html(this.getModelVal());
+                this.$el.addClass('mark-done').html(this.getModelVal());
+                return this;
             },
 
             // Test if this model should be marked done, other wise make sure it isn't 
@@ -131,6 +132,7 @@
 
             // Set options to be passed to each row instance
             rowOptions: {
+                twoWay: true,
                 className : 'form-row form-inline',
                 template: _.template($('#todo-list-row-template').html()),
                 events: {
@@ -174,6 +176,12 @@
                 },
                 // If the clear-complteted button is clicked, run the clearCompleted function
                 'click #clear-completed': 'clearCompleted',
+                //
+                'click .mark-all-complete': function () {
+                    _.each(this.collection.remaining(), function (todo) {
+                        todo.set('done', true);
+                    });
+                },
                 // If they click the add button, add a new todo
                 'click .add' : function () {
                     this.addRow();
