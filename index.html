@@ -133,6 +133,9 @@
 
     <section>
         <article><h1>Backbone BaseView and FormView</h1>
+<h2>TLDR</h2>
+<p><strong>Backbone.BaseView</strong> - Organize your views into components (subviews) to decouple them and promote more standard and maintainable code.</p>
+<p><strong>Backbone.FormView</strong> - Extends Backbone.BaseView and allows you to define and generate Backbone-ized forms more easily with less code while keeping the decoupled benefits of the BaseView.</p>
 <h2>Introduction</h2>
 <h3>Backbone.BaseView</h3>
 <p>Adds some additional functionality on top of <a href="http://backbonejs.org">Backbone's</a> native View constructor, and most of this is around <em>subview</em> management and managing a hierarchy of views. This can be useful for things like having a view for a collection and then subviews for each model in the collection, but also for a structure where you have nested models and collections within the model you are building a view for. It adds some useful methods in relation to the interaction between parent views and subviews.</p>
@@ -287,7 +290,7 @@ testView.subs.get(testModel);
 </li>
 </ol>
 <h2>BaseView Example - A Table</h2>
-<p>For a basic example of how you could create a simple application with a table layout, open up the example-table.html file in your browser and then take a look at its source code and the example-table.js source code. Considering that it doesn't do much of anything, the number of Views defined is obviously overkill, but it does illustrate a bunch of concepts that you could use when creating a much more sophisticated</p>
+<p><a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/example-table.html">Click here for an example</a> for a very <em>very</em> simple table app that uses Backbone.BaseView. Considering that it doesn't do much of anything, the number of Views defined is obviously overkill, but it does illustrate a bunch of concepts that you could use when creating a much more sophisticated app.</p>
 <p><strong>For more information on Backbone.BaseView</strong> you can consult the inline documentation in the source code.</p>
 <hr>
 <h2>Using Backbone.FormView</h2>
@@ -456,6 +459,8 @@ testView.subs.get(testModel);
 <li><p><a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/example-collection-form.html">Example collection form</a></p>
 </li>
 <li><p><a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/example-advanced-form.html">Example advanced form</a></p>
+</li>
+<li><p><a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/example-todo-formview.html">Example Todo App (FormView Version)</a></p>
 </li>
 </ul></article>
     </section>
