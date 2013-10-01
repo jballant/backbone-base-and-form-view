@@ -124,7 +124,7 @@ var ActionsView = Backbone.BaseView.extend({
     },
     events: {
         'click .submit' : function () {
-            this.triggerBubble('submit', ['hello, this person\'s name is ' +
+            this.triggerBubble('submit', ['Hello, this person\'s name is ' +
                 this.model.get('firstName') +
                 ' ' + this.model.get('lastName')]);
         }

@@ -1,6 +1,13 @@
 Backbone BaseView and FormView
 =======================================
 
+TLDR
+----
+
+**Backbone.BaseView** - Organize your views into components (subviews) to decouple them and promote more standard and maintainable code.
+
+**Backbone.FormView** - Extends Backbone.BaseView and allows you to define and generate Backbone-ized forms more easily with less code while keeping the decoupled benefits of the BaseView.
+
 Introduction
 ------------
 
@@ -209,12 +216,13 @@ Like Backbone.Events.trigger, the first argument passed to triggerBubble should 
 
 BaseView Example - A Table
 --------------------------
-For a basic example of how you could create a simple application with a table layout, open up the example-table.html file in your browser and then take a look at its source code and the example-table.js source code. Considering that it doesn't do much of anything, the number of Views defined is obviously overkill, but it does illustrate a bunch of concepts that you could use when creating a much more sophisticated
+[Click here for an example](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-table.html) for a very *very* simple table app that uses Backbone.BaseView. Considering that it doesn't do much of anything, the number of Views defined is obviously overkill, but it does illustrate a bunch of concepts that you could use when creating a much more sophisticated app.
 
 
 **For more information on Backbone.BaseView** you can consult the inline documentation in the source code.
 
 -----------------------
+
 
 Using Backbone.FormView
 -----------------------
@@ -396,12 +404,13 @@ Inherited from Text - *templateSrc*, *label*, *fieldName*, *inputId*, *templateV
 3. *displayText* - String. Helpful text to display on the right of the checkbox. You can also use a label, but labels display on the left side in the default template.
 
 Backbone.CollectionFormView
------------------------
+---------------------------
 A variant of Backbone.FormView that works in a very similar manner, except that instead of rendering one subView for each field defined in the schema, a 'row' or 'fieldset' will be rendered for each model in the collection passed to the Backbone.CollectionFormView. 
 
 Effectively, this renders a modified FormView for each model in the collection, and adds some methods to make it easier to modify the collection form like 'addRow', 'deleteRow', and 'reset'.
 
 What this means is that each field in schema will have a subview created for each model in the collection, and will be grouped into by a wrapper element that possesses a 'data-row' attribute.
+
 
 Example FormView Demos
 ----------------------
@@ -413,3 +422,5 @@ All of these form's are pretty bare-bones -- just to illustrate the concepts in 
 * [Example collection form](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-collection-form.html)
 
 * [Example advanced form](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-advanced-form.html)
+
+* [Example Todo App (FormView Version)](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-todo-formview.html)
