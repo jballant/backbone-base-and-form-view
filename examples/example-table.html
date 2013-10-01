@@ -3,9 +3,21 @@
 <head>
 	<title>Backbone BaseView Table Example</title>
 	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+	<style type="text/css">
+		#page {
+			margin: 30px;
+		}
+	</style>
 </head>
 <body>
-	<div id="wrapper">
+	<div id="page">
+		<!-- Will contain our rendered view -->
+		<div id="wrapper">
+		</div>
+		<!-- Container for messages from the rendered view -->
+		<div id="messages">
+			<p></p>
+		</div>
 	</div>
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
@@ -15,6 +27,7 @@
 	<!-- Load the example-table.js file which loads all the views used in this demo -->
 	<script type="text/javascript" src="example-table.js"></script>
 	<script type="text/javascript">
+		// Create a collection with some fake data
 		var who = new Backbone.Collection([
 			{
 				firstName: 'Pete',
@@ -33,11 +46,17 @@
 				lastName: 'Entwistle'
 			}
 		]);
+		// Create an instance of TableView (see example-table.js)
 		var table = new TableView({
 			collection: who,
 			className: 'table'
 		}).render();
+		// Append it to the wrapper
 		$('#wrapper').html(table.$el);
+		// Listen for the submit event, which bubble up from the table rows, and display the message
+		table.on('submit', function (msg) {
+			$('#messages p').html(msg);
+		});
 	</script>
 </body>
 </html>
