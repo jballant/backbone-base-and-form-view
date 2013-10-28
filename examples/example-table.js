@@ -49,8 +49,9 @@ var HeadingRowView = Backbone.BaseView.extend({
     subViewConfig: {
         headingCol: { construct: 'HeadingCellView' }
     },
-    initialize: function () {
-        _.each(this.options.cols, function (colLabel) {
+    initialize: function (options) {
+        this.cols = options.cols;
+        _.each(this.cols, function (colLabel) {
             this.subs.add('headingCol', { label: colLabel });
         }, this);
     },
@@ -65,8 +66,11 @@ var HeadingRowView = Backbone.BaseView.extend({
 
 var HeadingCellView = Backbone.BaseView.extend({
     tagName: 'th',
+    initialize: function (options) {
+        this.label = options.label;
+    },
     render: function () {
-        this.$el.html(this.options.label);
+        this.$el.html(this.label);
         return this;
     }
 });
@@ -109,8 +113,11 @@ var RowView = Backbone.BaseView.extend({
 
 var CellView = Backbone.BaseView.extend({
     tagName: 'td',
+    initialize: function (options) {
+        this.modelField = options.modelField;
+    },
     render: function () {
-        this.$el.html(this.model.get(this.options.modelField));
+        this.$el.html(this.model.get(this.modelField));
         return this;
     }
 });
