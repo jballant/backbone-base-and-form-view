@@ -717,6 +717,7 @@
      * @property subs {SubViewManager} - object specifically for manipulating subviews
      * @property subViewConfig      - A config map that can be automatically passed to the SubViewManager
      * @property autoInitSubViews   - any subviews that are singletons will be autoinitilized if true
+     * @property singletonSubViews  - If subviews should default to being singletons when created
      * @property parentView         - if this is a subView of another dibLibs.BaseView, this will be a ref to that view instance
      */
     BaseView = View.extend({
