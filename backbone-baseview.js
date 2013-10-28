@@ -43,6 +43,8 @@
             this.options = options || {};
             // Auto initialize a subview when config added
             this.autoInitSingletons = !!this.options.autoInitSingletons;
+            // If true, then new subview configs and types will default to being singletons
+            this.defaultToSingletons = this.options.defaultToSingletons;
             // Allow dot notation in 'get' method (if your config keys have dots, then set this to false)
             this.dotNotation = (this.options.dotNotation !== undefined) ? this.options.dotNotation : true;
 
@@ -144,9 +146,9 @@
          * @return {SubViewManager}
          */
         add: function (name, instance, singleton) {
-            var arr = (_.isArray(name)) ? name : (_.isArray(instance)) ? instance : false, // If its a simple array of subviews or configs
-                map = (!arr && _.isObject(name) && name instanceof View === false) ? name : false, // If its a mapping of subviews
-                viewOptions = (!arr && instance instanceof View === false) ? instance : false,
+            var arr = (_.isArray(name)) ? name : (_.isArray(instance)) ? instance : undefined, // If its a simple array of subviews or configs
+                map = (!arr && _.isObject(name) && name instanceof View === false) ? name : undefined, // If its a mapping of subviews
+                viewOptions = (!arr && instance instanceof View === false) ? instance : undefined,
                 key,
                 i,
                 len;
@@ -644,6 +646,7 @@
                 }
             }
 
+            singleton = (typeof singleton === 'boolean') ? singleton : this.defaultToSingletons;
             if (singleton) {
                 this._subViewSingletons[key] = instance;
             } else {
@@ -729,6 +732,8 @@
         subViewConfig: null,
         // Any subviews that are singletons will be auto initialized if the below is true
         autoInitSubViews: false,
+        // True if your subviews should default to singleton or not
+        singletonSubViews: false,
         // If this is a subView of another Backbone.BaseView, this will be a ref to that view instance
         parentView: null,
         // Add events that will not bubble events up app the view's ancestor tree
@@ -739,14 +744,20 @@
             // Assign a parentView if second param is a Backbone View
             this.parentView = (parentView instanceof View) ? parentView : null;
             this.subs = new SubViewManager(null, this, {
-                autoInitSingletons: this.autoInitSubViews
+                autoInitSingletons: this.autoInitSubViews,
+                defaultToSingletons: this.singletonSubViews
             });
             if (subViewCfg) {
                 this.subs.addConfig(subViewCfg);
             }
             this.subViews = this.subs.subViews;
             BaseView.__super__.constructor.call(this, options);
-            if (this.viewEvents || this.options.viewEvents) {
+            // To maintain parity with how Backbone handles the 'events'
+            // property on a view, we will overwrite the 'viewEvents'
+            // property on the prototype with options.viewEvents if it
+            // exists
+            this.viewEvents = options.viewEvents || this.viewEvents;
+            if (options && this.viewEvents) {
                 this.bindViewEvents();
             }
         },
@@ -922,7 +933,7 @@
          * return {Backbone.BaseView}
          */
         bindViewEvents: function (events) {
-            events = events || _.extend({}, _.result(this, 'viewEvents'), _.result(this.options, 'viewEvents'));
+            events = events || _.result(this, 'viewEvents');
             _.each(events, function (func, event) {
                 var segs = event.split(' '),
                     listenTo = (segs.length > 1) ? this[segs[1]] : this;
