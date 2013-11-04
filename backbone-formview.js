@@ -1202,8 +1202,8 @@
         setupOnInit: true,
         initialize: function (options) {
             options = options || {};
-            Backbone.FieldSetView.__super__.initialize.call(this, options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
+            Backbone.FieldSetView.__super__.initialize.call(this, options);
             this.$el.addClass('fieldset-' + this.fieldSetName);
         },
         /**
@@ -1235,8 +1235,8 @@
         setupOnInit: true,
         initialize: function (options) {
             options = options || {};
-            Backbone.CollectionFieldSetView.__super__.initialize.call(this, options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
+            Backbone.CollectionFieldSetView.__super__.initialize.call(this, options);
             this.$el.addClass('fieldset-' + this.fieldSetName);
             return this;
         },
