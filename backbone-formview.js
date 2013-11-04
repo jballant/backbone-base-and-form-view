@@ -189,6 +189,7 @@
             'CollectionField' : 'Backbone.CollectionFieldSetView'
         },
         templateSrc: '<div data-fields=""></div>',
+        fieldsWrapper: '[data-fields]',
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             var schema = options.schema || this.schema,
@@ -252,7 +253,7 @@
          * @return {$} 
          */
         getFieldsWrapper: function () {
-            var $wrapper = this.$('[data-fields]');
+            var $wrapper = this.$(this.fieldsWrapper);
             if (!$wrapper.length) {
                 return this.$el;
             }
@@ -267,26 +268,20 @@
          * @return {Backbone.FormView}
          */
         render : function () {
-            var order = this.options.fieldOrder || this.fieldOrder,
-                $appendTo;
+            var order = this.options.fieldOrder || this.fieldOrder;
 
             if (!this.subViewConfig) {
                 this.setupFields();
             }
             this.$el.html(this.template(this.templateVars));
-            if (this.options.attributes) {
-                this.$el.attr(this.options.attributes);
-            }
-
-            $appendTo = this.getFieldsWrapper();
 
             if (order && order.length) {
                 order = order.slice(0);
                 while (order.length) {
-                    this.subs.renderByKey(order.shift(), $appendTo);
+                    this.subs.renderByKey(order.shift());
                 }
             } else {
-                this.subs.renderAppend($appendTo);
+                this.subs.renderAppend();
             }
             return this;
         },
@@ -350,6 +345,7 @@
                 options = schema.options = schema.options || {};
                 schema.singleton = (schema.singleton === undefined) ? true : schema.singleton;
                 schema.construct = self.fieldAlias[schema.type || schema.construct] || schema.type || schema.construct;
+                schema.location = schema.location || self.fieldsWrapper;
                 options.model = getSubModel(options.model, key, model);
                 if (this.validateOnSet) { options.setOpts = defaults(options.setOpts || {}, { validate: true }); }
                 if (this.twoWay) { options.twoWay = (!isUndefined(options.twoWay)) ? options.twoWay : this.twoWay; }
