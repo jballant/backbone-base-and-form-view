@@ -423,8 +423,7 @@
          */
         remove: function (key, preserveElems) {
             var subViews = (key && (typeof key === "string" || key.cid)) ? this.get(key) : key,
-                len,
-                i = -1;
+                len;
             if (!subViews) { return this; }
             if (!_.isArray(subViews)) {
                 subViews = [subViews];
@@ -566,7 +565,7 @@
 
             key = key || '_svid_' + _.size(this._subViews);
 
-            if (self._subViewSingletons[key]) { return; }
+            if (self._subViewSingletons[key]) { return self; }
 
             if (!_.isArray(subViews)) {
                 subViews = [subViews];
