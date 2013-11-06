@@ -186,6 +186,7 @@
                 if (arr[0] instanceof View) {
                     this._addInstance(name, arr, singleton);
                 } else {
+                    i = -1;
                     while (++i < len) {
                         this._init(name, arr[i], singleton);
                     }
