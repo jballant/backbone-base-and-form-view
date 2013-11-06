@@ -666,11 +666,11 @@
             options = _.extend({}, config.options || {}, options || {});
 
             if (this._subViewSingletons[key]) {
-                return;
+                return this;
             }
 
             Construct = (typeof Construct === 'string') ? _stringToObj(Construct) : Construct;
-            instance = this.subViews[key] = new Construct(options, this.parent);
+            instance = new Construct(options, this.parent);
             this._setInst(key, instance, (singleton !== undefined) ? singleton : config.singleton);
             return this;
         }
