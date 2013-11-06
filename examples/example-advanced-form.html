@@ -1,15 +1,19 @@
 <! DOCTYPE html>
 <html>
 <head>
-    <title>Backbone BaseView Table Example</title>
+    <title>Backbone Form Nested Example</title>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     <style>
         #wrapper { margin: 10%; }
         .form-field-row { float: left; width: 50%; min-width: 430px; }
         .clear { clear: both; }
         input[type="text"] { height: 30px; }
         .output { display: inline-block; }
+        .help-block {
+            color: #888;
+            font-size: 12px;
+        }
     </style>
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 </head>
 <body>
     <div id="wrapper">
@@ -17,83 +21,254 @@
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+
+    <!-- Load Backbone Associations to be able to create nested relational models -->
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone-associations/0.5.3/backbone-associations-min.js"></script>
+
     <!-- load BaseView -->
     <script type="text/javascript" src="../backbone-baseview.js"></script>
     <!-- load FormView -->
     <script type="text/javascript" src="../backbone-formview.js"></script>
     <script type="text/template" id="form-template">
         <div data-fields=""></div>
+        <div class="output"></div>
         <div class="form-actions clear">
             <button class="btn submit">Save changes</button>
-            <div class="output"></div>
         </div>
     </script>
+    <script type="text/template" id="success-message">
+        <div class="alert alert-success"><%= obj.message %></div>
+    </script>
     <script type="text/javascript">
-        // First create a test model
-        var person = new Backbone.Model({
-                firstName: 'John',
-                lastName: 'Doe',
-                status: 'REG'
-            });
-        // Create a backbone form. For many
-        // cases, extending the FormView isn't
-        // nessecary and just passing options 
-        // works fine.
-        var form = new Backbone.FormView({
-            model: person,
+
+        var MaterialModel = Backbone.AssociatedModel.extend();
+
+        var MaterialsCollection = Backbone.Collection.extend({
+            model: MaterialModel
+        });
+
+        var CreatorModel = Backbone.AssociatedModel.extend();
+
+        // Using Backbone.Associations, create an associated 
+        // model to define submodel relations. We have a 
+        // one-to-one relationship with a 'CreatorModel' stored
+        // on the creator attribute and a one-to-many relation
+        // stored on the 'materials' attribute of the Widget
+        // model.
+        var WidgetModel = Backbone.AssociatedModel.extend({
+            defaults: {
+                creator: {},
+                materials: []
+            },
+            relations: [{
+                key: 'creator',
+                relatedModel: 'CreatorModel',
+                type: Backbone.One
+            }, {
+                key: 'materials',
+                collectionType: MaterialsCollection,
+                type: Backbone.Many
+            }]
+        });
+
+        // One way you might want to implement validation is through
+        // decoupled events on the field views. We create a required
+        // text field using this example form's implementation.
+        // 
+        // Extend the TextFieldView (Backbone.fields.FieldView) constructor
+        // and add a validate method and event. The validate method here 
+        // simply tests if there is a value on the model, and will trigger
+        // up a validation:error event if it does not
+        var RequiredTextField = Backbone.fields.FieldView.extend({
+            validate: function () {
+                // If the model value for this field isn't set
+                if (!this.model.get(this.fieldName)) {
+                    // Set the isInvalid property to true, so that we can
+                    // inspect the view instance at any time while it's invalid
+                    // and know that this is the case
+                    this.isInvalid = true;
+                    // Trigger an error as it enters the invalid state
+                    this.triggerBubble('validation:error', 'This field is required');
+                } else if (this.isInvalid) {
+                    // If the field was invalid but isn't anymore, 
+                    // set the flag to false
+                    this.isInvalid = false;
+                    // Trigger a validation:fixed event as soon as it
+                    // isn't in the invalid state anymore
+                    this.triggerBubble('validation:fixed');
+                }
+            },
+            viewEvents: function () {
+                var events = {
+                    // If a validate event is called specifically, then call the method
+                    validate: 'validate',
+                };
+                // On a model change for the fieldName (we are being agnostic here)
+                // trigger the validate method
+                events['change model:' + this.fieldName] = 'validate'
+                return events;
+            }
+        });
+
+        // Here we will be defining the prototype for the form we want to make
+        var WidgetFormView = Backbone.FormView.extend({
+
             templateSrc: $('#form-template').html(),
+
+            // Add a validate method that simply triggers a descending
+            // event, and then checks the forms status to see if it is
+            // invalid (meaning a field bounced up a validation:error event)
+            // Return false if this is the case, true otherwise.
+            validate: function () {
+                this.isInvalid = false;
+                this.triggerDescend('validate');
+                if (this.isInvalid) {
+                    return false;
+                }
+                return true;
+            },
+
+            viewEvents: {
+                // On a validation:error event, add the error class and the message
+                // to the view that bubbled it up, and flip the isInvalid flag on 
+                // the form to true
+                'validation:error': function (message, view) {
+                    view.$el.addClass('error').find('[data-error]').text(message);
+                    this.isInvalid = true;
+                },
+                // Remove the error for that field if it bubbles up
+                'validation:fixed': function (view) {
+                    view.$el.removeClass('error').find('[data-error]').text('');
+                }
+            },
+            
             // schema is used to describe the fields
             schema: {
-                // first name is a simple text input with
-                // a label 'First Name'. It will automatically
-                // be assigned the model attribute firstName
-                // (which we could override with fieldName option)
-                firstName: {
-                    type: 'Text',
-                    options: { label: 'First Name' }
-                },
-                lastName: {
-                    type: 'Text',
-                    options : { label: 'Last Name' }
-                },
-                // bio is a textarea, which is a text input
-                // with the elementType option 'textarea'
-                bio: {
-                    type: 'Text',
-                    options: {
-                        elementType: 'textarea',
-                        label: 'Biography',
-                        placeholder: 'Type here to add a bio.'
-                    }
-                },
-                // A list of radio buttons, created from the
-                // possibleVals option. The key is what get's
-                // set on the model, and the value is what
-                // is displayed to the user.
-                gender: {
-                    type: 'RadioList',
-                    options: {
-                        label: 'Gender',
-                        possibleVals: {
-                            'M' : 'Male',
-                            'F' : 'Female'
+                // A text field for the name of the widget
+                name: {
+                    type: RequiredTextField,
+                    options: { 
+                        label: 'Name*',
+                        help: 'Max length 30 characters',
+                        // Input attrs allows us to add any extra attributes
+                        // not added by the standard options (e.g. 'type').
+                        // Here we used it to add a maxlength
+                        inputAttrs: {
+                            maxlength: 30
                         }
                     }
                 },
-                // Select type works like RadioList,
-                // but obviously uses a select element
-                // instead of radio buttons, and has some
-                // different options
-                status: {
-                    type: 'Select',
+                // A textarea text field for the description of the widget
+                description: {
+                    type: 'Text',
                     options: { 
-                        label: 'User Status',
-                        placeholder: 'Select status...',
-                        possibleVals: {
-                            'REG' : 'Registered',
-                            'PEN' : 'Pending',
-                            'SUS' : 'Suspended',
-                            'CLO' : 'Closed'
+                        label: 'Description',
+                        elementType: 'textarea'
+                    }
+                },
+                // We want a fieldset for the creator of the widget so we
+                // can use the functionality to have the fieldset
+                // paired with an assotiated model of the widget.
+                // The FormView finds a submodel on the 'creator' property
+                // and because this fieldset is keyed with the same name,
+                // it gets that submodel for it's fields.
+                creator: {
+                    type: 'FieldSet',
+                    options : {
+                        label: 'Creator',
+                        schema: {
+                            // We define a first name field for the creator
+                            firstName: {
+                                type: 'Text',
+                                options: { 
+                                    label: 'First Name'
+                                }
+                            },
+                            // And a last name field
+                            lastName: {
+                                type: 'Text',
+                                options : { label: 'Last Name' }
+                            },
+                            // And an email address field. We add two events
+                            // to implement the validation scheme for this 
+                            // FormView extension.
+                            email: {
+                                type: 'Text',
+                                options: { 
+                                    label: 'Email Address',
+                                    viewEvents: {
+                                        'change:email model': function () {
+                                            this.trigger('validate');
+                                        },
+                                        'validate': function () {
+                                            if (this.model.get(this.fieldName).indexOf('@') === -1) {
+                                                this.isInvalid = true;
+                                                this.triggerBubble('validation:error', 'Must be valid email address');
+                                            } else if (this.isInvalid) {
+                                                this.isInvalid = false;
+                                                this.triggerBubble('validation:fixed');
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            gender: {
+                                type: 'RadioList',
+                                options: {
+                                    label: 'Gender',
+                                    possibleVals: ['M', 'F']
+                                }
+                            }
+                        }
+                    }
+                },
+                materials: {
+                    type: 'CollectionField',
+                    options: {
+                        
+                        label: 'Materials',
+                        
+                        templateSrc: '<div data-rows=""></div><div class="clear control-group btn add-material">Add Material</div>',
+                        
+                        rowSchema: {
+
+                            name: {
+                                type: 'Text',
+                                options: { label: 'Material Name' }
+                            },
+                            
+                            group: {
+                                type: 'Select',
+                                options: {
+                                    possibleVals : {
+                                        METALS: 'Metals (e.g. Steel, Aluminium)',
+                                        WOODS: 'Woods (e.g. Cedar, Fir)',
+                                        PLASTICS: 'Plastics (e.g. Teflon, Seran)'
+                                    }
+                                }
+                            }
+
+                        },
+
+                        rowOptions: {
+
+                            templateSrc: '<div data-fields=""></div>' +
+                                '<div class="control-group">' +
+                                '<div class="control-label">Delete Material</div>' +
+                                '<div class="controls"><div class="btn delete"><i class="icon icon-trash"></i></div></div>',
+
+                            events: {
+                                'click .delete': function () {
+                                    this.parentView.deleteRow(this);
+                                }
+                            }
+
+                        },
+
+                        events : {
+                            'click .add-material': function () {
+                                this.addRow();
+                            }
                         }
                     }
                 }
@@ -105,12 +280,46 @@
                 // display messages to the user about the save status.
                 'click .submit' : function (e) {
                     e.preventDefault();
-                    var output = 'You submitted a model. Here it is, stringified : ' + JSON.stringify(this.model.toJSON());
+
+                    if (!this.validate()) {
+                        return;
+                    }
+
+                    localStorage.setItem('widget', JSON.stringify(this.model.toJSON()));
+
+                    var output = _.template($('#success-message').html(), { message : 'You successfully saved the widget.' });
                     this.$('.output').html(output);
                 }
             }
-        }).render();
-        $('#wrapper').html(form.$el);
+        });
+
+        // Grab the existing widget data for the model from local storage or create some initial data
+        var widgetData = localStorage.getItem('widget') ? JSON.parse(localStorage.getItem('widget')) : {
+            name: 'Test widget',
+            creator: {
+                firstName: 'John',
+                lastName: 'Doe',
+                gender: 'M'
+            },
+            materials: [{
+                name: 'Stainless Steel',
+                group: 'METALS'
+            }, {
+                name: 'Pine',
+                group: 'WOODS'
+            }]
+        };
+
+        // Create the model instance
+        var widget = new WidgetModel(widgetData);
+
+        // Create the form view instance
+        var form = new WidgetFormView({
+            model:  widget
+        });
+
+        // Render the form and place it in the wrapper
+        $('#wrapper').html(form.render().el);
     </script>
 </body>
 </html>
