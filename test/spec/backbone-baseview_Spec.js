@@ -46,9 +46,13 @@
                     this.collection.each(function (rowModel) {
                         this.subs.add('row', { model: rowModel });
                     }, this);
+                    return this;
                 },
                 render: function () {
                     this.$el.html(this.template());
+                    return this;
+                },
+                renderSubs: function () {
                     this.subs.renderAppend({ clearLocations: true });
                     return this;
                 },
@@ -146,6 +150,9 @@
             ActionsView = Backbone.BaseView.extend({
                 tagName: 'td',
                 template: _.template('<button class="btn submit">Submit</button>'),
+                initialize: function (options) {
+                    this.options = options;
+                },
                 render: function () {
                     this.$el.html(this.template());
                     return this;
@@ -162,6 +169,7 @@
             CellView : CellView,
             RowView : RowView,
             HeadingRowView: HeadingRowView,
+            HeadingCellView: HeadingCellView,
             ActionsView : ActionsView
         });
 
@@ -279,8 +287,166 @@
                 });
 
                 it('should allow you to add subviews by passing an object literal map', function () {
-                    // stub
-                    expect(true).toBe(true);
+                    var testName = 'Test Name of Heading Row';
+                    testView.subs.add({
+                        headingRow: {
+                            testFlag: testName
+                        },
+                        row: [{
+                            model: testCollection.at(0)
+                        }, {
+                            model: testCollection.at(1)
+                        }]
+                    });
+                    expect(testView.subs.get('headingRow').options.testFlag).toBe(testName);
+                    expect(testView.subs.get('row').length).toBe(2);
+                    expect(testView.subs.get('row')[0].model.cid).toBe(testCollection.at(0).cid);
+                    expect(testView.subs.get('row')[1].model.cid).toBe(testCollection.at(1).cid);
+                });
+
+                it('should allow you to add a config for a subview type before adding it', function () {
+                    testView.subs.addConfig('testTypeA', {
+                        construct: 'ActionsView',
+                        options: { testOpt: 'A' }
+                    }).addConfig({
+                        testTypeB : {
+                            construct: 'Backbone.View',
+                            singleton: true
+                        }
+                    });
+                    testView.subs
+                        .add('testTypeA', { foo: 'bar' })
+                        .add('testTypeA', { foo: 'baz' })
+                        .add('testTypeA', { testOpt: 'B' });
+                    expect(testView.subs.get('testTypeA').length).toBe(3);
+                    expect(testView.subs.get('testTypeA')[0].options.testOpt).toBe('A');
+                    expect(testView.subs.get('testTypeA')[1].options.testOpt).toBe('A');
+                    expect(testView.subs.get('testTypeA')[0].options.foo).toBe('bar');
+                    expect(testView.subs.get('testTypeA')[1].options.foo).toBe('baz');
+                    expect(testView.subs.get('testTypeA')[2].options.testOpt).toBe('B');
+                    testView.subs.add('testTypeB');
+                    expect(testView.subs.get('testTypeB') instanceof Backbone.View).toBeTruthy();
+                });
+
+                it('should allow switching the default state of subviews types to being singletons', function () {
+                    testView.subs.defaultToSingletons = true;
+                    var view1 = new Backbone.View(),
+                        view2 = new Backbone.View();
+                    view1.name = 'A';
+                    view2.name = 'B';
+                    testView.subs.add('testType', view1);
+                    expect(testView.subs.get('testType') instanceof Backbone.View).toBe(true);
+                    testView.subs.add('testType', view2);
+                    expect(testView.subs.get('testType').name).toBe('A');
+                    testView.subs.addConfig({
+                        anotherTestType : {
+                            construct: Backbone.View
+                        },
+                        yetAnotherTestType : {
+                            construct: Backbone.View,
+                            singleton: false
+                        }
+                    });
+                    testView.subs.add('anotherTestType');
+                    expect(testView.subs.get('anotherTestType') instanceof Backbone.View).toBe(true);
+                    testView.subs.add('anotherTestType', new Backbone.View(), false);
+                    expect(testView.subs.get('anotherTestType') instanceof Backbone.View).toBe(true);
+                    testView.subs.add('yetAnotherTestType');
+                    expect(toString.call(testView.subs.get('yetAnotherTestType'))).toBe('[object Array]');
+                });
+
+                it('should automatically create singleton instances from config if "autoInitSingletons" option is true', function () {
+                    TableView.prototype.autoInitSubViews = true;
+                    var tableView = new TableView({
+                        collection: testCollection
+                    });
+                    expect(tableView.subs.get('headingRow') instanceof HeadingRowView).toBe(true);
+                    expect(tableView.subs.get('row')).toBeUndefined();
+                    TableView.prototype.autoInitSubViews = false;
+                });
+
+                it('should allow retrieval of subviews by the model, if the view had a model when added', function () {
+                    var testModel = new Backbone.Model(),
+                        testTypeView = new Backbone.View({
+                            model: testModel
+                        });
+                    testView.subs.add('row', {
+                        model : testModel
+                    });
+                    expect(testView.subs.get(testModel)).toBeDefined();
+                    expect(testView.subs.get(testModel) instanceof RowView).toBe(true);
+                    testView.subs.add('testType', testTypeView, true);
+                    expect(toString.call(testView.subs.get(testModel))).toBe('[object Array]');
+                    expect(testView.subs.get(testModel).length).toBe(2);
+                    expect(testView.subs.get(testModel)[1].cid).toBe(testTypeView.cid);
+                });
+            });
+
+            describe('Removing Subviews', function () {
+
+                beforeEach(function () {
+                    testView.subs.addConfig('testType', {
+                        construct: 'Backbone.View',
+                        singleton: false
+                    });
+                    testView.subs.addConfig('testTypeSingle', {
+                        construct: 'Backbone.View',
+                        singleton: true
+                    });
+                    testView.subs.add('testType').add('testType').add('testTypeSingle');
+                });
+
+                it('should allow removing subviews by a particular type', function () {
+                    testView.subs.remove('testType');
+                    expect(testView.subs.get('testType').length).toBeFalsy();
+                    testView.subs.remove('testTypeSingle');
+                    expect(testView.subs.get('testTypeSingle')).toBeUndefined();
+                });
+
+                it('should call the Backbone.View remove method to remove from the dom', function () {
+                    var aView = new Backbone.View();
+                    spyOn(aView, 'remove');
+                    testView.subs.add('anotherTestType', aView);
+                    testView.subs.remove('anotherTestType');
+                    expect(aView.remove).toHaveBeenCalled();
+                });
+
+                it('should allow using a \'clear\' method to remove all subviews at once', function () {
+                    var sub1 = testView.subs.at(1);
+                    spyOn(sub1, 'remove');
+                    testView.subs.clear();
+                    expect(sub1.remove).toHaveBeenCalled();
+                    expect(testView.subs.subViews.length).toEqual(0);
+                    expect(testView.subs.get('testType')).toBeFalsy();
+                    expect(testView.subs.get('testTypeSingle')).toBeFalsy();
+                });
+            });
+
+            describe('Rendering subviews', function () {
+
+                beforeEach(function () {
+                    testView.setup().render();
+                });
+
+                it('should invoke \'render\' method on all subviews when the SubViewManager "render" method is called without arguments', function () {
+                    spyOn(testView.subs.subViews[0], 'render');
+                    spyOn(testView.subs.subViews[1], 'render');
+                    spyOn(testView.subs.subViews[2], 'render');
+
+                    testView.subs.render();
+                    expect(testView.subs.subViews[0].render).toHaveBeenCalled();
+                    expect(testView.subs.subViews[1].render).toHaveBeenCalled();
+                    expect(testView.subs.subViews[2].render).toHaveBeenCalled();
+                });
+
+                it('should append subview "el" elements to their type\'s configured location if "renderAppend" is called without arguments', function () {
+                    var headbeforeLen = testView.$('thead').children().length,
+                        bodyBeforeLen = testView.$('tbody').children().length;
+                    testView.subs.renderAppend();
+                    expect(testView.$('thead').children().length).toBeGreaterThan(headbeforeLen);
+                    expect(testView.$('thead').children().length).toBe(1);
+                    expect(testView.$('tbody').children().length).toBeGreaterThan(bodyBeforeLen);
+                    expect(testView.$('tbody').children().length).toBe(testView.collection.length);
                 });
             });
         });
