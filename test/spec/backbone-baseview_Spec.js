@@ -448,6 +448,23 @@
                     expect(testView.$('tbody').children().length).toBeGreaterThan(bodyBeforeLen);
                     expect(testView.$('tbody').children().length).toBe(testView.collection.length);
                 });
+
+                it('should append all subviews to a container found inside the parent view\'s "el" HTMLelement when passing a selector argument', function () {
+                    var testClass = 'test-subview-container';
+                    testView.$el.append('<div class="' + testClass + '"></div>');
+                    testView.subs.renderAppend('.' + testClass);
+                    expect(testView.$('.' + testClass).children().length).toBe(testView.subViews.length);
+                    expect(testView.subs.first().$el.parent().attr('class')).toBe(testClass);
+                });
+
+                it('should render only a specific type to have been rendered when passing a type to renderByKey', function () {
+                    spyOn(testView.subs.get('headingRow'), 'render');
+                    spyOn(testView.subs.get('row')[0], 'render');
+                    testView.subs.renderByKey('headingRow');
+                    expect(testView.subs.get('headingRow').render).toHaveBeenCalled();
+                    expect(testView.subs.get('row')[0].render).not.toHaveBeenCalled();
+                });
+
             });
         });
 
