@@ -332,6 +332,7 @@
         renderByKey: function (key, options) {
             var subViews = this.getByType(key) || this.get(key);
             if (!_.isArray(subViews)) { subViews = [subViews]; }
+            options = options || {};
             return this._render(subViews, options.appendTo || options.useLocation, options.clearLocations);
         },
         /**
