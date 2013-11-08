@@ -547,7 +547,7 @@
             while (++i < len) {
                 subViews[i].render();
                 if ($appendTo) {
-                    subViews[i].$el.appendTo($appendTo);
+                    subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo) : $appendTo);
                 } else if (place && (location = this._subViews[this.getSubViewType(subViews[i])].location)) {
                     if (typeof location === 'string') {
                         if (!$locations[location]) {
