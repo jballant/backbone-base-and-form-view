@@ -23,8 +23,6 @@
 
             toString = Object.prototype.toString,
 
-            RowView = Backbone.BaseView.extend(),
-
             TableView = Backbone.BaseView.extend({
                 tagName: 'table',
                 template: _.template('<thead></thead><tbody></tbody>'),
@@ -65,111 +63,31 @@
                 }
             }),
 
-            HeadingRowView = Backbone.BaseView.extend({
-                tagName: 'tr',
-                subViewConfig: {
-                    headingCol: { construct: 'HeadingCellView' }
-                },
-                initialize: function (options) {
-                    this.options = options || {};
-                    this.cols = options.cols;
-                    _.each(this.cols, function (colLabel) {
-                        this.subs.add('headingCol', { label: colLabel });
-                    }, this);
-                },
-                render: function () {
-                    this.$el.empty();
-                    // Render the sub-views and append them directly to 
-                    // this.$el
-                    this.subs.renderAppend(this.$el);
-                    return this;
-                }
-            }),
-
-            HeadingCellView = Backbone.BaseView.extend({
-                tagName: 'th',
-                initialize: function (options) {
-                    this.options = options || {};
-                    this.label = options.label;
-                },
-                render: function () {
-                    this.$el.html(this.label);
-                    return this;
-                }
-            }),
-
             RowView = Backbone.BaseView.extend({
                 tagName: 'tr',
+                autoInitSubViews: true,
                 subViewConfig: {
-                    firstName :  {
-                        construct: 'CellView',
+                    a: {
                         singleton: true,
-                        options: {
-                            modelField: 'firstName'
-                        }
-                    },
-                    lastName : {
-                        construct : 'CellView',
-                        singleton: true,
-                        options: {
-                            modelField: 'lastName'
-                        }
-                    },
-                    actions : {
-                        construct: 'ActionsView',
-                        singleton: true
+                        construct: 'Backbone.BaseView'
                     }
-                },
-                initialize: function (options) {
-                    this.options = options || {};
-                    var opts = { model : this.model };
-                    this.subs.add({
-                        firstName : opts,
-                        lastName: opts,
-                        actions : opts
-                    });
-                },
-                render: function () {
-                    this.subs.renderAppend(this.$el);
-                    return this;
                 }
             }),
 
-            CellView = Backbone.BaseView.extend({
-                tagName: 'td',
-                initialize: function (options) {
-                    this.options = options || {};
-                    this.modelField = options.modelField;
-                },
-                render: function () {
-                    this.$el.html(this.model.get(this.modelField));
-                    return this;
-                }
+            HeadingRowView = Backbone.BaseView.extend({
+                tagName: 'tr',
+                initialize: function (opts) { this.options = opts; }
             }),
 
             ActionsView = Backbone.BaseView.extend({
                 tagName: 'td',
-                template: _.template('<button class="btn submit">Submit</button>'),
-                initialize: function (options) {
-                    this.options = options;
-                },
-                render: function () {
-                    this.$el.html(this.template());
-                    return this;
-                },
-                events: {
-                    'click .submit' : function () {
-                        this.triggerBubble('submit', [this.model.get('firstName'), this.model.get('lastName')]);
-                    }
-                }
+                initialize: function (opts) { this.options = opts; }
             });
 
         _.extend(root, {
             TableView : TableView,
-            CellView : CellView,
             RowView : RowView,
             HeadingRowView: HeadingRowView,
-            HeadingCellView: HeadingCellView,
             ActionsView : ActionsView
         });
 
@@ -661,7 +579,6 @@
 
             it('should trigger an event the view it\'s ancestors', function () {
                 var triggeredOnTopViewWith,
-                    originatingView,
                     triggeredOnA,
                     triggeredOnB,
                     triggeredOnC;
