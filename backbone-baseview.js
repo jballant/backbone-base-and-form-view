@@ -758,8 +758,8 @@
             // property on a view, we will overwrite the 'viewEvents'
             // property on the prototype with options.viewEvents if it
             // exists
-            this.viewEvents = options.viewEvents || this.viewEvents;
-            if (options && this.viewEvents) {
+            this.viewEvents = options && options.viewEvents ? options.viewEvents : this.viewEvents;
+            if (this.viewEvents) {
                 this.bindViewEvents();
             }
         },
