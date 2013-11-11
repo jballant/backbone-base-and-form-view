@@ -380,6 +380,12 @@
                     expect(testView.subs.get(testModel).length).toBe(2);
                     expect(testView.subs.get(testModel)[1].cid).toBe(testTypeView.cid);
                 });
+
+                it('should always return an array of subviews (of a named type) if "getByType" is used', function () {
+                    testView.setup();
+                    expect(toString.call(testView.subs.getByType('headingRow'))).toBe('[object Array]');
+                    expect(testView.subs.getByType('row').length).toBe(testView.collection.length);
+                });
             });
 
             describe('Removing Subviews', function () {
@@ -409,6 +415,13 @@
                     testView.subs.add('anotherTestType', aView);
                     testView.subs.remove('anotherTestType');
                     expect(aView.remove).toHaveBeenCalled();
+                });
+
+                it('should remove only elements from the parent when "clearLocations" is used', function () {
+                    testView.setup().render().subs.renderAppend();
+                    testView.subs.clearLocations();
+                    expect(testView.$('thead').children().length).toEqual(0);
+                    expect(testView.$('tbody').children().length).toEqual(0);
                 });
 
                 it('should allow using a \'clear\' method to remove all subviews at once', function () {
@@ -457,7 +470,7 @@
                     expect(testView.subs.first().$el.parent().attr('class')).toBe(testClass);
                 });
 
-                it('should render only a specific type to have been rendered when passing a type to renderByKey', function () {
+                it('should render only a specific type to have been rendered when passing a type to "renderByKey"', function () {
                     spyOn(testView.subs.get('headingRow'), 'render');
                     spyOn(testView.subs.get('row')[0], 'render');
                     testView.subs.renderByKey('headingRow');
@@ -466,7 +479,219 @@
                 });
 
             });
+
+            describe('"filteredSubs" method', function () {
+
+                beforeEach(function () {
+                    testView.setup();
+                });
+
+                it("should return an instance of the SubViewManager", function () {
+                    expect(testView.subs.filteredSubs('row') instanceof testView.subs.constructor).toBe(true);
+                });
+                it("should return instance with subviews that match the type passed as an argument", function () {
+                    expect(testView.subs.filteredSubs('headingRow').subViews.length).toBe(1);
+                    expect(testView.subs.filteredSubs('headingRow').at(0).getSubViewType()).toBe('headingRow');
+                });
+                it('should allow passing an array of subviews that will be used to create the new filtered instance', function () {
+                    var i = 0,
+                        subViews = testView.subs.filter(function (subView) {
+                            if (subView.getSubViewType() === 'row') {
+                                i++;
+                                if (i % 2 === 1) {
+                                    return true;
+                                }
+                            }
+                        });
+                    expect(testView.subs.filteredSubs(subViews).subViews.length).toBe(2);
+                    expect(testView.subs.filteredSubs(subViews).subViews[0].cid).toBe(subViews[0].cid);
+                    expect(testView.subs.filteredSubs(subViews).subViews[1].cid).toBe(subViews[1].cid);
+                });
+            });
+
+            describe('"descend" method', function () {
+                var descendView;
+                beforeEach(function () {
+                    descendView = new Backbone.BaseView();
+                    descendView.subs.addConfig({
+                        typeA : {
+                            construct : Backbone.BaseView.extend({
+                                subViewConfig : {
+                                    typeAsubTypeA : { construct : 'Backbone.View' }
+                                }
+                            }),
+                            singleton: true
+                        },
+                        typeB : { construct : 'Backbone.View' }
+                    });
+                    descendView.subs.add('typeA').add('typeB');
+                    descendView.subs.get('typeA').subs.add('typeAsubTypeA').add('typeAsubTypeA');
+                });
+
+                it('should call a passed function for every subview and every subview\'s subview', function () {
+                    var i = 0,
+                        len = descendView.subs.subViews.length +
+                            descendView.subs.get('typeA').subs.get('typeAsubTypeA').length;
+                    descendView.subs.descend(function () {
+                        i++;
+                    });
+                    expect(i).toEqual(len);
+                });
+
+                it('should set the context ("this") to switch to each subview instance', function () {
+                    var wasTypeB,
+                        wasTypeASubTypeA,
+                        typeB = descendView.subs.get('typeB')[0],
+                        typeAsubTypeA = descendView.subs.get('typeA').subs.get('typeAsubTypeA')[1];
+                    descendView.subs.descend(function () {
+                        if (this.cid === typeB.cid) {
+                            wasTypeB = true;
+                        } else if (this.cid === typeAsubTypeA.cid) {
+                            wasTypeASubTypeA = true;
+                        }
+                    });
+                    expect(wasTypeB).toBe(true);
+                    expect(wasTypeASubTypeA).toBe(true);
+                });
+
+                it('should invoke a method on a subview if a string matching a method name is passed, and do nothing otherwise', function () {
+                    var typeB = descendView.subs.get('typeB')[0],
+                        typeAsubTypeA = descendView.subs.get('typeA').subs.get('typeAsubTypeA')[1],
+                        foo = function () { return 'bar'; };
+                    typeB.foo = foo;
+                    typeAsubTypeA.foo = foo;
+                    spyOn(typeB, 'foo');
+                    spyOn(typeAsubTypeA, 'foo');
+                    descendView.subs.descend('foo', ['arg']);
+                    expect(typeB.foo).toHaveBeenCalledWith('arg');
+                    expect(typeAsubTypeA.foo).toHaveBeenCalledWith('arg');
+                });
+            });
+
         });
+
+        describe('"bindViewEvents" method', function () {
+
+            it('should listens for events on backbone objects based on object literal key', function () {
+                var calledEventA = false,
+                    calledEventB = false,
+                    eventAArg;
+                testView.foo = function (arg) {
+                    calledEventA = this;
+                    eventAArg = arg;
+                };
+                testView.bindViewEvents({
+                    'eventA collection': 'foo',
+                    'eventB' : function () {
+                        calledEventB = this;
+                    }
+                });
+                testView.collection.trigger('eventA', 'test-arg');
+                testView.trigger('eventB');
+                expect(calledEventA.cid).toBe(testView.cid);
+                expect(eventAArg).toBe('test-arg');
+                expect(calledEventB.cid).toBe(testView.cid);
+            });
+
+            it('should bind backbone events on prototype in "viewEvents" property', function () {
+                var calledFooWith,
+                    calledBar = false,
+                    calledBaz = false,
+                    EventViewA = Backbone.BaseView.extend({
+                        viewEvents: {
+                            foo: function (arg) { calledFooWith = arg; }
+                        }
+                    }),
+                    EventViewB = Backbone.BaseView.extend({
+                        viewEvents: {
+                            baz: 'baz'
+                        },
+                        baz: function () { calledBaz = true; },
+                        bar: function () { calledBar = true; }
+                    }),
+                    viewA = new EventViewA(),
+                    viewB = new EventViewB({
+                        viewEvents: function () {
+                            return { bar: 'bar' };
+                        }
+                    });
+                viewA.trigger('foo', 'test-arg');
+                viewB.trigger('bar').trigger('baz');
+                expect(calledFooWith).toBe('test-arg');
+                expect(calledBar).toBe(true);
+                expect(calledBaz).toBeFalsy();
+            });
+
+            it('should be called on instantiation and bind events if present in options', function () {
+                var calledEvent = false,
+                    view = new Backbone.BaseView({
+                        viewEvents: function () {
+                            return {
+                                testEvent : function () {
+                                    calledEvent = this;
+                                }
+                            };
+                        }
+                    });
+                view.trigger('testEvent');
+                expect(calledEvent.cid).toBe(view.cid);
+            });
+
+        });
+
+        it('should have a parentView property that\'s a reference to the View instance that it is a subview of', function () {
+            testView.setup();
+            expect(testView.subs.get('headingRow').parentView.cid).toBe(testView.cid);
+            expect(testView.subs.get('row')[0].subs.subViews[0].parentView.cid).toBe(testView.subs.get('row')[0].cid);
+            expect(testView.parentView).toBeFalsy();
+        });
+
+        describe('"triggerBubble" method', function () {
+            var topView, cView;
+            beforeEach(function () {
+                topView = new Backbone.BaseView();
+                cView = new Backbone.BaseView();
+                topView.subs
+                    .add('a', new Backbone.BaseView(), true)
+                    .last().subs
+                    .add('b', new Backbone.BaseView())
+                    .last().subs
+                    .add('c', cView);
+            });
+
+            it('should trigger an event the view it\'s ancestors', function () {
+                var triggeredOnTopViewWith,
+                    originatingView,
+                    triggeredOnA,
+                    triggeredOnB,
+                    triggeredOnC;
+
+                cView.on('foo', function () { triggeredOnC = true; });
+                cView.parentView.on('foo', function () { triggeredOnB = true; });
+                topView.subs.get('a').on('foo', function () { triggeredOnA = true; });
+                topView.on('foo', function (arg) {
+                    triggeredOnTopViewWith = arg;
+                });
+                cView.triggerBubble('foo', 'test-arg');
+                expect(triggeredOnC).toBe(true);
+                expect(triggeredOnB).toBe(true);
+                expect(triggeredOnA).toBe(true);
+                expect(triggeredOnTopViewWith).toBe('test-arg');
+            });
+
+            it('should pass the originating view as the last argument to the callback', function () {
+                var originatingView,
+                    triggeredWith;
+                topView.on('foo', function (firstArg, view) {
+                    triggeredWith = firstArg;
+                    originatingView = view;
+                });
+                cView.triggerBubble('foo', 'test-arg');
+                expect(triggeredWith).toBe('test-arg');
+                expect(originatingView.cid).toBe(cView.cid);
+            });
+        });
+
 
     });
 }(this, jQuery, Backbone, _));
