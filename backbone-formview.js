@@ -5,9 +5,19 @@
 //     For all details and documentation:
 //     https://github.com/1stdibs/backbone-base-and-form-view
 
-/*global Backbone, jQuery, _, window */
-(function ($, Backbone, _) {
+/*global Backbone, jQuery, _, window, exports, module, jQuery, require */
+(function (root) {
     "use strict";
+
+    var $ = root.jQuery,
+        Backbone = root.Backbone,
+        _ = root._;
+
+    if (typeof module !== 'undefined') {
+        _ = require('underscore');
+        Backbone = require('./backbone-baseview');
+        module.exports = Backbone;
+    }
 
     if (!Backbone || !Backbone.BaseView) {
         throw new Error('Backbone and Backbone.BaseView required');
@@ -776,7 +786,7 @@
                 id = this.templateVars.inputId,
                 attrs =  this.addId ? { id : id, name: id } : {},
                 modelVal = this.getModelVal();
-            $input = $('<' + this.elementType + '>');
+            $input = Backbone.$('<' + this.elementType + '>');
             if (this.elementType === 'input') { attrs.type = 'text'; }
             if (this.placeholder) { attrs.placeholder = this.placeholder; }
             $input.attr(defaults(attrs, this.inputAttrs));
@@ -908,9 +918,9 @@
                         attributes = { type: 'radio', value: key };
                     if (self.addId) { extend(attributes, { name: id, id: (id + '-' + i) }); }
                     if (isChecked) { attributes.checked = 'checked'; }
-                    $listItem = $('<input>').attr(defaults(attributes, self.inputAttrs));
+                    $listItem = Backbone.$('<input>').attr(defaults(attributes, self.inputAttrs));
                     if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = $('<label>').attr('class', 'radio');
+                    $label = Backbone.$('<label>').attr('class', 'radio');
                     $label.append($listItem).append(val);
                     return $label;
                 };
@@ -988,7 +998,7 @@
             var possibleVals = result(this, 'possibleVals'),
                 modelVals = this.getModelVal(),
                 id = this.templateVars.inputId,
-                $select = $('<' + this.elementType + '>')
+                $select = Backbone.$('<' + this.elementType + '>')
                     .attr(defaults((this.addId ? { id: id, name: id } : {}), this.inputAttrs));
 
             this.getInputWrapper().html($select);
@@ -1008,10 +1018,10 @@
                 if (vals.hasOwnProperty(key)) {
                     val = vals[key];
                     if (_.isObject(val)) {
-                        $optgroup = $('<optgroup label="' + key + '"></optgroup>').appendTo($wrapper);
+                        $optgroup = Backbone.$('<optgroup label="' + key + '"></optgroup>').appendTo($wrapper);
                         this._renderInput($optgroup, vals[key], selectedVals);
                     } else {
-                        $option = $('<option>').text(vals[key]);
+                        $option = Backbone.$('<option>').text(vals[key]);
                         if (!isArr) {
                             val = key;
                             $option.attr('value', key);
@@ -1078,7 +1088,7 @@
         },
         setModelAttrs: function (e) {
             var val = {},
-                $target = $(e.target),
+                $target = Backbone.$(e.target),
                 key = $target.val();
             val[key] = ($target.is(':checked')) ? this.checkedVal : this.unCheckedVal;
             this.model.set(val, this.setOpts);
@@ -1095,9 +1105,11 @@
                     attributes = { type: 'checkbox', value: key};
                     if (this.addId) { extend(attributes, { name: id, id: (id + '-' + i) }); }
                     if (isChecked) { attributes.checked = 'checked'; }
-                    $listItem = $('<input>').attr(defaults(attributes, self.inputAttrs));
+                    $listItem = Backbone.
+                    Backbone.
+                    Backbone.$('<input>').attr(defaults(attributes, self.inputAttrs));
                     if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = $('<label>').attr('class', 'checkbox');
+                    $label = Backbone.$('<label>').attr('class', 'checkbox');
                     return $label.append($listItem).append(val);
                 };
 
@@ -1153,8 +1165,8 @@
             return this.unCheckedVal;
         },
         renderInput: function () {
-            var $label = $('<label>').attr('class', 'checkbox'),
-                $input = $('<input>').attr({ type: 'checkbox', value: this.checkedVal }),
+            var $label = Backbone.$('<label>').attr('class', 'checkbox'),
+                $input = Backbone.$('<input>').attr({ type: 'checkbox', value: this.checkedVal }),
                 id = this.templateVars.inputId,
                 modelVal = this.getModelVal();
 
@@ -1252,4 +1264,4 @@
         }
     });
 
-}(jQuery, Backbone, _, this));
+}(this));

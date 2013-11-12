@@ -5,15 +5,26 @@
 //     For all details and documentation:
 //     https://github.com/1stdibs/backbone-base-and-form-view
 
-/*global Backbone, window, jQuery, _ */
-(function ($, Backbone, _, window) {
+/*global Backbone, window, jQuery, _, exports, module, require */
+(function (root) {
     "use strict";
+
+    var $ = root.jQuery,
+        Backbone = root.Backbone,
+        _ = root._;
+
+    if (typeof module !== 'undefined') {
+        _ = require('underscore');
+        Backbone = require('Backbone');
+        $ = Backbone.$;
+        module.exports = Backbone;
+    }
 
     var
         // Finds globally dot noted namespaced objects from a string
         _stringToObj = function (str) {
             var arr = str.split('.'),
-                obj = window[arr.shift()];
+                obj = root[arr.shift()];
 
             while (arr.length && obj) {
                 obj = obj[arr.shift()];
@@ -671,6 +682,9 @@
             }
 
             Construct = (typeof Construct === 'string') ? _stringToObj(Construct) : Construct;
+            if (!Construct) {
+                console.log('Construct for key ' + key + ' was not found', config ? config.construct : '');
+            }
             instance = new Construct(options, this.parent);
             this._setInst(key, instance, (singleton !== undefined) ? singleton : config.singleton);
             return this;
@@ -775,7 +789,7 @@
          */
         place: function ($location, replace) {
             if (typeof $location === "string") {
-                var $parent = (this.parentView) ? this.parentView.$el : $('body');
+                var $parent = (this.parentView) ? this.parentView.$el : Backbone.$('body');
                 $location = $parent.find($location);
             }
 
@@ -952,4 +966,4 @@
 
     Backbone.BaseView = BaseView;
 
-}(jQuery, Backbone, _, this));
+}(this));
