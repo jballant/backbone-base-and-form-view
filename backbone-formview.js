@@ -257,7 +257,7 @@
             if (!$wrapper.length) {
                 return this.$el;
             }
-            return $wrapper;
+            return $wrapper.first();
         },
         /**
          * If your subviews (aka the fields) set in the schema aren't setup yet, then this method
@@ -278,7 +278,7 @@
             if (order && order.length) {
                 order = order.slice(0);
                 while (order.length) {
-                    this.subs.renderByKey(order.shift());
+                    this.subs.renderByKey(order.shift(), { useLocation: true });
                 }
             } else {
                 this.subs.renderAppend();
@@ -504,7 +504,7 @@
             if (!$wrapper.length) {
                 return this.$el;
             }
-            return $wrapper;
+            return $wrapper.first();
         },
         /**
          * Add a row or row to the CollectionFormView. If you do not
@@ -662,7 +662,7 @@
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             extend(this, {
-                templateVars : options.templateVars || {},
+                templateVars : options.templateVars || this.templateVars || {},
                 fieldName : options.fieldName || options.schemaKey,
                 elementType : options.elementType || this.elementType,
                 templateSrc : !isUndefined(options.templateSrc) ? options.templateSrc : this.templateSrc,
