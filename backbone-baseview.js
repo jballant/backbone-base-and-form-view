@@ -855,11 +855,11 @@
                         descend;
                     while (++i < len) {
                         descend = true;
+                        subViews[i].trigger.apply(subViews[i], args);
                         if ((stop = subViews[i]._stopPropogation) && stop[event]) {
                             stop[event] = false;
                             descend = false;
                         }
-                        subViews[i].trigger.apply(subViews[i], args);
                         subSubs = subViews[i].subViews;
                         if (descend && subSubs && subSubs.length) {
                             _trigger(subSubs);
