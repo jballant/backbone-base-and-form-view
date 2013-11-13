@@ -2,7 +2,6 @@
 backbone-base-form-view.sublime-project
 backbone-base-form-view.sublime-workspace
 node_modules
-package.json
 Gruntfile.js
 .grunt
 *.sh
