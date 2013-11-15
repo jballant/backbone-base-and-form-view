@@ -1111,7 +1111,7 @@
                 renderCheckbox = function (key, val, isChecked) {
                     var $listItem, $label;
                     attributes = { type: 'checkbox', value: key};
-                    if (this.addId) { extend(attributes, { name: id, id: (id + '-' + i) }); }
+                    if (self.addId) { extend(attributes, { name: id, id: (id + '-' + i) }); }
                     if (isChecked) { attributes.checked = 'checked'; }
                     $listItem = $('<input>').attr(defaults(attributes, self.inputAttrs));
                     if (self.inputClass) { $listItem.addClass(self.inputClass); }
@@ -1182,7 +1182,7 @@
                 modelVal = this.getModelVal();
 
             if (this.addId) { $input.attr({ id: id, name: id }); }
-            if (modelVal === true || modelVal === this.checkedVal) {
+            if (modelVal === this.checkedVal) {
                 $input.attr('checked', 'checked');
             }
             $label.append($input);
@@ -1221,13 +1221,12 @@
      */
     Backbone.FieldSetView = Backbone.FormView.extend({
         tagName: 'div',
-        className: 'fieldset',
         setupOnInit: true,
         initialize: function (options) {
             options = options || {};
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
             Backbone.FieldSetView.__super__.initialize.call(this, options);
-            this.$el.addClass('fieldset-' + this.fieldSetName);
+            this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
         },
         /**
          * Returns a prefix that the fieldset fields can use to create
@@ -1249,7 +1248,6 @@
      */
     Backbone.CollectionFieldSetView = Backbone.CollectionFormView.extend({
         tagName: 'div',
-        className: 'fieldset',
         templateSrc: '<% if(obj && obj.label) { %><p><strong><%= obj.label %></strong></p><% } %>' +
             '<fieldset class="fieldset" data-rows=""></fieldset>',
         setupOnInit: true,
@@ -1257,7 +1255,7 @@
             options = options || {};
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
             Backbone.CollectionFieldSetView.__super__.initialize.call(this, options);
-            this.$el.addClass('fieldset-' + this.fieldSetName);
+            this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
             return this;
         },
         /**
