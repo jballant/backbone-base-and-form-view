@@ -1074,6 +1074,11 @@
         type: 'check-list',
         checkedVal: true,
         unCheckedVal: false,
+        events : function () {
+            var events = {};
+            events['click ' + this.elementType] = 'setModelAttrs';
+            return events;
+        },
         initialize: function (options) {
             options = options || {};
             this.possibleVals = options.possibleVals || this.possibleVals || {};
@@ -1152,6 +1157,11 @@
     Backbone.fields.CheckBoxView = Backbone.fields.FieldView.extend({
         checkedVal: true,
         unCheckedVal: false,
+        events: function () {
+            var events = {};
+            events['click ' + this.elementType] = 'setModelAttrs';
+            return events;
+        },
         initialize: function (options) {
             options = options || {};
             this.checkedVal = options.checkedVal || this.checkedVal;
