@@ -532,7 +532,7 @@
             if (!isArray(models)) {
                 models = [models];
             }
-            this.collection.add(models);
+            models = this.collection.add(models);
             each(models, function (model) {
                 this._addRow(model).subs.last().render().$el
                     .appendTo(this.getRowWrapper());
