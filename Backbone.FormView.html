@@ -533,7 +533,7 @@ prototype property, or by passing a 'schema' option when you initialize the view
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-67">line 67</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-107">line 107</a>
     </li></ul></dd>
     
 
@@ -745,7 +745,7 @@ static function to add an allias 'Date' for that constructor</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-348">line 348</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-388">line 388</a>
     </li></ul></dd>
     
 
@@ -873,7 +873,7 @@ static function to add an allias 'Date' for that constructor</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-869">line 869</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-882">line 882</a>
     </li></ul></dd>
     
 
@@ -961,7 +961,7 @@ static function to add an allias 'Date' for that constructor</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-223">line 223</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-264">line 264</a>
     </li></ul></dd>
     
 
@@ -1052,7 +1052,7 @@ type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-885">line 885</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-898">line 898</a>
     </li></ul></dd>
     
 
@@ -1147,7 +1147,7 @@ type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-893">line 893</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-906">line 906</a>
     </li></ul></dd>
     
 
@@ -1237,7 +1237,7 @@ type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-905">line 905</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-918">line 918</a>
     </li></ul></dd>
     
 
@@ -1421,7 +1421,7 @@ default it is appended to the location.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-763">line 763</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-776">line 776</a>
     </li></ul></dd>
     
 
@@ -1509,7 +1509,7 @@ appended to that. Otherwise they will be directly appended to the template.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-238">line 238</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-279">line 279</a>
     </li></ul></dd>
     
 
@@ -1565,7 +1565,11 @@ appended to that. Otherwise they will be directly appended to the template.</p>
 they have the correct model based on the top level model. Only necessary
 if Form utitlizes a nested model paradigm and something might cause
 the field models to not be correct (ie if a nested model was changed but
-a field that should that nested model is using one that is out of date)</p>
+a field that should that nested model is using one that is out of date).
+NOTE: Events are not copied when you use this method. It is strongly
+recommended that if you need your subview models to be switched out
+that you reinstantiate the FormView, because that is the best way to 
+functionality remains.</p>
     </div>
     
 
@@ -1598,7 +1602,7 @@ a field that should that nested model is using one that is out of date)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-271">line 271</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-310">line 310</a>
     </li></ul></dd>
     
 
@@ -1686,7 +1690,7 @@ from the inputs all at once.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-214">line 214</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-255">line 255</a>
     </li></ul></dd>
     
 
@@ -1820,7 +1824,7 @@ from the inputs all at once.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-190">line 190</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-231">line 231</a>
     </li></ul></dd>
     
 
@@ -1907,7 +1911,7 @@ but fleshed out for the baseView's subView manager.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-201">line 201</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-242">line 242</a>
     </li></ul></dd>
     
 
@@ -2049,7 +2053,7 @@ view.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-785">line 785</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-798">line 798</a>
     </li></ul></dd>
     
 
@@ -2239,7 +2243,7 @@ on to the end of the arguments, so you can access it if needed.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-802">line 802</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-815">line 815</a>
     </li></ul></dd>
     
 
@@ -2428,7 +2432,7 @@ work in the same manner as they do with triggerBubble.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-835">line 835</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-848">line 848</a>
     </li></ul></dd>
     
 

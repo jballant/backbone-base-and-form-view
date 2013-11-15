@@ -157,6 +157,8 @@
             this.options = options || {};
             // Auto initialize a subview when config added
             this.autoInitSingletons = !!this.options.autoInitSingletons;
+            // If true, then new subview configs and types will default to being singletons
+            this.defaultToSingletons = this.options.defaultToSingletons;
             // Allow dot notation in 'get' method (if your config keys have dots, then set this to false)
             this.dotNotation = (this.options.dotNotation !== undefined) ? this.options.dotNotation : true;
 
@@ -258,9 +260,9 @@
          * @return {SubViewManager}
          */
         add: function (name, instance, singleton) {
-            var arr = (_.isArray(name)) ? name : (_.isArray(instance)) ? instance : false, // If its a simple array of subviews or configs
-                map = (!arr && _.isObject(name) && name instanceof View === false) ? name : false, // If its a mapping of subviews
-                viewOptions = (!arr && instance instanceof View === false) ? instance : false,
+            var arr = (_.isArray(name)) ? name : (_.isArray(instance)) ? instance : undefined, // If its a simple array of subviews or configs
+                map = (!arr && _.isObject(name) && name instanceof View === false) ? name : undefined, // If its a mapping of subviews
+                viewOptions = (!arr && instance instanceof View === false) ? instance : undefined,
                 key,
                 i,
                 len;
@@ -298,6 +300,7 @@
                 if (arr[0] instanceof View) {
                     this._addInstance(name, arr, singleton);
                 } else {
+                    i = -1;
                     while (++i &lt; len) {
                         this._init(name, arr[i], singleton);
                     }
@@ -443,6 +446,7 @@
         renderByKey: function (key, options) {
             var subViews = this.getByType(key) || this.get(key);
             if (!_.isArray(subViews)) { subViews = [subViews]; }
+            options = options || {};
             return this._render(subViews, options.appendTo || options.useLocation, options.clearLocations);
         },
         /**
@@ -534,8 +538,7 @@
          */
         remove: function (key, preserveElems) {
             var subViews = (key && (typeof key === "string" || key.cid)) ? this.get(key) : key,
-                len,
-                i = -1;
+                len;
             if (!subViews) { return this; }
             if (!_.isArray(subViews)) {
                 subViews = [subViews];
@@ -659,7 +662,7 @@
             while (++i &lt; len) {
                 subViews[i].render();
                 if ($appendTo) {
-                    subViews[i].$el.appendTo($appendTo);
+                    subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo) : $appendTo);
                 } else if (place && (location = this._subViews[this.getSubViewType(subViews[i])].location)) {
                     if (typeof location === 'string') {
                         if (!$locations[location]) {
@@ -677,7 +680,7 @@
 
             key = key || '_svid_' + _.size(this._subViews);
 
-            if (self._subViewSingletons[key]) { return; }
+            if (self._subViewSingletons[key]) { return self; }
 
             if (!_.isArray(subViews)) {
                 subViews = [subViews];
@@ -758,6 +761,7 @@
                 }
             }
 
+            singleton = (typeof singleton === 'boolean') ? singleton : this.defaultToSingletons;
             if (singleton) {
                 this._subViewSingletons[key] = instance;
             } else {
@@ -777,11 +781,11 @@
             options = _.extend({}, config.options || {}, options || {});
 
             if (this._subViewSingletons[key]) {
-                return;
+                return this;
             }
 
             Construct = (typeof Construct === 'string') ? _stringToObj(Construct) : Construct;
-            instance = this.subViews[key] = new Construct(options, this.parent);
+            instance = new Construct(options, this.parent);
             this._setInst(key, instance, (singleton !== undefined) ? singleton : config.singleton);
             return this;
         }
@@ -828,6 +832,7 @@
      * @property subs {SubViewManager} - object specifically for manipulating subviews
      * @property subViewConfig      - A config map that can be automatically passed to the SubViewManager
      * @property autoInitSubViews   - any subviews that are singletons will be autoinitilized if true
+     * @property singletonSubViews  - If subviews should default to being singletons when created
      * @property parentView         - if this is a subView of another dibLibs.BaseView, this will be a ref to that view instance
      */
     BaseView = View.extend({
@@ -843,6 +848,8 @@
         subViewConfig: null,
         // Any subviews that are singletons will be auto initialized if the below is true
         autoInitSubViews: false,
+        // True if your subviews should default to singleton or not
+        singletonSubViews: false,
         // If this is a subView of another Backbone.BaseView, this will be a ref to that view instance
         parentView: null,
         // Add events that will not bubble events up app the view's ancestor tree
@@ -853,14 +860,20 @@
             // Assign a parentView if second param is a Backbone View
             this.parentView = (parentView instanceof View) ? parentView : null;
             this.subs = new SubViewManager(null, this, {
-                autoInitSingletons: this.autoInitSubViews
+                autoInitSingletons: this.autoInitSubViews,
+                defaultToSingletons: this.singletonSubViews
             });
             if (subViewCfg) {
                 this.subs.addConfig(subViewCfg);
             }
             this.subViews = this.subs.subViews;
             BaseView.__super__.constructor.call(this, options);
-            if (this.viewEvents || this.options.viewEvents) {
+            // To maintain parity with how Backbone handles the 'events'
+            // property on a view, we will overwrite the 'viewEvents'
+            // property on the prototype with options.viewEvents if it
+            // exists
+            this.viewEvents = options && options.viewEvents ? options.viewEvents : this.viewEvents;
+            if (this.viewEvents) {
                 this.bindViewEvents();
             }
         },
@@ -956,11 +969,11 @@
                         descend;
                     while (++i &lt; len) {
                         descend = true;
+                        subViews[i].trigger.apply(subViews[i], args);
                         if ((stop = subViews[i]._stopPropogation) && stop[event]) {
                             stop[event] = false;
                             descend = false;
                         }
-                        subViews[i].trigger.apply(subViews[i], args);
                         subSubs = subViews[i].subViews;
                         if (descend && subSubs && subSubs.length) {
                             _trigger(subSubs);
@@ -1036,7 +1049,7 @@
          * return {Backbone.BaseView}
          */
         bindViewEvents: function (events) {
-            events = events || _.extend({}, _.result(this, 'viewEvents'), _.result(this.options, 'viewEvents'));
+            events = events || _.result(this, 'viewEvents');
             _.each(events, function (func, event) {
                 var segs = event.split(' '),
                     listenTo = (segs.length > 1) ? this[segs[1]] : this;
