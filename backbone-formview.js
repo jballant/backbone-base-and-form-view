@@ -451,6 +451,7 @@
         tagName: 'form',
         attributes: { 'class' : 'form' },
         rowTemplateSrc: '',
+        rowWrapper : '[data-rows]',
         rowConfig: {
             singleton: false,
             construct: Backbone.CollectionFormRowView
@@ -484,7 +485,8 @@
          * @return {Backbone.CollectionFormView}
          */
         setRowSchema: function (schema) {
-            this.rowConfig.rowSchema = schema || this.options.rowSchema || this.rowSchema;
+            if (!this.rowConfig.options) { this.rowConfig.options = {}; }
+            this.rowConfig.options.schema = schema || this.options.rowSchema || this.rowSchema;
             return this;
         },
         /**
@@ -509,7 +511,7 @@
          * @return {$} 
          */
         getRowWrapper: function () {
-            var $wrapper = this.$('[data-rows]');
+            var $wrapper = this.$(this.rowWrapper);
             if (!$wrapper.length) {
                 return this.$el;
             }
@@ -663,6 +665,7 @@
         template: _.template(Backbone.formTemplates.Field),
         addId: true,
         elementType: 'input',
+        inputWrapper: '[data-input]',
         events: function () {
             var events = {};
             events['blur ' + this.elementType] = 'setModelAttrs';
@@ -801,11 +804,11 @@
          * @return {$}
          */
         getInputWrapper: function () {
-            var $wrapper = this.$('[data-input]');
+            var $wrapper = this.$(this.inputWrapper);
             if (!$wrapper.length) {
                 return this.$el;
             }
-            return $wrapper;
+            return $wrapper.first();
         },
         /**
          * Disable the input if not already disabled
