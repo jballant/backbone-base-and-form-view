@@ -56,6 +56,15 @@
             }
         },
 
+        /**
+         * Used by the FieldSet and CollectionFieldSet function
+         * @return {string} A prefix for a field name/id
+         */
+        getFieldPrefix = function () {
+            var prefPref = (this.parentView && this.parentView.getFieldPrefix) ? this.parentView.getFieldPrefix() : '';
+            return prefPref + this.fieldSetName + '-';
+        },
+
         // ------------------------
         // Local utility functions
 
@@ -1212,10 +1221,7 @@
          * @memberOf Backbone.FieldSetView#
          * @return {string}
          */
-        getFieldPrefix: function () {
-            var prefPref = (this.parentView && this.parentView.getFieldPrefix) ? this.parentView.getFieldPrefix() : '';
-            return prefPref + this.fieldSetName + '-';
-        },
+        getFieldPrefix: getFieldPrefix,
         templateSrc: '<% if(obj && obj.label) { %><label class="fieldset-label">' +
             '<strong><%= obj.label %></strong></label><% } %><fieldset data-fields=""></fieldset>'
     });
@@ -1246,10 +1252,7 @@
          * @memberOf Backbone.CollectionFieldSetView#
          * @return {string}
          */
-        getFieldPrefix: function () {
-            var prefPref = (this.parentView && this.parentView.getFieldPrefix) ? this.parentView.getFieldPrefix() : '';
-            return prefPref + this.fieldSetName + '-';
-        }
+        getFieldPrefix: getFieldPrefix
     });
 
 }(jQuery, Backbone, _, this));
