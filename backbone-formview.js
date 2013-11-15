@@ -876,7 +876,7 @@
      * @property {string} [options.inputClass] inherited from Backbone.fields.FieldView
      * @property {boolean} [options.twoWay] inherited from Backbone.fields.FieldView
      * @property {object} [options.inputAttrs] inherited from Backbone.fields.FieldView
-     * @property {object} [options.possibleVals]
+     * @property {object|function} [options.possibleVals]
      *      An object with the set of possible choices to display to the user. Each key will be
      *      what is set in the model when the user selects the radio, and each value is what
      *      will be used as the label text to display to the user.
@@ -1035,6 +1035,7 @@
                     }
                 }
             }
+            return this;
         }
     });
 
@@ -1062,7 +1063,7 @@
      * @property {string} [options.inputId] inherited from Backbone.fields.FieldView
      * @property {string} [options.inputClass] inherited from Backbone.fields.FieldView
      * @property {boolean} [options.twoWay] inherited from Backbone.fields.FieldView
-     * @property {object} [options.possibleVals]
+     * @property {object|function} [options.possibleVals]
      *      An object with the set of possible choices to display to the user. Unlike the other
      *      list views, the key should be what field the choice corresponds to on the model.
      * @property [options.checkedVal] - the value to set on the model when a checkbox is checked
