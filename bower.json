@@ -1,0 +1,9 @@
+{
+    "name":"backbone-base-and-form-view",
+    "version":"0.4.0",
+    "main":["./backbone-baseview.js", "./backbone-formview.js"],
+    "dependencies":{
+        "backbone":">=1.0.0",
+        "underscore":">=1.4.3"
+    }
+}

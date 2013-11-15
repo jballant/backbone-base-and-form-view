@@ -1,0 +1,25 @@
+{
+    "name": "1stdibs/backbone-base-and-form-view",
+    "description": "Create an organized hierarchy of views and subviews with Backbone.BaseView and highly extendable forms with Backbone.FormView",
+    "type": "library",
+    "authors": [
+        {
+            "name" : "James Ballantine",
+            "email": "james@1stdibs.com"
+        }
+    ],
+    "require": {
+        "jashkenas/underscore": ">=1.5.2",
+        "jashkenas/backbone": ">=1.0.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/jashkenas/underscore/"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/jashkenas/backbone/"
+        }
+    ]
+}
