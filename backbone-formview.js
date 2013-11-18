@@ -575,6 +575,16 @@
             return this;
         },
         /**
+         * Shortcut method to remove all rows and then
+         * set them up again, render them, and place
+         * them in the row wrapper
+         * @memberOf Backbone.CollectionFormView#
+         * @return {Backbone.CollectionFormView}
+         */
+        reset: function () {
+            this.setupRows().subs.renderByKey('row', { appendTo: this.getRowWrapper() });
+        },
+        /**
          * When you are ready to set up your rows (ie initialize
          * each Row view instance based on the collection
          * @memberOf Backbone.CollectionFormView#
