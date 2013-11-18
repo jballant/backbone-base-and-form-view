@@ -198,7 +198,7 @@
             'CollectionField' : 'Backbone.CollectionFieldSetView'
         },
         templateSrc: '<div data-fields=""></div>',
-        fieldsWrapper: '[data-fields]',
+        fieldsWrapper: '[data-fields]:first',
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             var schema = options.schema || this.schema,
@@ -449,9 +449,9 @@
      */
     Backbone.CollectionFormView = Backbone.BaseView.extend({
         tagName: 'form',
-        attributes: { 'class' : 'form' },
+        className: 'form',
         rowTemplateSrc: '',
-        rowWrapper : '[data-rows]',
+        rowWrapper : '[data-rows]:first',
         rowConfig: {
             singleton: false,
             construct: Backbone.CollectionFormRowView
@@ -528,11 +528,17 @@
          * @return {Backbone.CollectionFormView}
          */
         addRow: function (models) {
+            var added;
             models = models || new this.collection.model();
             if (!isArray(models)) {
                 models = [models];
             }
-            models = this.collection.add(models);
+            added = this.collection.add(models);
+            // Backbone 1.0.0 does not return the added models,
+            // so we will not set the models var to the return val
+            if (!(added instanceof Backbone.Collection)) {
+                models = added;
+            }
             each(models, function (model) {
                 this._addRow(model).subs.last().render().$el
                     .appendTo(this.getRowWrapper());
@@ -665,7 +671,7 @@
         template: _.template(Backbone.formTemplates.Field),
         addId: true,
         elementType: 'input',
-        inputWrapper: '[data-input]',
+        inputWrapper: '[data-input]:first',
         events: function () {
             var events = {};
             events['blur ' + this.elementType] = 'setModelAttrs';
