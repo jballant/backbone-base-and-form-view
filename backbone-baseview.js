@@ -548,11 +548,11 @@
             while (++i < len) {
                 subViews[i].render();
                 if ($appendTo) {
-                    subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo) : $appendTo);
+                    subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo).first() : $appendTo);
                 } else if (place && (location = this._subViews[this.getSubViewType(subViews[i])].location)) {
                     if (typeof location === 'string') {
                         if (!$locations[location]) {
-                            $locations[location] = this.parent.$(location);
+                            $locations[location] = this.parent.$(location).first();
                         }
                         location = $locations[location];
                     }
