@@ -1222,6 +1222,7 @@
     Backbone.FieldSetView = Backbone.FormView.extend({
         tagName: 'div',
         setupOnInit: true,
+        className: '',
         initialize: function (options) {
             options = options || {};
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
@@ -1251,6 +1252,7 @@
         templateSrc: '<% if(obj && obj.label) { %><p><strong><%= obj.label %></strong></p><% } %>' +
             '<fieldset class="fieldset" data-rows=""></fieldset>',
         setupOnInit: true,
+        className: '',
         initialize: function (options) {
             options = options || {};
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
