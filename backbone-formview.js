@@ -583,6 +583,7 @@
          */
         reset: function () {
             this.setupRows().subs.renderByKey('row', { appendTo: this.getRowWrapper() });
+            return this;
         },
         /**
          * When you are ready to set up your rows (ie initialize
