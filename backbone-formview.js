@@ -210,7 +210,8 @@
                 setupOnInit : options.setupOnInit || this.setupOnInit,
                 validateOnSet : (!isUndefined(options.validateOnSet)) ? options.validateOnSet : this.validateOnSet,
                 twoWay: (!isUndefined(options.twoWay)) ? options.twoWay : this.twoWay,
-                autoUpdateModel: (!isUndefined(options.autoUpdateModel)) ? options.autoUpdateModel : this.autoUpdateModel
+                autoUpdateModel: (!isUndefined(options.autoUpdateModel)) ? options.autoUpdateModel : this.autoUpdateModel,
+                fieldsWrapper: options.fieldsWrapper || this.fieldsWrapper
             });
             this.template = options.template || _.template(this.templateSrc);
             this.subViewConfig = options.subViewConfig || null;
@@ -463,6 +464,7 @@
             this.setupOnInit = !isUndefined(this.options.setupOnInit) ? this.options.setupOnInit : this.setupOnInit;
             this.rowOptions = this.options.rowOptions || this.rowOptions;
             this.templateVars = defaults(this.options.templateVars || {}, { label: this.options.label });
+            this.rowWrapper = options.rowWrapper || this.rowWrapper;
             if (this.options.rowConfig) {
                 this.rowConfig = this.options.rowConfig;
                 this.rowConfig = result(this, 'rowConfig');
@@ -701,7 +703,8 @@
                 inputAttrs: options.inputAttrs || this.inputAttrs,
                 placeholder: options.placeholder || this.placeholder,
                 inputClass: options.inputClass || this.inputClass,
-                addId: !isUndefined(options.addId) ? options.addId : this.addId
+                addId: !isUndefined(options.addId) ? options.addId : this.addId,
+                inputWrapper: options.inputWrapper || this.inputWrapper
             });
             extend(this.templateVars, {
                 inputId : this.addId ? this._getInputId() : false,
