@@ -464,7 +464,7 @@
             this.setupOnInit = !isUndefined(this.options.setupOnInit) ? this.options.setupOnInit : this.setupOnInit;
             this.rowOptions = this.options.rowOptions || this.rowOptions;
             this.templateVars = defaults(this.options.templateVars || {}, { label: this.options.label });
-            this.rowWrapper = options.rowWrapper || this.rowWrapper;
+            this.rowWrapper = this.options.rowWrapper || this.rowWrapper;
             if (this.options.rowConfig) {
                 this.rowConfig = this.options.rowConfig;
                 this.rowConfig = result(this, 'rowConfig');
