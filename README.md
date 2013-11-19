@@ -110,7 +110,9 @@ The config above has several properties that are important to know:
 
    * construct : This tells the SubViewManager what constructor function to use when creating the view 
    * singleton : This tells the SubViewManager that you only want one instance of this type allowed for this SubViewManager. Once it's instantiated, other instances will not be added to that type.
-   * location : When you render the subviews, the SubViewManager makes it easier to place them by allowing you to specify in a config where a subview of this type should be appended to
+   * location : When you render the subviews, the SubViewManager makes it easier to place them by allowing you to specify in a config where a subview of this type should be appended to. This can be a jQuery selector, a 
+   jQuery object, or a function that will be invoked after rendering the subview that returns an instance
+   of jQuery.
    * options : A default set of options to pass to the constructor. When you instantiate this object later with 'add' you can add additional options.
 
 With the example above, you could have also added a 'subViewConfig' property to the MyView definition at the top, which in this example would be an object with one key value pair, with the key being 'mySubView' (the name of the sub view type you want to define) and the value being the config object for that type.

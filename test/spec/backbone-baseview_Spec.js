@@ -396,6 +396,21 @@
                     expect(testView.subs.get('row')[0].render).not.toHaveBeenCalled();
                 });
 
+                it('should allow making \'location\' a function that returns a jQuery instance', function () {
+                    testView = new Backbone.BaseView();
+                    testView.$el.html('<div class="one"></div><div class="two">');
+                    testView.subs.addConfig('testType', {
+                        singleton: true,
+                        construct: Backbone.BaseView,
+                        location : function () {
+                            return this.parentView.$('.two');
+                        }
+                    });
+                    testView.subs.add('testType').renderAppend();
+                    expect(testView.$('.two').children().length).toBe(1);
+                    expect(testView.$('.one').children().length).toBe(0);
+                });
+
             });
 
             describe('"filteredSubs" method', function () {

@@ -363,6 +363,23 @@
                     expect(testForm.collection.get(model)).toBeFalsy();
                 });
             });
+            describe('"reset" method', function () {
+                it('should invoke "setupRows" and then append new row subviews to inputWrapper', function () {
+                    testForm.collection.reset([{
+                        foo: 'Test 4',
+                        bar: 'D'
+                    }, {
+                        foo: 'Test 5',
+                        bar: 'E'
+                    }]);
+                    spyOn(testForm, 'setupRows').andCallThrough();
+                    testForm.reset();
+                    expect(testForm.setupRows).toHaveBeenCalled();
+                    expect(testForm.subs.get('row').length).toBe(2);
+                    expect(testForm.subs.get('row')[0].model.get('foo')).toBe('Test 4');
+                    expect(testForm.getRowWrapper().children().length).toBe(2);
+                });
+            });
         });
 
         describe('FieldView', function () {
