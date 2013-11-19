@@ -242,8 +242,9 @@
          *          construct:  // Constructor function or string version (i.e. "Backbone.BaseView")
          *          options:    // Any options you want to pass to the initialize function
          *          singleton:  // if the object should be configured as a singleton or not
-         *          location:   // A string or jQuery instance in the parent view element.
-         *                      // The subview el will be appended to that location
+         *          location:   // A string or jQuery instance in the parent view element. Or
+         *                      // a function that returns one of these. The subview el will 
+         *                      // be appended to that location
          *      }
          * @returns {SubViewManager}
          */
@@ -555,6 +556,9 @@
                             $locations[location] = this.parent.$(location).first();
                         }
                         location = $locations[location];
+                    } else if (typeof location === 'function') {
+                        location = location.call(subViews[i]);
+                        if (!(location instanceof $)) { throw new Error('location function must return instance of jQuery'); }
                     }
                     location.append(subViews[i].$el);
                 }
