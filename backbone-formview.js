@@ -909,8 +909,9 @@
         },
         type: 'radio-list',
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.possibleVals = options.possibleVals || this.possibleVals || {};
+            this.labelAttrs = options.labelAttrs || this.labelAttrs;
             Backbone.fields.RadioListView.__super__.initialize.call(this, options);
         },
         /**
@@ -935,6 +936,7 @@
                 id = this.templateVars.inputId,
                 modelVal = this.getModelVal(),
                 $inputWrapper = this.getInputWrapper().empty(),
+                labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'radio' }),
                 renderCheckbox = function (val, isChecked) {
                     var $listItem, $label,
                         attributes = { type: 'radio', value: key };
@@ -942,7 +944,7 @@
                     if (isChecked) { attributes.checked = 'checked'; }
                     $listItem = $('<input>').attr(defaults(attributes, self.inputAttrs));
                     if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = $('<label>').attr('class', 'radio');
+                    $label = $('<label>').attr(labelAttrs);
                     $label.append($listItem).append(val);
                     return $label;
                 };
@@ -1004,7 +1006,7 @@
             return events;
         },
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.multiple = !isUndefined(options.multiple) ? options.multiple : this.multiple;
             Backbone.fields.SelectListView.__super__.initialize.call(this, options);
         },
@@ -1100,10 +1102,11 @@
             return events;
         },
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.possibleVals = options.possibleVals || this.possibleVals || {};
             this.checkedVal = options.checkedVal || this.checkedVal;
             this.unCheckedVal = options.unCheckedVal || this.unCheckedVal;
+            this.labelAttrs = options.labelAttrs || this.labelAttrs;
             Backbone.fields.CheckListView.__super__.initialize.call(this, options);
         },
         setupTwoWay: function () {
@@ -1126,6 +1129,7 @@
                 possibleVals = result(this, 'possibleVals'),
                 i = 0,
                 id = this.templateVars.inputId,
+                labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'radio' }),
                 self = this,
                 $inputWrapper = this.getInputWrapper().empty(),
                 renderCheckbox = function (key, val, isChecked) {
@@ -1135,7 +1139,7 @@
                     if (isChecked) { attributes.checked = 'checked'; }
                     $listItem = $('<input>').attr(defaults(attributes, self.inputAttrs));
                     if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = $('<label>').attr('class', 'checkbox');
+                    $label = $('<label>').attr(labelAttrs);
                     return $label.append($listItem).append(val);
                 };
 
@@ -1183,10 +1187,11 @@
             return events;
         },
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.checkedVal = options.checkedVal || this.checkedVal;
             this.unCheckedVal = options.unCheckedVal || this.unCheckedVal;
             this.displayText = options.displayText || this.displayText;
+            this.labelAttrs = options.labelAttrs || this.labelAttrs;
             Backbone.fields.CheckListView.__super__.initialize.call(this, options);
         },
         getValue: function () {
@@ -1196,7 +1201,7 @@
             return this.unCheckedVal;
         },
         renderInput: function () {
-            var $label = $('<label>').attr('class', 'checkbox'),
+            var $label = $('<label>').attr(defaults(this.labelAttrs || {}, { 'class': 'radio' })),
                 $input = $('<input>').attr({ type: 'checkbox', value: this.checkedVal }),
                 id = this.templateVars.inputId,
                 modelVal = this.getModelVal();
@@ -1244,7 +1249,7 @@
         setupOnInit: true,
         className: '',
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
             Backbone.FieldSetView.__super__.initialize.call(this, options);
             this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
@@ -1274,7 +1279,7 @@
         setupOnInit: true,
         className: '',
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
             Backbone.CollectionFieldSetView.__super__.initialize.call(this, options);
             this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
