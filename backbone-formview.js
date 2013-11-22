@@ -1129,7 +1129,7 @@
                 possibleVals = result(this, 'possibleVals'),
                 i = 0,
                 id = this.templateVars.inputId,
-                labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'radio' }),
+                labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'checkbox' }),
                 self = this,
                 $inputWrapper = this.getInputWrapper().empty(),
                 renderCheckbox = function (key, val, isChecked) {
@@ -1201,7 +1201,7 @@
             return this.unCheckedVal;
         },
         renderInput: function () {
-            var $label = $('<label>').attr(defaults(this.labelAttrs || {}, { 'class': 'radio' })),
+            var $label = $('<label>').attr(defaults(this.labelAttrs || {}, { 'class': 'checkbox' })),
                 $input = $('<input>').attr({ type: 'checkbox', value: this.checkedVal }),
                 id = this.templateVars.inputId,
                 modelVal = this.getModelVal();
