@@ -13,6 +13,10 @@
       "url":"https://github.com/1stdibs/backbone-base-and-form-view/blob/master/LICENSE.txt"
     }
   ],
+  "dependencies":{
+    "underscore": ">=1.4.3",
+    "backbone": ">=1.0.0"
+  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.9",
@@ -21,6 +25,11 @@
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-contrib-jasmine": "~0.5.2"
   },
+  "main": "./backbone-formview",
+  "scripts": {
+    "test": "grunt jasmine"
+  },
+  "github": "https://github.com/1stdibs/backbone-base-and-form-view/",
   "contributors": [{
     "name": "James Ballantine",
     "web": "https://github.com/jballant"

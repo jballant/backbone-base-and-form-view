@@ -5,15 +5,24 @@
 //     For all details and documentation:
 //     https://github.com/1stdibs/backbone-base-and-form-view
 
-/*global Backbone, window, jQuery, _ */
-(function ($, Backbone, _, window) {
+/*global Backbone, window, jQuery, _, exports, module, require */
+(function (root) {
     "use strict";
+
+    var Backbone = root.Backbone,
+        _ = root._;
+
+    if (typeof module !== 'undefined') {
+        _ = require('underscore');
+        Backbone = require('Backbone');
+        module.exports = Backbone;
+    }
 
     var
         // Finds globally dot noted namespaced objects from a string
         _stringToObj = function (str) {
             var arr = str.split('.'),
-                obj = window[arr.shift()];
+                obj = root[arr.shift()];
 
             while (arr.length && obj) {
                 obj = obj[arr.shift()];
@@ -304,7 +313,7 @@
          */
         renderAppend: function (appendTo, options) {
             options = options || {};
-            if (_.isObject(appendTo) && appendTo instanceof $ === false && !_.isElement(appendTo)) {
+            if (_.isObject(appendTo) && appendTo instanceof Backbone.$ === false && !_.isElement(appendTo)) {
                 options = appendTo;
                 appendTo = options.appendTo;
             }
@@ -675,6 +684,9 @@
             }
 
             Construct = (typeof Construct === 'string') ? _stringToObj(Construct) : Construct;
+            if (!Construct) {
+                console.log('Construct for key ' + key + ' was not found', config ? config.construct : '');
+            }
             instance = new Construct(options, this.parent);
             this._setInst(key, instance, (singleton !== undefined) ? singleton : config.singleton);
             return this;
@@ -779,7 +791,7 @@
          */
         place: function ($location, replace) {
             if (typeof $location === "string") {
-                var $parent = (this.parentView) ? this.parentView.$el : $('body');
+                var $parent = (this.parentView) ? this.parentView.$el : Backbone.$('body');
                 $location = $parent.find($location);
             }
 
@@ -956,4 +968,4 @@
 
     Backbone.BaseView = BaseView;
 
-}(jQuery, Backbone, _, this));
+}(this));
