@@ -159,10 +159,13 @@
 <p><a href="http://jquery.com">jQuery</a></p>
 <p><a href="http://underscorejs.org">Underscore</a> OR <a href="http://lodash.com">Lo-Dash</a></p>
 <p><a href="http://backbonejs.org">Backbone</a></p>
-<h3>Installation</h3>
+<h3>Standard Installation</h3>
 <p><a href="https://github.com/1stdibs/backbone-base-and-form-view">Download the source code from Github</a></p>
 <p><strong>BaseView</strong> - If you just want to use Backbone.BaseView, first load it on your page after Backbone.</p>
 <p><strong>FormView</strong> - To use Backbone.FormView, load Backbone.BaseView after Backbone, and then load Backbone.FormView</p>
+<h3>NPM Installation</h3>
+<p>Install it through npm simply by running the command <code>npm install backbone-base-and-form-view</code>. If you use <a href="https://github.com/substack/node-browserify">browserify</a>, you can load these modules like this: </p>
+<p><code>var Backbone = require('backbone-base-and-view'); // loads Backbone for you and re-exports it</code></p>
 <h2>Using Backbone.BaseView</h2>
 <p>You can use Backbone.BaseView like a normal Backbone.View, however, you get some additional functionality in the form of <em>subviews</em>. A subview is a view that is nested in the '.subViews' array in a BaseView instance, and typically would have it's '.el' HTMLelement inside the BaseViews '.el' HTMLelement. </p>
 <p>Backbone.BaseView lets you interact with them through the SubViewManager instance stored in the 'subs' property of the BaseView instance. </p>
@@ -453,6 +456,61 @@ testView.subs.get(testModel);
 <p>A variant of Backbone.FormView that works in a very similar manner, except that instead of rendering one subView for each field defined in the schema, a 'row' or 'fieldset' will be rendered for each model in the collection passed to the Backbone.CollectionFormView. </p>
 <p>Effectively, this renders a modified FormView for each model in the collection, and adds some methods to make it easier to modify the collection form like 'addRow', 'deleteRow', and 'reset'.</p>
 <p>What this means is that each field in schema will have a subview created for each model in the collection, and will be grouped into by a wrapper element that possesses a 'data-row' attribute.</p>
+<h2>Extending the FormView and FormFields</h2>
+<p>Backbone.FormView and the field views are designed to be extended, like Backbone.BaseView or any Backbone.View. Here are some ways you can extend the Backbone.FormView and form view fields.</p>
+<h3>Overriding the default templates</h3>
+<p>It's likely that you would want to use your own templates most of the time. First you need to define the template you want to use.Backbone.FormView instances append the field elements to the <code>fieldsWrapper</code> property by defualt. This property is a jQuery selector that looks for the the first element with a 'data-fields' attribute. Note that you can override this property in your extension if you wish. Most of the time, it's easiest just to create a template with this element:</p>
+<pre><code>    &lt;script type=&quot;text/template&quot; id=&quot;my-form-template&quot;&gt;
+      &lt;div data-fields=&quot;&quot;&gt;&lt;/div&gt;
+    &lt;/script&gt;</code></pre>
+<p>Backbone.fields.FieldView (aka the 'Text' field) instances render a template that serves to wrap the actual input element for the purposes of adding formatting, help text, labels, etc. When you define a custom template, by default, you would create a blank element with a 'data-input' attribute, which tells the field instance to put the input there when it renders. </p>
+<pre><code>    &lt;script type=&quot;text/template&quot; id=&quot;my-field-template&quot;&gt;
+      &lt;div data-input=&quot;&quot;&gt;&lt;/div&gt;
+      &lt;p class=&quot;help-text&quot;&gt;&lt;%= obj.help %&gt;&lt;/p&gt;
+    &lt;/script&gt;</code></pre>
+<p>Notice that you can obviously still use the template variables normally used on render. You can always add more variables using the <code>templateVars</code> property for both the FormView and the field views.</p>
+<p>Now we can define our extensions:</p>
+<pre><code>    // Define an extended FormView with a custom template
+    var MyFormView = Backbone.FormView.extend({
+      template: _.template($('#my-form-template').html())
+    });
+    // Define an extended FieldView with a custom template
+    var MyFieldView = Backbone.FormView.extend({
+      label: 'Default label for MyField fields',
+      template: _.template($('#my-field-template').html())
+    });
+
+    // Add an alias for your field so you don't have to 
+    // refer to the constructor directly
+    MyFormView.addFieldAlias('MyField', MyFieldView);</code></pre>
+<p>And now you are free to use your extension</p>
+<pre><code>    new MyFormView({
+      model: new Backbone.Model(),
+      schema: {
+        name: {
+          type: 'MyField'
+        }
+      }
+    });</code></pre>
+<h3>Overriding how and when model attributes are set</h3>
+<p>Backbone.FormView field views, by default, uses 'blur' events for Text fields, 'change' events for SelectList fields, and 'click' events for CheckList, Checkbox, and RadioList fields. When these events occur, the field calls <code>setModelAttrs</code>. If you just want to tweak the value that is set on the model, you can probably just override the <code>getValue</code> method (note that CheckList doesn't use this method). The <code>getValue</code> method simply returns the value for the model field that you want to set, which should be the current value of the input. </p>
+<p>Lets say you want to make a number text field, an extension of the Text field where values are converted to a number when set on the model:</p>
+<pre><code>      var NumberFieldView = Backbone.fields.FieldView.extend({
+        // Intended to be the same as the default implementation, so
+        // we call the super method, and then run it through parse float
+        getValue: function () {
+          return parseFloat(MyFieldView.__super__.getValue.call(this));
+        }
+      });
+      Backbone.FormView.addFieldAlias('NumberField', NumberFieldView);</code></pre>
+<p>See? That was easy. Another way to extend model-setting functionality is by overriding the events. Let's say you want attributes to be set only after a keypress, all you have to do is this:</p>
+<pre><code>      var KeyPressTextFieldView = Backbone.fields.FieldView.extend({
+        events: {
+          'keypress input' : 'setModelAttrs'
+        }
+      });
+      Backbone.FormView.addfieldAlias('KeyPressText', KeyPressTextFieldView);</code></pre>
+<p>You could write a custom function and use <code>_.debounce</code> if you want to wait till the user stops typing to set the attributes. If you want to preserve the original 'blur' event functionality, then you just need to add another event for 'blur' that calls <code>setModelAttrs</code>.</p>
 <h2>Example FormView Demos</h2>
 <p>All of these form's are pretty bare-bones -- just to illustrate the concepts in a simple manner.</p>
 <ul>
