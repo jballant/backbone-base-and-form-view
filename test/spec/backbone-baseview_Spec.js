@@ -396,6 +396,21 @@
                     expect(testView.subs.get('row')[0].render).not.toHaveBeenCalled();
                 });
 
+                it('should allow making \'location\' a function that returns a jQuery instance', function () {
+                    testView = new Backbone.BaseView();
+                    testView.$el.html('<div class="one"></div><div class="two">');
+                    testView.subs.addConfig('testType', {
+                        singleton: true,
+                        construct: Backbone.BaseView,
+                        location : function () {
+                            return this.parentView.$('.two');
+                        }
+                    });
+                    testView.subs.add('testType').renderAppend();
+                    expect(testView.$('.two').children().length).toBe(1);
+                    expect(testView.$('.one').children().length).toBe(0);
+                });
+
             });
 
             describe('"filteredSubs" method', function () {
@@ -564,7 +579,7 @@
             expect(testView.parentView).toBeFalsy();
         });
 
-        describe('"triggerBubble" method', function () {
+        describe('Backbone events view heirarchy cascading', function () {
             var topView, cView;
             beforeEach(function () {
                 topView = new Backbone.BaseView();
@@ -577,37 +592,93 @@
                     .add('c', cView);
             });
 
-            it('should trigger an event the view it\'s ancestors', function () {
-                var triggeredOnTopViewWith,
-                    triggeredOnA,
-                    triggeredOnB,
-                    triggeredOnC;
+            describe('"triggerBubble" method', function () {
 
-                cView.on('foo', function () { triggeredOnC = true; });
-                cView.parentView.on('foo', function () { triggeredOnB = true; });
-                topView.subs.get('a').on('foo', function () { triggeredOnA = true; });
-                topView.on('foo', function (arg) {
-                    triggeredOnTopViewWith = arg;
+                it('should trigger an event the view it\'s ancestors', function () {
+                    var triggeredOnTopViewWith,
+                        triggeredOnA,
+                        triggeredOnB,
+                        triggeredOnC;
+
+                    cView.on('foo', function () { triggeredOnC = true; });
+                    cView.parentView.on('foo', function () { triggeredOnB = true; });
+                    topView.subs.get('a').on('foo', function () { triggeredOnA = true; });
+                    topView.on('foo', function (arg) {
+                        triggeredOnTopViewWith = arg;
+                    });
+                    cView.triggerBubble('foo', 'test-arg');
+                    expect(triggeredOnC).toBe(true);
+                    expect(triggeredOnB).toBe(true);
+                    expect(triggeredOnA).toBe(true);
+                    expect(triggeredOnTopViewWith).toBe('test-arg');
                 });
-                cView.triggerBubble('foo', 'test-arg');
-                expect(triggeredOnC).toBe(true);
-                expect(triggeredOnB).toBe(true);
-                expect(triggeredOnA).toBe(true);
-                expect(triggeredOnTopViewWith).toBe('test-arg');
+
+                it('should pass the originating view as the last argument to the callback', function () {
+                    var originatingView,
+                        triggeredWith;
+                    topView.on('foo', function (firstArg, view) {
+                        triggeredWith = firstArg;
+                        originatingView = view;
+                    });
+                    cView.triggerBubble('foo', 'test-arg');
+                    expect(triggeredWith).toBe('test-arg');
+                    expect(originatingView.cid).toBe(cView.cid);
+                });
+
+                it('should allow stopping the event bubble by calling stopEvent method in an event callback', function () {
+                    var triggeredOnTopView = false,
+                        triggeredOnA = false;
+                    topView.on('foo', function () {
+                        triggeredOnTopView = true;
+                    });
+                    topView.subs.get('a').on('foo', function () {
+                        triggeredOnA = true;
+                        this.stopEvent('foo');
+                    });
+                    cView.triggerBubble('foo');
+                    expect(triggeredOnA).toBe(true);
+                    expect(triggeredOnTopView).toBe(false);
+                });
             });
 
-            it('should pass the originating view as the last argument to the callback', function () {
-                var originatingView,
-                    triggeredWith;
-                topView.on('foo', function (firstArg, view) {
-                    triggeredWith = firstArg;
-                    originatingView = view;
+            describe('"triggerDescend" method', function () {
+                it('should trigger an event all a view\'s subviews, and their subviews, and so on', function () {
+                    var firedOnTopView = false, firedOnA = false, firedOnB = false, firedOnCWith, origView;
+                    topView.on('foo', function () { firedOnTopView = true; });
+                    topView.subs.get('a').on('foo', function () { firedOnA = true; });
+                    topView.subs.get('a').subs.get('b')[0].on('foo', function () { firedOnB = true; });
+                    topView.subs.get('a').subs.get('b')[0].subs.get('c')[0].on('foo', function (arg, view) {
+                        firedOnCWith = arg;
+                        origView = view;
+                    });
+                    topView.triggerDescend('foo', 'test-arg');
+                    expect(firedOnTopView).toBe(true);
+                    expect(firedOnA).toBe(true);
+                    expect(firedOnB).toBe(true);
+                    expect(firedOnCWith).toBe('test-arg');
+                    expect(origView.cid).toBe(topView.cid);
                 });
-                cView.triggerBubble('foo', 'test-arg');
-                expect(triggeredWith).toBe('test-arg');
-                expect(originatingView.cid).toBe(cView.cid);
+                it('should allow a subview to stop an event descending down it\'s tree with "stopEvent" method', function () {
+                    topView.subs.add('altA', new Backbone.BaseView());
+                    var firedOnAltA = false, firedOnB = false, firedOnC = false;
+                    topView.subs.get('a').subs.get('b')[0].on('foo', function () {
+                        firedOnB = true;
+                        this.stopEvent('foo');
+                    });
+                    cView.on('foo', function () {
+                        firedOnC = true;
+                    });
+                    topView.subs.get('altA')[0].on('foo', function () {
+                        firedOnAltA = true;
+                    });
+                    topView.triggerDescend('foo');
+                    expect(firedOnB).toBe(true);
+                    expect(firedOnAltA).toBe(true);
+                    expect(firedOnC).toBe(false);
+                });
             });
         });
+
 
 
     });

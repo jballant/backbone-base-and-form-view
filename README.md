@@ -52,11 +52,17 @@ Getting Started
 
 [Backbone](http://backbonejs.org)
 
-### Installation
+### Standard Installation
 
 **BaseView** - If you just want to use Backbone.BaseView, first load it on your page after Backbone.
 
 **FormView** - To use Backbone.FormView, load Backbone.BaseView after Backbone, and then load Backbone.FormView
+
+### NPM Installation
+
+Install it through npm simply by running the command ```npm install backbone-base-and-form-view```. If you use [browserify](https://github.com/substack/node-browserify), you can load these modules like this: 
+
+```var Backbone = require('backbone-base-and-view'); // loads Backbone for you and re-exports it```
 
 Using Backbone.BaseView
 -----------------------
@@ -108,7 +114,9 @@ The config above has several properties that are important to know:
 
    * construct : This tells the SubViewManager what constructor function to use when creating the view 
    * singleton : This tells the SubViewManager that you only want one instance of this type allowed for this SubViewManager. Once it's instantiated, other instances will not be added to that type.
-   * location : When you render the subviews, the SubViewManager makes it easier to place them by allowing you to specify in a config where a subview of this type should be appended to
+   * location : When you render the subviews, the SubViewManager makes it easier to place them by allowing you to specify in a config where a subview of this type should be appended to. This can be a jQuery selector, a 
+   jQuery object, or a function that will be invoked after rendering the subview that returns an instance
+   of jQuery.
    * options : A default set of options to pass to the constructor. When you instantiate this object later with 'add' you can add additional options.
 
 With the example above, you could have also added a 'subViewConfig' property to the MyView definition at the top, which in this example would be an object with one key value pair, with the key being 'mySubView' (the name of the sub view type you want to define) and the value being the config object for that type.
@@ -376,8 +384,8 @@ Example schema definition:
 Inherited from Text - *templateSrc*, *label*, *fieldName*, *inputId*, *templateVars*.
 
 1. *possibleVals* - Object|Function. Should be an object literal with the choices you would like to have a checkbox for. The keys will be the values that are saved on the model attribute. The values are the display text label for each checkbox.
-2. *checkedVal* - Mixed. the value to set on the model when a checkbox is checked for a particular possibleVal. So if the user selected the checkbox with the value 'fluf', and the checkedVal is ```true```, then the 'fluf' attribute on the model will be set to ```true```.
-3. *unCheckedVal* - Mixed. the value to set on the model when a checkbox is unchecked.
+1. *checkedVal* - Mixed. the value to set on the model when a checkbox is checked for a particular possibleVal. So if the user selected the checkbox with the value 'fluf', and the checkedVal is ```true```, then the 'fluf' attribute on the model will be set to ```true```.
+1. *unCheckedVal* - Mixed. the value to set on the model when a checkbox is unchecked.
 
 #### CheckBox (alias of Backbone.fields.CheckBoxView)
 Just a simple checkbox in a shell template, associated with an attribute on the model that can have only two values.
@@ -398,8 +406,8 @@ Example schema definition:
 Inherited from Text - *templateSrc*, *label*, *fieldName*, *inputId*, *templateVars*.
 
 1. *checkedVal* - Mixed. the value set on the model when the users checks the checkbox. In the example above, the 'email' property of the the checkbox would be set to string 'Yes' .
-2. *unCheckedVal* - Mixed. the value to set on the model when a checkbox is unchecked.
-3. *displayText* - String. Helpful text to display on the right of the checkbox. You can also use a label, but labels display on the left side in the default template.
+1. *unCheckedVal* - Mixed. the value to set on the model when a checkbox is unchecked.
+1. *displayText* - String. Helpful text to display on the right of the checkbox. You can also use a label, but labels display on the left side in the default template.
 
 Backbone.CollectionFormView
 ---------------------------
@@ -409,6 +417,80 @@ Effectively, this renders a modified FormView for each model in the collection, 
 
 What this means is that each field in schema will have a subview created for each model in the collection, and will be grouped into by a wrapper element that possesses a 'data-row' attribute.
 
+
+Extending the FormView and FormFields
+-------------------------------------
+Backbone.FormView and the field views are designed to be extended, like Backbone.BaseView or any Backbone.View. Here are some ways you can extend the Backbone.FormView and form view fields.
+
+### Overriding the default templates
+
+It's likely that you would want to use your own templates most of the time. First you need to define the template you want to use.Backbone.FormView instances append the field elements to the ```fieldsWrapper``` property by defualt. This property is a jQuery selector that looks for the the first element with a 'data-fields' attribute. Note that you can override this property in your extension if you wish. Most of the time, it's easiest just to create a template with this element:
+
+        <script type="text/template" id="my-form-template">
+          <div data-fields=""></div>
+        </script>
+
+Backbone.fields.FieldView (aka the 'Text' field) instances render a template that serves to wrap the actual input element for the purposes of adding formatting, help text, labels, etc. When you define a custom template, by default, you would create a blank element with a 'data-input' attribute, which tells the field instance to put the input there when it renders. 
+
+        <script type="text/template" id="my-field-template">
+          <div data-input=""></div>
+          <p class="help-text"><%= obj.help %></p>
+        </script>
+
+Notice that you can obviously still use the template variables normally used on render. You can always add more variables using the ```templateVars``` property for both the FormView and the field views.
+
+Now we can define our extensions:
+
+        // Define an extended FormView with a custom template
+        var MyFormView = Backbone.FormView.extend({
+          template: _.template($('#my-form-template').html())
+        });
+        // Define an extended FieldView with a custom template
+        var MyFieldView = Backbone.FormView.extend({
+          label: 'Default label for MyField fields',
+          template: _.template($('#my-field-template').html())
+        });
+
+        // Add an alias for your field so you don't have to 
+        // refer to the constructor directly
+        MyFormView.addFieldAlias('MyField', MyFieldView);
+
+And now you are free to use your extension
+
+        new MyFormView({
+          model: new Backbone.Model(),
+          schema: {
+            name: {
+              type: 'MyField'
+            }
+          }
+        });
+
+### Overriding how and when model attributes are set
+
+Backbone.FormView field views, by default, uses 'blur' events for Text fields, 'change' events for SelectList fields, and 'click' events for CheckList, Checkbox, and RadioList fields. When these events occur, the field calls ```setModelAttrs```. If you just want to tweak the value that is set on the model, you can probably just override the ```getValue``` method (note that CheckList doesn't use this method). The ```getValue``` method simply returns the value for the model field that you want to set, which should be the current value of the input. 
+
+Lets say you want to make a number text field, an extension of the Text field where values are converted to a number when set on the model:
+
+          var NumberFieldView = Backbone.fields.FieldView.extend({
+            // Intended to be the same as the default implementation, so
+            // we call the super method, and then run it through parse float
+            getValue: function () {
+              return parseFloat(MyFieldView.__super__.getValue.call(this));
+            }
+          });
+          Backbone.FormView.addFieldAlias('NumberField', NumberFieldView);
+
+See? That was easy. Another way to extend model-setting functionality is by overriding the events. Let's say you want attributes to be set only after a keypress, all you have to do is this:
+
+          var KeyPressTextFieldView = Backbone.fields.FieldView.extend({
+            events: {
+              'keypress input' : 'setModelAttrs'
+            }
+          });
+          Backbone.FormView.addfieldAlias('KeyPressText', KeyPressTextFieldView);
+
+You could write a custom function and use ```_.debounce``` if you want to wait till the user stops typing to set the attributes. If you want to preserve the original 'blur' event functionality, then you just need to add another event for 'blur' that calls ```setModelAttrs```.
 
 Example FormView Demos
 ----------------------

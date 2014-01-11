@@ -66,6 +66,15 @@
             }
         },
 
+        /**
+         * Used by the FieldSet and CollectionFieldSet function
+         * @return {string} A prefix for a field name/id
+         */
+        getFieldPrefix = function () {
+            var prefPref = (this.parentView && this.parentView.getFieldPrefix) ? this.parentView.getFieldPrefix() : '';
+            return prefPref + this.fieldSetName + '-';
+        },
+
         // ------------------------
         // Local utility functions
 
@@ -199,7 +208,7 @@
             'CollectionField' : 'Backbone.CollectionFieldSetView'
         },
         templateSrc: '<div data-fields=""></div>',
-        fieldsWrapper: '[data-fields]',
+        fieldsWrapper: '[data-fields]:first',
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             var schema = options.schema || this.schema,
@@ -211,7 +220,8 @@
                 setupOnInit : options.setupOnInit || this.setupOnInit,
                 validateOnSet : (!isUndefined(options.validateOnSet)) ? options.validateOnSet : this.validateOnSet,
                 twoWay: (!isUndefined(options.twoWay)) ? options.twoWay : this.twoWay,
-                autoUpdateModel: (!isUndefined(options.autoUpdateModel)) ? options.autoUpdateModel : this.autoUpdateModel
+                autoUpdateModel: (!isUndefined(options.autoUpdateModel)) ? options.autoUpdateModel : this.autoUpdateModel,
+                fieldsWrapper: options.fieldsWrapper || this.fieldsWrapper
             });
             this.template = options.template || _.template(this.templateSrc);
             this.subViewConfig = options.subViewConfig || null;
@@ -267,7 +277,7 @@
             if (!$wrapper.length) {
                 return this.$el;
             }
-            return $wrapper;
+            return $wrapper.first();
         },
         /**
          * If your subviews (aka the fields) set in the schema aren't setup yet, then this method
@@ -288,7 +298,7 @@
             if (order && order.length) {
                 order = order.slice(0);
                 while (order.length) {
-                    this.subs.renderByKey(order.shift());
+                    this.subs.renderByKey(order.shift(), { useLocation: true });
                 }
             } else {
                 this.subs.renderAppend();
@@ -450,8 +460,9 @@
      */
     Backbone.CollectionFormView = Backbone.BaseView.extend({
         tagName: 'form',
-        attributes: { 'class' : 'form' },
+        className: 'form',
         rowTemplateSrc: '',
+        rowWrapper : '[data-rows]:first',
         rowConfig: {
             singleton: false,
             construct: Backbone.CollectionFormRowView
@@ -463,6 +474,7 @@
             this.setupOnInit = !isUndefined(this.options.setupOnInit) ? this.options.setupOnInit : this.setupOnInit;
             this.rowOptions = this.options.rowOptions || this.rowOptions;
             this.templateVars = defaults(this.options.templateVars || {}, { label: this.options.label });
+            this.rowWrapper = this.options.rowWrapper || this.rowWrapper;
             if (this.options.rowConfig) {
                 this.rowConfig = this.options.rowConfig;
                 this.rowConfig = result(this, 'rowConfig');
@@ -485,7 +497,8 @@
          * @return {Backbone.CollectionFormView}
          */
         setRowSchema: function (schema) {
-            this.rowConfig.rowSchema = schema || this.options.rowSchema || this.rowSchema;
+            if (!this.rowConfig.options) { this.rowConfig.options = {}; }
+            this.rowConfig.options.schema = schema || this.options.rowSchema || this.rowSchema;
             return this;
         },
         /**
@@ -510,11 +523,11 @@
          * @return {$} 
          */
         getRowWrapper: function () {
-            var $wrapper = this.$('[data-rows]');
+            var $wrapper = this.$(this.rowWrapper);
             if (!$wrapper.length) {
                 return this.$el;
             }
-            return $wrapper;
+            return $wrapper.first();
         },
         /**
          * Add a row or row to the CollectionFormView. If you do not
@@ -527,11 +540,17 @@
          * @return {Backbone.CollectionFormView}
          */
         addRow: function (models) {
+            var added;
             models = models || new this.collection.model();
             if (!isArray(models)) {
                 models = [models];
             }
-            this.collection.add(models);
+            added = this.collection.add(models);
+            // Backbone 1.0.0 does not return the added models,
+            // so we will not set the models var to the return val
+            if (!(added instanceof Backbone.Collection)) {
+                models = added;
+            }
             each(models, function (model) {
                 this._addRow(model).subs.last().render().$el
                     .appendTo(this.getRowWrapper());
@@ -565,6 +584,17 @@
 
             this.subs.remove(view);
             this.collection.remove(model);
+            return this;
+        },
+        /**
+         * Shortcut method to remove all rows and then
+         * set them up again, render them, and place
+         * them in the row wrapper
+         * @memberOf Backbone.CollectionFormView#
+         * @return {Backbone.CollectionFormView}
+         */
+        reset: function () {
+            this.setupRows().subs.renderByKey('row', { appendTo: this.getRowWrapper() });
             return this;
         },
         /**
@@ -664,6 +694,7 @@
         template: _.template(Backbone.formTemplates.Field),
         addId: true,
         elementType: 'input',
+        inputWrapper: '[data-input]:first',
         events: function () {
             var events = {};
             events['blur ' + this.elementType] = 'setModelAttrs';
@@ -672,7 +703,7 @@
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             extend(this, {
-                templateVars : options.templateVars || {},
+                templateVars : options.templateVars || this.templateVars || {},
                 fieldName : options.fieldName || options.schemaKey,
                 elementType : options.elementType || this.elementType,
                 templateSrc : !isUndefined(options.templateSrc) ? options.templateSrc : this.templateSrc,
@@ -682,7 +713,8 @@
                 inputAttrs: options.inputAttrs || this.inputAttrs,
                 placeholder: options.placeholder || this.placeholder,
                 inputClass: options.inputClass || this.inputClass,
-                addId: !isUndefined(options.addId) ? options.addId : this.addId
+                addId: !isUndefined(options.addId) ? options.addId : this.addId,
+                inputWrapper: options.inputWrapper || this.inputWrapper
             });
             extend(this.templateVars, {
                 inputId : this.addId ? this._getInputId() : false,
@@ -802,11 +834,11 @@
          * @return {$}
          */
         getInputWrapper: function () {
-            var $wrapper = this.$('[data-input]');
+            var $wrapper = this.$(this.inputWrapper);
             if (!$wrapper.length) {
                 return this.$el;
             }
-            return $wrapper;
+            return $wrapper.first();
         },
         /**
          * Disable the input if not already disabled
@@ -874,7 +906,8 @@
      * @property {string} [options.inputClass] inherited from Backbone.fields.FieldView
      * @property {boolean} [options.twoWay] inherited from Backbone.fields.FieldView
      * @property {object} [options.inputAttrs] inherited from Backbone.fields.FieldView
-     * @property {object} [options.possibleVals]
+     * @property {object} [options.labelAttrs] Attributes for the label elements that wrap radio inputs
+     * @property {object|function} [options.possibleVals]
      *      An object with the set of possible choices to display to the user. Each key will be
      *      what is set in the model when the user selects the radio, and each value is what
      *      will be used as the label text to display to the user.
@@ -887,8 +920,9 @@
         },
         type: 'radio-list',
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.possibleVals = options.possibleVals || this.possibleVals || {};
+            this.labelAttrs = options.labelAttrs || this.labelAttrs;
             Backbone.fields.RadioListView.__super__.initialize.call(this, options);
         },
         /**
@@ -913,6 +947,7 @@
                 id = this.templateVars.inputId,
                 modelVal = this.getModelVal(),
                 $inputWrapper = this.getInputWrapper().empty(),
+                labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'radio' }),
                 renderCheckbox = function (val, isChecked) {
                     var $listItem, $label,
                         attributes = { type: 'radio', value: key };
@@ -920,7 +955,7 @@
                     if (isChecked) { attributes.checked = 'checked'; }
                     $listItem = Backbone.$('<input>').attr(defaults(attributes, self.inputAttrs));
                     if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = Backbone.$('<label>').attr('class', 'radio');
+                    $label = Backbone.$('<label>').attr(labelAttrs);
                     $label.append($listItem).append(val);
                     return $label;
                 };
@@ -982,7 +1017,7 @@
             return events;
         },
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.multiple = !isUndefined(options.multiple) ? options.multiple : this.multiple;
             Backbone.fields.SelectListView.__super__.initialize.call(this, options);
         },
@@ -1033,6 +1068,7 @@
                     }
                 }
             }
+            return this;
         }
     });
 
@@ -1060,7 +1096,9 @@
      * @property {string} [options.inputId] inherited from Backbone.fields.FieldView
      * @property {string} [options.inputClass] inherited from Backbone.fields.FieldView
      * @property {boolean} [options.twoWay] inherited from Backbone.fields.FieldView
-     * @property {object} [options.possibleVals]
+     * @property {object} [options.inputAttrs] inherited from Backbone.fields.FieldView
+     * @property {object} [options.labelAttrs] inherited from Backbone.fields.RadioListView
+     * @property {object|function} [options.possibleVals]
      *      An object with the set of possible choices to display to the user. Unlike the other
      *      list views, the key should be what field the choice corresponds to on the model.
      * @property [options.checkedVal] - the value to set on the model when a checkbox is checked
@@ -1071,11 +1109,17 @@
         type: 'check-list',
         checkedVal: true,
         unCheckedVal: false,
+        events : function () {
+            var events = {};
+            events['click ' + this.elementType] = 'setModelAttrs';
+            return events;
+        },
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.possibleVals = options.possibleVals || this.possibleVals || {};
             this.checkedVal = options.checkedVal || this.checkedVal;
             this.unCheckedVal = options.unCheckedVal || this.unCheckedVal;
+            this.labelAttrs = options.labelAttrs || this.labelAttrs;
             Backbone.fields.CheckListView.__super__.initialize.call(this, options);
         },
         setupTwoWay: function () {
@@ -1086,36 +1130,47 @@
                 });
             }, this);
         },
-        setModelAttrs: function (e) {
-            var val = {},
-                $target = Backbone.$(e.target),
-                key = $target.val();
-            val[key] = ($target.is(':checked')) ? this.checkedVal : this.unCheckedVal;
-            this.model.set(val, this.setOpts);
+        setModelAttrs: function () {
+            var attrs = this.getAttrs();
+            this.model.set(attrs, this.setOpts);
+        },
+        getAttrs: function () {
+            var attrs = {}, self = this;
+            this.$(this.elementType).each(function (index, input) {
+                var $input = Backbone.$(input),
+                    key = $input.val(),
+                    val = ($input.prop('checked')) ? self.checkedVal : self.unCheckedVal;
+                if (val === self.checkedVal || self.getModelVal(key) === self.checkedVal) {
+                    attrs[key] = val;
+                }
+            });
+            return attrs;
+        },
+        getModelVal: function (key) {
+            return this.model.get(key);
         },
         renderInput: function () {
             var key, attributes,
                 possibleVals = result(this, 'possibleVals'),
                 i = 0,
                 id = this.templateVars.inputId,
+                labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'checkbox' }),
                 self = this,
                 $inputWrapper = this.getInputWrapper().empty(),
                 renderCheckbox = function (key, val, isChecked) {
                     var $listItem, $label;
                     attributes = { type: 'checkbox', value: key};
-                    if (this.addId) { extend(attributes, { name: id, id: (id + '-' + i) }); }
+                    if (self.addId) { extend(attributes, { name: id, id: (id + '-' + i) }); }
                     if (isChecked) { attributes.checked = 'checked'; }
-                    $listItem = Backbone.
-                    Backbone.
-                    Backbone.$('<input>').attr(defaults(attributes, self.inputAttrs));
+                    $listItem = Backbone.$('<input>').attr(defaults(attributes, self.inputAttrs));
                     if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = Backbone.$('<label>').attr('class', 'checkbox');
+                    $label = $('<label>').attr('class', 'checkbox');
                     return $label.append($listItem).append(val);
                 };
 
             for (key in possibleVals) {
                 if (possibleVals.hasOwnProperty(key)) {
-                    $inputWrapper.append(renderCheckbox(key, possibleVals[key], (self.model.get(key) === self.checkedVal)));
+                    $inputWrapper.append(renderCheckbox(key, possibleVals[key], (self.getModelVal(key) === self.checkedVal)));
                     i++;
                 }
             }
@@ -1142,6 +1197,7 @@
      * @property {string} [options.inputClass] inherited from Backbone.fields.FieldView
      * @property {boolean} [options.twoWay] inherited from Backbone.fields.FieldView
      * @property {object} [options.addId] inherited from Backbone.fields.FieldView
+     * @property {object} [options.labelAttrs] inherited from Backbone.fields.RadioListView
      * @property {string} [options.displayText] 
      *           Templates can have a label and/or display text for checkboxes. Display text is
      *           intended for longer desciptions of the textbox's purpose.
@@ -1151,11 +1207,17 @@
     Backbone.fields.CheckBoxView = Backbone.fields.FieldView.extend({
         checkedVal: true,
         unCheckedVal: false,
+        events: function () {
+            var events = {};
+            events['click ' + this.elementType] = 'setModelAttrs';
+            return events;
+        },
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.checkedVal = options.checkedVal || this.checkedVal;
             this.unCheckedVal = options.unCheckedVal || this.unCheckedVal;
             this.displayText = options.displayText || this.displayText;
+            this.labelAttrs = options.labelAttrs || this.labelAttrs;
             Backbone.fields.CheckListView.__super__.initialize.call(this, options);
         },
         getValue: function () {
@@ -1165,13 +1227,13 @@
             return this.unCheckedVal;
         },
         renderInput: function () {
-            var $label = Backbone.$('<label>').attr('class', 'checkbox'),
+            var $label = Backbone.$('<label>').attr(defaults(this.labelAttrs || {}, { 'class': 'checkbox' })),
                 $input = Backbone.$('<input>').attr({ type: 'checkbox', value: this.checkedVal }),
                 id = this.templateVars.inputId,
                 modelVal = this.getModelVal();
 
             if (this.addId) { $input.attr({ id: id, name: id }); }
-            if (modelVal === true || modelVal === this.checkedVal) {
+            if (modelVal === this.checkedVal) {
                 $input.attr('checked', 'checked');
             }
             $label.append($input);
@@ -1210,13 +1272,13 @@
      */
     Backbone.FieldSetView = Backbone.FormView.extend({
         tagName: 'div',
-        className: 'fieldset',
         setupOnInit: true,
+        className: '',
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
             Backbone.FieldSetView.__super__.initialize.call(this, options);
-            this.$el.addClass('fieldset-' + this.fieldSetName);
+            this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
         },
         /**
          * Returns a prefix that the fieldset fields can use to create
@@ -1224,10 +1286,7 @@
          * @memberOf Backbone.FieldSetView#
          * @return {string}
          */
-        getFieldPrefix: function () {
-            var prefPref = (this.parentView && this.parentView.getFieldPrefix) ? this.parentView.getFieldPrefix() : '';
-            return prefPref + this.fieldSetName + '-';
-        },
+        getFieldPrefix: getFieldPrefix,
         templateSrc: '<% if(obj && obj.label) { %><label class="fieldset-label">' +
             '<strong><%= obj.label %></strong></label><% } %><fieldset data-fields=""></fieldset>'
     });
@@ -1241,15 +1300,15 @@
      */
     Backbone.CollectionFieldSetView = Backbone.CollectionFormView.extend({
         tagName: 'div',
-        className: 'fieldset',
         templateSrc: '<% if(obj && obj.label) { %><p><strong><%= obj.label %></strong></p><% } %>' +
             '<fieldset class="fieldset" data-rows=""></fieldset>',
         setupOnInit: true,
+        className: '',
         initialize: function (options) {
-            options = options || {};
+            options = this.options = defaults(options || {}, this.options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
             Backbone.CollectionFieldSetView.__super__.initialize.call(this, options);
-            this.$el.addClass('fieldset-' + this.fieldSetName);
+            this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
             return this;
         },
         /**
@@ -1258,10 +1317,7 @@
          * @memberOf Backbone.CollectionFieldSetView#
          * @return {string}
          */
-        getFieldPrefix: function () {
-            var prefPref = (this.parentView && this.parentView.getFieldPrefix) ? this.parentView.getFieldPrefix() : '';
-            return prefPref + this.fieldSetName + '-';
-        }
+        getFieldPrefix: getFieldPrefix
     });
 
 }(this));

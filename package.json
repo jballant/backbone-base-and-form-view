@@ -14,7 +14,6 @@
     }
   ],
   "dependencies":{
-    "jquery": "coolaj86/node-jquery",
     "underscore": ">=1.4.3",
     "backbone": ">=1.0.0"
   },

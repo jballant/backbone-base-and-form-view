@@ -251,8 +251,9 @@
          *          construct:  // Constructor function or string version (i.e. "Backbone.BaseView")
          *          options:    // Any options you want to pass to the initialize function
          *          singleton:  // if the object should be configured as a singleton or not
-         *          location:   // A string or jQuery instance in the parent view element.
-         *                      // The subview el will be appended to that location
+         *          location:   // A string or jQuery instance in the parent view element. Or
+         *                      // a function that returns one of these. The subview el will 
+         *                      // be appended to that location
          *      }
          * @returns {SubViewManager}
          */
@@ -557,13 +558,16 @@
             while (++i < len) {
                 subViews[i].render();
                 if ($appendTo) {
-                    subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo) : $appendTo);
+                    subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo).first() : $appendTo);
                 } else if (place && (location = this._subViews[this.getSubViewType(subViews[i])].location)) {
                     if (typeof location === 'string') {
                         if (!$locations[location]) {
-                            $locations[location] = this.parent.$(location);
+                            $locations[location] = this.parent.$(location).first();
                         }
                         location = $locations[location];
+                    } else if (typeof location === 'function') {
+                        location = location.call(subViews[i]);
+                        if (!(location instanceof $)) { throw new Error('location function must return instance of jQuery'); }
                     }
                     location.append(subViews[i].$el);
                 }
@@ -867,11 +871,11 @@
                         descend;
                     while (++i < len) {
                         descend = true;
+                        subViews[i].trigger.apply(subViews[i], args);
                         if ((stop = subViews[i]._stopPropogation) && stop[event]) {
                             stop[event] = false;
                             descend = false;
                         }
-                        subViews[i].trigger.apply(subViews[i], args);
                         subSubs = subViews[i].subViews;
                         if (descend && subSubs && subSubs.length) {
                             _trigger(subSubs);
