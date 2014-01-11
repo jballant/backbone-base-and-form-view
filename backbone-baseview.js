@@ -9,14 +9,12 @@
 (function (root) {
     "use strict";
 
-    var $ = root.jQuery,
-        Backbone = root.Backbone,
+    var Backbone = root.Backbone,
         _ = root._;
 
     if (typeof module !== 'undefined') {
         _ = require('underscore');
         Backbone = require('Backbone');
-        $ = Backbone.$;
         module.exports = Backbone;
     }
 
@@ -314,7 +312,7 @@
          */
         renderAppend: function (appendTo, options) {
             options = options || {};
-            if (_.isObject(appendTo) && appendTo instanceof $ === false && !_.isElement(appendTo)) {
+            if (_.isObject(appendTo) && appendTo instanceof Backbone.$ === false && !_.isElement(appendTo)) {
                 options = appendTo;
                 appendTo = options.appendTo;
             }

@@ -744,7 +744,7 @@
          * @return {String|Boolean|Array|Number|Object}
          */
         getValue: function () {
-            return $.trim(this.$(this.elementType).val());
+            return Backbone.$.trim(this.$(this.elementType).val());
         },
         /**
          * Gets the value of the field as it appears in the model
