@@ -1164,7 +1164,7 @@
                     if (isChecked) { attributes.checked = 'checked'; }
                     $listItem = Backbone.$('<input>').attr(defaults(attributes, self.inputAttrs));
                     if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = $('<label>').attr('class', 'checkbox');
+                    $label = Backbone.$('<label>').attr('class', 'checkbox');
                     return $label.append($listItem).append(val);
                 };
 
