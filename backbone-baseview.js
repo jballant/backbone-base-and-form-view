@@ -14,7 +14,8 @@
 
     if (typeof module !== 'undefined') {
         _ = require('underscore');
-        Backbone = require('Backbone');
+        root = root || {};
+        root.Backbone = Backbone = require('Backbone');
         module.exports = Backbone;
     }
 
