@@ -1,6 +1,6 @@
-//     Backbone.FormView 0.3
+//     Backbone.FormView 0.4
 
-//     (c) 2013 James Ballantine, 1stdibs.com Inc.
+//     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.FormView may be freely distributed under the MIT license.
 //     For all details and documentation:
 //     https://github.com/1stdibs/backbone-base-and-form-view
