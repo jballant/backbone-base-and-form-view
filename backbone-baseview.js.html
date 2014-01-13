@@ -112,9 +112,9 @@
     
     <section>
         <article>
-            <pre class="sunlight-highlight-javascript linenums">//     Backbone.BaseView 0.3
+            <pre class="sunlight-highlight-javascript linenums">//     Backbone.BaseView 0.4
 
-//     (c) 2013 James Ballantine, 1stdibs.com Inc.
+//     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.BaseView may be freely distributed under the MIT license.
 //     For all details and documentation:
 //     https://github.com/1stdibs/backbone-base-and-form-view
@@ -128,7 +128,8 @@
 
     if (typeof module !== 'undefined') {
         _ = require('underscore');
-        Backbone = require('Backbone');
+        root = root || {};
+        root.Backbone = Backbone = require('Backbone');
         module.exports = Backbone;
     }
 

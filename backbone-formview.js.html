@@ -112,9 +112,9 @@
     
     <section>
         <article>
-            <pre class="sunlight-highlight-javascript linenums">//     Backbone.FormView 0.3
+            <pre class="sunlight-highlight-javascript linenums">//     Backbone.FormView 0.4
 
-//     (c) 2013 James Ballantine, 1stdibs.com Inc.
+//     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.FormView may be freely distributed under the MIT license.
 //     For all details and documentation:
 //     https://github.com/1stdibs/backbone-base-and-form-view
@@ -1278,7 +1278,7 @@
                     if (isChecked) { attributes.checked = 'checked'; }
                     $listItem = Backbone.$('&lt;input>').attr(defaults(attributes, self.inputAttrs));
                     if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = $('&lt;label>').attr('class', 'checkbox');
+                    $label = Backbone.$('&lt;label>').attr('class', 'checkbox');
                     return $label.append($listItem).append(val);
                 };
 

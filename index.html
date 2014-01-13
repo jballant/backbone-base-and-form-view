@@ -188,7 +188,7 @@
 <ul>
 <li><p><strong>Adding a config first</strong>, and then instantiating from that config. A config tells the SubViewManager some standard information about the subview type.</p>
 <pre><code>  var MySubView = Backbone.BaseView.extend();
-  var MyView = Backbone.Base.extend({
+  var MyView = Backbone.BaseView.extend({
        initialize: function () {
           var myModel = new Backbone.Model();
           this.subs.addConfig('mySubView', {
