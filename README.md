@@ -95,7 +95,7 @@ This is probably fine if you never need to refer to this sub view by a type. If 
 * **Adding a config first**, and then instantiating from that config. A config tells the SubViewManager some standard information about the subview type.
 
         var MySubView = Backbone.BaseView.extend();
-        var MyView = Backbone.Base.extend({
+        var MyView = Backbone.BaseView.extend({
              initialize: function () {
                 var myModel = new Backbone.Model();
                 this.subs.addConfig('mySubView', {
