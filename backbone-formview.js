@@ -1151,11 +1151,11 @@
         },
         /**
          * Renders a single checkbox in a CheckList
-         * @param key - the key from possibleVals
-         * @param val - the value from possibleVals
-         * @param isChecked - boolean if the box should be checked or not
-         * @param index - the index of the checkbox
-         * @returns {void|*}
+         * @param {string} key the key from possibleVals
+         * @param {string} val the value from possibleVals
+         * @param {boolean} isChecked if the box should be checked or not
+         * @param {number} index the index of the checkbox
+         * @returns {$}
          */
         renderSingleCheckbox: function (key, val, isChecked, index) {
             var $listItem,
@@ -1172,7 +1172,7 @@
         },
         /**
          * Returns true or false if the checkbox should be selected.
-         * @param key - the key of the possibleVal that is being tested
+         * @param {string} key the key of the possibleVal that is being tested
          * @returns {boolean}
          */
         isSelected: function (key) {
