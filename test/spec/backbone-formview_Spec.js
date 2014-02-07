@@ -731,6 +731,19 @@
                     expect(testField.renderInput).toHaveBeenCalled();
                 });
             });
+
+            describe('"renderSingleCheckbox" method', function () {
+                it('should create a checked checkbox input if passed true', function () {
+                    var $checkbox = testField.renderSingleCheckbox('foo', testOpts.possibleVals.foo, true, 1);
+                    expect($checkbox.find('input').val()).toBe('foo');
+                    expect($checkbox.find('input').is(':checked')).toBe(true);
+                });
+                it('should create an un checked checkbox input if passed false', function () {
+                    var $checkbox = testField.renderSingleCheckbox('foo', testOpts.possibleVals.foo, false, 1);
+                    expect($checkbox.find('input').val()).toBe('foo');
+                    expect($checkbox.find('input').is(':checked')).toBe(false);
+                });
+            });
             describe('"renderInput" method', function () {
                 beforeEach(function () {
                     testField.renderWrapper();
@@ -755,6 +768,16 @@
                     expect(testField.$('input').eq(0).prop('checked')).toBe(false);
                     expect(testField.$('input').eq(1).prop('checked')).toBe(true);
                     expect(testField.$('input').eq(2).prop('checked')).toBe(true);
+                });
+            });
+            describe('"isSelected" method', function () {
+                it('should return true when the attribute is set to the checkedVal on the model', function () {
+                    testField.model.set('bar', testField.checkedVal);
+                    expect(testField.isSelected('bar')).toBe(true);
+                });
+                it('should return false when the attribute is set to the unCheckedVal on the model', function () {
+                    testField.model.set('foo', testField.unCheckedVal);
+                    expect(testField.isSelected('foo')).toBe(false);
                 });
             });
             it('should set a field on the model that corresponds to the checkbox value attribute when clicked on', function () {
