@@ -256,7 +256,7 @@ If you do choose to extend the FormView, you can also define schema as a pseudoc
 ### FormView Schema
 The schema property of the options object has one field defined in the example above, 'firstName'. The schema tells the FormView that the firstName field should be of type 'Text', and that it should be have the label 'First Name'. Each field is actually a sub view, and the FormView basically automatically sorts some things out for you:
 
-1. The *schema* property 'type' is actually an alias of 'construct' (you can use either), and the value 'Text' is an alias of 'Backbone.FormFieldView'. The Backbone.FormView prototype has several built in aliases for field types: 'Text', 'Checkbox', 'Checklist', 'Select', 'Chosen', 'RadioList', 'FieldSet', 'CollectionField'. More on these types will be discussed later.
+1. The *schema* property 'type' is actually an alias of 'construct' (you can use either), and the value 'Text' is an alias of 'Backbone.FormFieldView'. The Backbone.FormView prototype has several built in aliases for field types: 'Text', 'Checkbox', 'Checklist', 'Select', 'RadioList', 'FieldSet', 'CollectionField'. More on these types will be discussed later.
   
  If you want to use a custom sub view constructor, you can easily just use that as the value of type. For example, if you created a custom field View constructor called 'App.MyField', you can just use that as the type value. *Note* that if you use a string value as type it will have to be a dot notation object that can be found on the global scope.
 
