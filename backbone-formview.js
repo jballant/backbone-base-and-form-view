@@ -1140,7 +1140,7 @@
                 var $input = Backbone.$(input),
                     key = $input.val(),
                     val = ($input.prop('checked')) ? self.checkedVal : self.unCheckedVal;
-                if (val === self.checkedVal || self.getModelVal(key) === self.checkedVal) {
+                if (val === self.checkedVal || self.isSelected(key)) {
                     attrs[key] = val;
                 }
             });
@@ -1149,28 +1149,31 @@
         getModelVal: function (key) {
             return this.model.get(key);
         },
+        renderSingleCheckbox: function (key, val, isChecked, index) {
+            var $listItem,
+                $label,
+                id = this.templateVars.inputId,
+                attributes = { type: 'checkbox', value: key};
+
+            if (this.addId) { extend(attributes, { name: id, id: (id + '-' + index) }); }
+            if (isChecked) { attributes.checked = 'checked'; }
+            $listItem = Backbone.$('<input>').attr(defaults(attributes, this.inputAttrs));
+            if (this.inputClass) { $listItem.addClass(this.inputClass); }
+            $label = Backbone.$('<label>').attr('class', 'checkbox');
+            return $label.append($listItem).append(val);
+        },
+        isSelected: function (key) {
+            return (this.getModelVal(key) === this.checkedVal);
+        },
         renderInput: function () {
-            var key, attributes,
+            var key,
                 possibleVals = result(this, 'possibleVals'),
                 i = 0,
-                id = this.templateVars.inputId,
-                labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'checkbox' }),
-                self = this,
-                $inputWrapper = this.getInputWrapper().empty(),
-                renderCheckbox = function (key, val, isChecked) {
-                    var $listItem, $label;
-                    attributes = { type: 'checkbox', value: key};
-                    if (self.addId) { extend(attributes, { name: id, id: (id + '-' + i) }); }
-                    if (isChecked) { attributes.checked = 'checked'; }
-                    $listItem = Backbone.$('<input>').attr(defaults(attributes, self.inputAttrs));
-                    if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = Backbone.$('<label>').attr('class', 'checkbox');
-                    return $label.append($listItem).append(val);
-                };
+                $inputWrapper = this.getInputWrapper().empty();
 
             for (key in possibleVals) {
                 if (possibleVals.hasOwnProperty(key)) {
-                    $inputWrapper.append(renderCheckbox(key, possibleVals[key], (self.getModelVal(key) === self.checkedVal)));
+                    $inputWrapper.append(this.renderSingleCheckbox(key, possibleVals[key], this.isSelected(key), i));
                     i++;
                 }
             }
