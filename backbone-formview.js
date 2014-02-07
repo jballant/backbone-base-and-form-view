@@ -935,6 +935,14 @@
             return this.$(this.elementType + ':checked').val();
         },
         /**
+         * Returns true or false if the radio input should be selected.
+         * @param {string} key The key of the possibleVal that is being tested
+         * @returns {boolean}
+         */
+        isSelected: function (key) {
+            return (this.getModelVal() + '' === '' + key);
+        },
+        /**
          * Renders the radio inputs and appends them to the input wrapper.
          * @memberOf Backbone.fields.RadioListView#
          * @return {Backbone.fields.RadioListView}
@@ -945,7 +953,6 @@
                 i = 0,
                 self = this,
                 id = this.templateVars.inputId,
-                modelVal = this.getModelVal(),
                 $inputWrapper = this.getInputWrapper().empty(),
                 labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'radio' }),
                 renderCheckbox = function (val, isChecked) {
@@ -963,7 +970,7 @@
             for (key in possibleVals) {
                 if (possibleVals.hasOwnProperty(key)) {
                     if (!isNaN(Number(key))) { key = Number(key); }
-                    $inputWrapper.append(renderCheckbox(possibleVals[key], (modelVal + '' === '' + key)));
+                    $inputWrapper.append(renderCheckbox(possibleVals[key], this.isSelected(key)));
                     i++;
                 }
             }
@@ -1025,13 +1032,21 @@
             return this.$(this.elementType).val();
         },
         /**
+         * Returns true or false if the option should be selected
+         * @memberOf Backbone.fields.SelectListView#
+         * @param {string} key The key of the possibleVal that is being tested
+         * @return {boolean}
+         */
+        isSelected: function (key) {
+            return (_.indexOf(_.map(this.getModelVal(), String), key + '') !== -1);
+        },
+        /**
          * Renders the select element and the options
          * @memberOf Backbone.fields.SelectListView#
          * @return {Backbone.fields.SelectListView}
          */
         renderInput: function () {
             var possibleVals = result(this, 'possibleVals'),
-                modelVals = this.getModelVal(),
                 id = this.templateVars.inputId,
                 $select = Backbone.$('<' + this.elementType + '>')
                     .attr(defaults((this.addId ? { id: id, name: id } : {}), this.inputAttrs));
@@ -1042,26 +1057,24 @@
             if (this.placeholder) {
                 $select.append('<option value="">' + this.placeholder + '</option>');
             }
-            return this._renderInput($select, possibleVals, modelVals);
+            return this._renderInput($select, possibleVals);
         },
-        _renderInput: function ($wrapper, vals, selectedVals) {
+        _renderInput: function ($wrapper, vals) {
             var key, val, $optgroup, $option,
-                toStr = function (num) { return '' + num; },
                 isArr = isArray(vals);
-            selectedVals = _.map((isArray(selectedVals) ? selectedVals : [selectedVals]), toStr);
             for (key in vals) {
                 if (vals.hasOwnProperty(key)) {
                     val = vals[key];
                     if (_.isObject(val)) {
                         $optgroup = Backbone.$('<optgroup label="' + key + '"></optgroup>').appendTo($wrapper);
-                        this._renderInput($optgroup, vals[key], selectedVals);
+                        this._renderInput($optgroup, vals[key]);
                     } else {
                         $option = Backbone.$('<option>').text(vals[key]);
                         if (!isArr) {
                             val = key;
                             $option.attr('value', key);
                         }
-                        if (_.indexOf(selectedVals, toStr(val)) !== -1) {
+                        if (this.isSelected(val)) {
                             $option.attr('selected', 'selected');
                         }
                         $option.appendTo($wrapper);
@@ -1150,7 +1163,8 @@
             return this.model.get(key);
         },
         /**
-         * Renders a single checkbox in a CheckList
+         * Renders and returns a single checkbox in a CheckList
+         * @memberOf Backbone.fields.CheckListView#
          * @param {string} key the key from possibleVals
          * @param {string} val the value from possibleVals
          * @param {boolean} isChecked if the box should be checked or not
@@ -1172,11 +1186,12 @@
         },
         /**
          * Returns true or false if the checkbox should be selected.
+         * @memberOf Backbone.fields.CheckListView#
          * @param {string} key the key of the possibleVal that is being tested
          * @returns {boolean}
          */
         isSelected: function (key) {
-            return (this.getModelVal(key) === this.checkedVal);
+            return this.getModelVal(key) === this.checkedVal;
         },
         renderInput: function () {
             var key,
@@ -1242,14 +1257,21 @@
             }
             return this.unCheckedVal;
         },
+        /**
+         * Returns true or false if the checkbox should be selected
+         * @memberOf Backbone.fields.CheckBoxView#
+         * @returns {boolean}
+         */
+        isSelected: function () {
+            return this.getModelVal() === this.checkedVal;
+        },
         renderInput: function () {
             var $label = Backbone.$('<label>').attr(defaults(this.labelAttrs || {}, { 'class': 'checkbox' })),
                 $input = Backbone.$('<input>').attr({ type: 'checkbox', value: this.checkedVal }),
-                id = this.templateVars.inputId,
-                modelVal = this.getModelVal();
+                id = this.templateVars.inputId;
 
             if (this.addId) { $input.attr({ id: id, name: id }); }
-            if (modelVal === this.checkedVal) {
+            if (this.isSelected()) {
                 $input.attr('checked', 'checked');
             }
             $label.append($input);
