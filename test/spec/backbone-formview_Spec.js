@@ -380,6 +380,32 @@
                     expect(testForm.getRowWrapper().children().length).toBe(2);
                 });
             });
+
+            describe('Backbone.CollectionFormRowView', function () {
+                beforeEach(function () {
+                    testForm.setupRows();
+                });
+                describe('"getFieldPrefix" method', function () {
+                    it('should return the parentView getFieldPrefix result, plus the index, plus a trailing "-"', function () {
+                        var index = 0,
+                            parentPrefix = 'testing-';
+                        testForm.getFieldPrefix = function () { return parentPrefix; };
+                        expect(testForm.subs.get('row')[index].getFieldPrefix()).toBe(parentPrefix + index + '-');
+                    });
+                });
+                describe('"deleteSelf" method', function () {
+                    it('should invoke "deleteRow" method of the parentView with the row instance as the param', function () {
+                        var row = testForm.subs.get('row')[1],
+                            length = testForm.subs.get('row').length;
+                        spyOn(testForm, 'deleteRow').andCallThrough();
+                        row.deleteSelf();
+                        expect(testForm.deleteRow).toHaveBeenCalledWith(row);
+                        expect(testForm.subs.subViews.length).toBe(length - 1);
+                        expect(testForm.collection.length).toBe(length - 1);
+                    });
+                });
+            });
+
         });
 
         describe('FieldView', function () {
@@ -593,6 +619,16 @@
                 };
                 testField = new Backbone.fields.RadioListView(testOpts);
             });
+            describe('"isSelected" method', function () {
+                beforeEach(function () {
+                    testField.model = new Backbone.Model({ testField: 'bar' });
+                });
+                it('should return "true" if the model field matches the provided key and "false" otherwise', function () {
+                    expect(testField.isSelected('foo')).toBe(false);
+                    expect(testField.isSelected('bar')).toBe(true);
+                    expect(testField.isSelected('baz')).toBe(false);
+                });
+            });
             describe('"renderInput" method', function () {
                 it('should create a set of radio button inputs with value attributes of the keys in the "possibleVals" property/option', function () {
                     testField.render();
@@ -619,7 +655,29 @@
                     var radios = testField.$('input[type="radio"]');
                     expect(radios.length).toBe(2);
                     expect(radios.eq(0).val()).toBe('a');
+                    expect(radios.eq(0).parent().text()).toBe('test val a');
                     expect(radios.eq(1).val()).toBe('b');
+                    expect(radios.eq(1).parent().text()).toBe('test val b');
+                });
+                it('should also work if the result of "possibleVals" is an array, setting both "value" attr and label text to array values', function () {
+                    testField.possibleVals = ['test val a', 'test val b'];
+                    testField.render();
+                    var radios = testField.$('input[type="radio"]');
+                    expect(radios.length).toBe(2);
+                    expect(radios.eq(0).val()).toBe('test val a');
+                    expect(radios.eq(0).parent().text()).toBe('test val a');
+                    expect(radios.eq(1).val()).toBe('test val b');
+                    expect(radios.eq(1).parent().text()).toBe('test val b');
+                });
+                it('should also work if the result of "possibleVals" is an array of objects with a "value" and "display property', function () {
+                    testField.possibleVals = [{ display: 'test val a', value: 'a' }, { display: 'test val b', value: 'b' }];
+                    testField.render();
+                    var radios = testField.$('input[type="radio"]');
+                    expect(radios.length).toBe(2);
+                    expect(radios.eq(0).val()).toBe('a');
+                    expect(radios.eq(0).parent().text()).toBe('test val a');
+                    expect(radios.eq(1).val()).toBe('b');
+                    expect(radios.eq(1).parent().text()).toBe('test val b');
                 });
                 it('should not check any radio buttons if there is no model value', function () {
                     testField.render();
@@ -660,6 +718,22 @@
                 };
                 testField = new Backbone.fields.SelectListView(testOpts);
             });
+            describe('"isSelected" method', function () {
+                it('should return true for a single select if the value of the attribute in the model matches the key passed and false otherwise', function () {
+                    testField.model = new Backbone.Model({ testField: 'bar' });
+                    expect(testField.isSelected('foo')).toBe(false);
+                    expect(testField.isSelected('bar')).toBe(true);
+                    expect(testField.isSelected('baz')).toBe(false);
+                });
+                it('should return true for a multi select if the array value of the attribute in the model contains the key passed, and false otherwise', function () {
+                    testOpts.multiple = true;
+                    testOpts.model = new Backbone.Model({ testField: ['bar', 'baz'] });
+                    testField = new Backbone.fields.SelectListView(testOpts);
+                    expect(testField.isSelected('foo')).toBe(false);
+                    expect(testField.isSelected('bar')).toBe(true);
+                    expect(testField.isSelected('baz')).toBe(true);
+                });
+            });
             describe('"renderInput" method', function () {
 
                 beforeEach(function () {
@@ -685,8 +759,29 @@
                     testField.renderInput();
                     expect(testField.$('select > optgroup').length).toBe(1);
                     expect(testField.$('select > optgroup > option').eq(0).attr('value')).toBe('fooFoo');
+                    expect(testField.$('select > optgroup > option').eq(0).text()).toBe('Test fooFoo');
                     expect(testField.$('select > optgroup > option').eq(1).attr('value')).toBe('fooBar');
+                    expect(testField.$('select > optgroup > option').eq(1).text()).toBe('Test fooBar');
                     expect(testField.$('select > option').eq(0).attr('value')).toBe('bar');
+                    expect(testField.$('select > option').eq(0).text()).toBe('Test bar');
+                });
+
+                it('should allow possibleVals to be an array of objects with keys "display" and "value" or "group" for optgroups', function () {
+                    testField.possibleVals = [{
+                        display: "foo",
+                        group: [{ value: "fooFoo", display: "Test fooFoo" }, { value: 'fooBar', display: 'Test fooBar' }]
+                    }, {
+                        display: 'Test bar',
+                        value: 'bar'
+                    }];
+                    testField.renderInput();
+                    expect(testField.$('select > optgroup').length).toBe(1);
+                    expect(testField.$('select > optgroup > option').eq(0).attr('value')).toBe('fooFoo');
+                    expect(testField.$('select > optgroup > option').eq(0).text()).toBe('Test fooFoo');
+                    expect(testField.$('select > optgroup > option').eq(1).attr('value')).toBe('fooBar');
+                    expect(testField.$('select > optgroup > option').eq(1).text()).toBe('Test fooBar');
+                    expect(testField.$('select > option').eq(0).attr('value')).toBe('bar');
+                    expect(testField.$('select > option').eq(0).text()).toBe('Test bar');
                 });
 
                 it('should render a multi-select if multiple option/property is true, which sets and returns arrays', function () {

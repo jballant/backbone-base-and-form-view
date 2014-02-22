@@ -9,8 +9,7 @@
 (function (root) {
     "use strict";
 
-    var $ = root.jQuery,
-        Backbone = root.Backbone,
+    var Backbone = root.Backbone,
         _ = root._;
 
     if (typeof module !== 'undefined') {
@@ -24,6 +23,12 @@
     }
 
     var
+        RadioListView,
+        SelectListView,
+        CheckListView,
+        CheckBoxView,
+        FieldSetView,
+        CollectionFieldSetView,
         // Local copies
         Model = Backbone.Model,
         Collection = Backbone.Collection,
@@ -314,7 +319,7 @@
          * NOTE: Events are not copied when you use this method. It is strongly
          * recommended that if you need your subview models to be switched out
          * that you reinstantiate the FormView, because that is the best way to 
-         * functionality remains.
+         * ensure functionality remains.
          * @memberOf Backbone.FormView#
          * @return {Backbone.FormView}
          */
@@ -421,6 +426,15 @@
                 parentPref = this.parentView.getFieldPrefix(this) || '';
             }
             return parentPref + this.options.index  + '-';
+        },
+        /**
+         * Asks the parent collection form view to delete this row
+         * @memberOf Backbone.CollectionFormRowView#
+         * @return {Backbone.CollectionFormRowView}
+         */
+        deleteSelf: function () {
+            this.parentView.deleteRow(this);
+            return this;
         }
     });
 
@@ -913,7 +927,7 @@
      *      will be used as the label text to display to the user.
      *
      */
-    Backbone.fields.RadioListView = Backbone.fields.FieldView.extend({
+    RadioListView = Backbone.fields.RadioListView = Backbone.fields.FieldView.extend({
         tagName: 'div',
         events : {
             'click input:radio' : 'setModelAttrs'
@@ -923,7 +937,7 @@
             options = this.options = defaults(options || {}, this.options);
             this.possibleVals = options.possibleVals || this.possibleVals || {};
             this.labelAttrs = options.labelAttrs || this.labelAttrs;
-            Backbone.fields.RadioListView.__super__.initialize.call(this, options);
+            RadioListView.__super__.initialize.call(this, options);
         },
         /**
          * Get the value of the radio list. Looks for a checked radio input
@@ -935,7 +949,7 @@
             return this.$(this.elementType + ':checked').val();
         },
         /**
-         * Returns true or false if the radio input should be selected.
+         * Returns true or false if the input should be selected.
          * @param {string} key The key of the possibleVal that is being tested
          * @returns {boolean}
          */
@@ -953,9 +967,12 @@
                 i = 0,
                 self = this,
                 id = this.templateVars.inputId,
+                possibleVal,
+                $checkbox,
+                isSelected,
                 $inputWrapper = this.getInputWrapper().empty(),
                 labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'radio' }),
-                renderCheckbox = function (val, isChecked) {
+                renderCheckbox = function (val, key, isChecked) {
                     var $listItem, $label,
                         attributes = { type: 'radio', value: key };
                     if (self.addId) { extend(attributes, { name: id, id: (id + '-' + i) }); }
@@ -969,12 +986,27 @@
 
             for (key in possibleVals) {
                 if (possibleVals.hasOwnProperty(key)) {
-                    if (!isNaN(Number(key))) { key = Number(key); }
-                    $inputWrapper.append(renderCheckbox(possibleVals[key], this.isSelected(key)));
+                    possibleVal = this._parsePossibleVal(possibleVals, key);
+                    isSelected = this.isSelected(possibleVal.value);
+                    $checkbox = renderCheckbox(possibleVal.display, possibleVal.value, isSelected);
+                    $inputWrapper.append($checkbox);
                     i++;
                 }
             }
             return this;
+        },
+        _parsePossibleVal: function (possibleVals, key) {
+            var val = possibleVals[key];
+            if (val && val.value && val.display) {
+                return val;
+            }
+            if (possibleVals.slice && isArray(possibleVals)) {
+                return { value: val, display: val };
+            }
+            if (!isNaN(Number(key))) {
+                key = Number(key);
+            }
+            return { value: key, display: val };
         }
     });
 
@@ -1015,7 +1047,7 @@
      *      is set on the model.
      *
      */
-    Backbone.fields.SelectListView = Backbone.fields.RadioListView.extend({
+    SelectListView = Backbone.fields.SelectListView = Backbone.fields.RadioListView.extend({
         type: 'select-list',
         elementType: 'select',
         events : function () {
@@ -1026,7 +1058,7 @@
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             this.multiple = !isUndefined(options.multiple) ? options.multiple : this.multiple;
-            Backbone.fields.SelectListView.__super__.initialize.call(this, options);
+            SelectListView.__super__.initialize.call(this, options);
         },
         getValue: function () {
             return this.$(this.elementType).val();
@@ -1038,7 +1070,9 @@
          * @return {boolean}
          */
         isSelected: function (key) {
-            return (_.indexOf(_.map(this.getModelVal(), String), key + '') !== -1);
+            var modelVal = this.getModelVal();
+            modelVal = this.multiple ? modelVal : [modelVal];
+            return (_.indexOf(_.map(modelVal, String), key + '') !== -1);
         },
         /**
          * Renders the select element and the options
@@ -1060,21 +1094,16 @@
             return this._renderInput($select, possibleVals);
         },
         _renderInput: function ($wrapper, vals) {
-            var key, val, $optgroup, $option,
-                isArr = isArray(vals);
+            var key, val, $optgroup, $option;
             for (key in vals) {
                 if (vals.hasOwnProperty(key)) {
-                    val = vals[key];
-                    if (_.isObject(val)) {
+                    val = this._parsePossibleVal(vals, key);
+                    if (val.group) {
                         $optgroup = Backbone.$('<optgroup label="' + key + '"></optgroup>').appendTo($wrapper);
-                        this._renderInput($optgroup, vals[key]);
+                        this._renderInput($optgroup, val.group);
                     } else {
-                        $option = Backbone.$('<option>').text(vals[key]);
-                        if (!isArr) {
-                            val = key;
-                            $option.attr('value', key);
-                        }
-                        if (this.isSelected(val)) {
+                        $option = Backbone.$('<option>').text(val.display).attr('value', val.value);
+                        if (this.isSelected(val.value)) {
                             $option.attr('selected', 'selected');
                         }
                         $option.appendTo($wrapper);
@@ -1082,15 +1111,25 @@
                 }
             }
             return this;
+        },
+        _parsePossibleVal: function (possibleVals, key) {
+            var val = possibleVals[key];
+            if (val && val.group && val.display) {
+                return val;
+            }
+            if (_.isObject(val) && !isArray(possibleVals)) {
+                return { group: val, display: key };
+            }
+            return SelectListView.__super__._parsePossibleVal.call(this, possibleVals, key);
         }
     });
 
 
     // ====================================================
-    // FormCheckListView
+    // CheckListView
 
     /**
-     * Like Backbone.FormSelectView, but instead of a select, it's a list of checkboxes.
+     * Like Backbone.fields.SelectListView, but instead of a select, it's a list of checkboxes.
      * Additionally, instead of setting one value on the model, each checkbox represents
      * one attribute on the model assigned to it. Each of these attributes should expect
      * a boolean or one of a set of 2 possible values. You can set what these values 
@@ -1117,7 +1156,7 @@
      * @property [options.checkedVal] - the value to set on the model when a checkbox is checked
      * @property [options.unCheckedVal] - the value to set on the model when a checkbox is unchecked
      */
-    Backbone.fields.CheckListView = Backbone.fields.FieldView.extend({
+    CheckListView = Backbone.fields.CheckListView = Backbone.fields.RadioListView.extend({
         tagName: 'div',
         type: 'check-list',
         checkedVal: true,
@@ -1129,15 +1168,15 @@
         },
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
-            this.possibleVals = options.possibleVals || this.possibleVals || {};
             this.checkedVal = options.checkedVal || this.checkedVal;
             this.unCheckedVal = options.unCheckedVal || this.unCheckedVal;
-            this.labelAttrs = options.labelAttrs || this.labelAttrs;
-            Backbone.fields.CheckListView.__super__.initialize.call(this, options);
+            CheckListView.__super__.initialize.call(this, options);
         },
         setupTwoWay: function () {
-            each(result(this, 'possibleVals'), function (val, key) {
-                this.listenTo(this.model, 'change:' + key, function () {
+            var possibleVals = result(this, 'possibleVals');
+            each(possibleVals, function (val, key) {
+                var possibleVal = this._parsePossibleVal(possibleVals, key);
+                this.listenTo(this.model, 'change:' + possibleVal.value, function () {
                     if (!this._viewChangedModel) { this.renderInput(); }
                     this._viewChangedModel = false;
                 });
@@ -1181,7 +1220,7 @@
             if (isChecked) { attributes.checked = 'checked'; }
             $listItem = Backbone.$('<input>').attr(defaults(attributes, this.inputAttrs));
             if (this.inputClass) { $listItem.addClass(this.inputClass); }
-            $label = Backbone.$('<label>').attr('class', 'checkbox');
+            $label = Backbone.$('<label>').attr(defaults(this.labelAttrs || {}, { 'class': 'checkbox' }));
             return $label.append($listItem).append(val);
         },
         /**
@@ -1196,12 +1235,18 @@
         renderInput: function () {
             var key,
                 possibleVals = result(this, 'possibleVals'),
+                possibleVal,
+                $checkbox,
+                isSelected,
                 i = 0,
                 $inputWrapper = this.getInputWrapper().empty();
 
             for (key in possibleVals) {
                 if (possibleVals.hasOwnProperty(key)) {
-                    $inputWrapper.append(this.renderSingleCheckbox(key, possibleVals[key], this.isSelected(key), i));
+                    possibleVal = this._parsePossibleVal(possibleVals, key);
+                    isSelected = this.isSelected(possibleVal.value);
+                    $checkbox = this.renderSingleCheckbox(possibleVal.value, possibleVal.display, isSelected, i);
+                    $inputWrapper.append($checkbox);
                     i++;
                 }
             }
@@ -1235,7 +1280,7 @@
      * @property [options.checkedVal] - the value to set on the model when a checkbox is checked
      * @property [options.unCheckedVal] - the value to set on the model when a checkbox is unchecked
      */
-    Backbone.fields.CheckBoxView = Backbone.fields.FieldView.extend({
+    CheckBoxView = Backbone.fields.CheckBoxView = Backbone.fields.FieldView.extend({
         checkedVal: true,
         unCheckedVal: false,
         events: function () {
@@ -1249,7 +1294,7 @@
             this.unCheckedVal = options.unCheckedVal || this.unCheckedVal;
             this.displayText = options.displayText || this.displayText;
             this.labelAttrs = options.labelAttrs || this.labelAttrs;
-            Backbone.fields.CheckListView.__super__.initialize.call(this, options);
+            CheckBoxView.__super__.initialize.call(this, options);
         },
         getValue: function () {
             if (this.$('input:checkbox').prop('checked')) {
@@ -1308,14 +1353,14 @@
      * @property {Boolean} [options.autoUpdateModel] Inherited from Backbone.FormView
      * @property {Boolean} [options.twoWay] Inherited from Backbone.FormView
      */
-    Backbone.FieldSetView = Backbone.FormView.extend({
+    FieldSetView = Backbone.FieldSetView = Backbone.FormView.extend({
         tagName: 'div',
         setupOnInit: true,
         className: '',
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
-            Backbone.FieldSetView.__super__.initialize.call(this, options);
+            FieldSetView.__super__.initialize.call(this, options);
             this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
         },
         /**
@@ -1336,7 +1381,7 @@
      * @extends {Backbone.CollectionFormView}
      * @class Backbone.CollectionFieldSetView
      */
-    Backbone.CollectionFieldSetView = Backbone.CollectionFormView.extend({
+    CollectionFieldSetView = Backbone.CollectionFieldSetView = Backbone.CollectionFormView.extend({
         tagName: 'div',
         templateSrc: '<% if(obj && obj.label) { %><p><strong><%= obj.label %></strong></p><% } %>' +
             '<fieldset class="fieldset" data-rows=""></fieldset>',
@@ -1345,7 +1390,7 @@
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
-            Backbone.CollectionFieldSetView.__super__.initialize.call(this, options);
+            CollectionFieldSetView.__super__.initialize.call(this, options);
             this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
             return this;
         },
