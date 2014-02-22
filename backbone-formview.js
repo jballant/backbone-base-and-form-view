@@ -1182,10 +1182,6 @@
                 });
             }, this);
         },
-        setModelAttrs: function () {
-            var attrs = this.getAttrs();
-            this.model.set(attrs, this.setOpts);
-        },
         getAttrs: function () {
             var attrs = {}, self = this;
             this.$(this.elementType).each(function (index, input) {
@@ -1255,7 +1251,7 @@
     });
 
     // ====================================================
-    // FormCheckBoxView
+    // CheckBoxView
 
     /**
      * Creates a single checkbox that corresponds to one attribute in the model
@@ -1331,7 +1327,7 @@
     });
 
     // ====================================================
-    // FieldSet View
+    // FieldSetView
 
     /**
      * Essentially a subform, an extension of {@link Backbone.FormView} 
