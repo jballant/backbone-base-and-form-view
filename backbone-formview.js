@@ -1,4 +1,4 @@
-//     Backbone.FormView 0.4
+//     Backbone.FormView 0.5.0
 
 //     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.FormView may be freely distributed under the MIT license.
@@ -23,6 +23,7 @@
     }
 
     var
+        FieldView,
         RadioListView,
         SelectListView,
         CheckListView,
@@ -700,7 +701,7 @@
      *      If you would like this field to re-render the input when model is updated by something other
      *      than this view, in addition to the normal behavior of the view updating the model
      */
-    Backbone.fields.FieldView = Backbone.BaseView.extend({
+    FieldView = Backbone.fields.FieldView = Backbone.BaseView.extend({
         tagName: 'div',
         classDefaults: 'control-group form-field',
         inputPrefix: 'field-input-',
@@ -895,6 +896,16 @@
                 return this.parentView.getFieldPrefix(this) || '';
             }
             return '';
+        }
+    }, {
+        /**
+         * Set the default template for all fields that don't override
+         * the 'template' property of the Backbone.fields.FieldView
+         * @memberOf Backbone.fields.FieldView
+         * @param {function} template An underscore template function
+         */
+        setDefaultFieldTemplate: function (template) {
+            FieldView.prototype.template = template;
         }
     });
 
