@@ -16,9 +16,9 @@ Adds some additional functionality on top of [Backbone's](http://backbonejs.org)
 
 **Why??** 
 
-'Subviews' are a concept used often in Backbone without an official way to actually manage them. Backbone is nice enough to let you do pretty much whatever you want, but as a result it doesn't really provide that many structures to help you deal with a more complicated application -- it lets you decide what you want to do. Backbone.BaseView adds the SubViewManager component to standardize a little bit what can often end up being a wild west in terms of what people are doing deal with all the moving pieces inside their views.
+'Subviews' are a concept used often in Backbone without an official way to actually manage them. Backbone is nice enough to let you do pretty much whatever you want, but as a result it doesn't really provide that many structures to help you deal with a more complicated application -- it lets you decide what you want to do. Backbone.BaseView adds the SubViewManager component to help standardize what can often end up being a wild west in terms of what people are doing to deal with all the moving pieces inside their views.
 
-**Example scenario**: Say you want to make a table view based on a collection and it's models. You can make a TableView, then RowView sub views for it's rows, and then CellView sub views for each column cell in the RowView instance. (See [our basic implementation](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-table.html) as an example.)
+**Example scenario**: Say you want to make a table view based on a collection and it's models. You can make a TableView, then RowView subviews for it's rows, and then CellView subviews for each column cell in the RowView instance. (See [our basic implementation](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-table.html) as an example.)
 
 This allows you to focus only on the functionality of the ColView and it's UI in isolation of the TableView. With Backbone.BaseView, any BaseView can publish events that 'bubble' up or 'descend' down the hierarchy of views, not to mention a set of other functions to help you standardize how your views instantiate each other and communicate with one another.
 
@@ -37,7 +37,7 @@ Adds functionality on top of *Backbone.BaseView* to create a framework for gener
 
 If you make a lot of Forms with just vanilla Backbone, it's very easy to write a lot of very similar code. You write a template for the form, then write a view that renders the form, then event handlers to take UI form changes and set associated values on the view's model.
 
-Worse, a lot of code could be better standardized but often isn't when people write with vanilla Backbone, not through an issue with Backbone but out of fast development needs superseding organization. A lot of that repetitiveness / unintentional obscurity can be taken away using a Backbone.FormView or an extension. Instead of writing lots of html and then writing lots of javascript to bind itself to the html, a javascript schema object can be used to build the form, and this schema is formatted in a way that is very readable and pretty concise.
+Worse, a lot of code could be better standardized but often isn't when people write with vanilla Backbone, not through an issue with Backbone but out of fast development needs superseding organization. A lot of that repetitiveness / unintentional obscurity can be taken away using a Backbone.FormView or an extension. Instead of writing lots of html and then writing lots of javascript to bind itself to the html, a javascript schema object can be used to build the form, and this schema is formatted in a way that is very readable and pretty concise. Visit [the example for a simple form](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-simple-form.html) to see the very basics of this.
 
 ### Project Page with 'Class' documentation:
 [Go to the project page](http://1stdibs.github.io/backbone-base-and-form-view/)
@@ -88,7 +88,7 @@ To add a subview is through using the SubViewManager's ('.subs') ```add``` metho
         var testView = new MyView();
         console.log(testView.subViews); // Logs an array with one MySubview instance
 
-This is probably fine if you never need to refer to this sub view by a type. If you provide a string as the first parameter, this serves as a key to refer to the subview by. This would look like ``this.subs.add('mySubView', new MySubView())``. You can continue adding subviews on the same type string (they would be grouped in an array).
+This is probably fine if you never need to refer to this subview by a type. If you provide a string as the first parameter, this serves as a key to refer to the subview by. This would look like ``this.subs.add('mySubView', new MySubView())``. You can continue adding subviews on the same type string (they would be grouped in an array).
 
 * **Adding a config first**, and then instantiating from that config. A config tells the SubViewManager some standard information about the subview type.
 
@@ -101,7 +101,7 @@ This is probably fine if you never need to refer to this sub view by a type. If 
                      singleton: true,
                      location: '.mysub-wrapper'
                      options: {
-                          // 'default' options to pass to the sub view on init
+                          // 'default' options to pass to the subview on init
                      }
                 });
                 this.subs.add('mySubView', {
@@ -119,9 +119,9 @@ The config above has several properties that are important to know:
    of jQuery.
    * options : A default set of options to pass to the constructor. When you instantiate this object later with 'add' you can add additional options.
 
-With the example above, you could have also added a ```subViewConfig``` property to the MyView definition at the top, which in this example would be an object with one key value pair, with the key being 'mySubView' (the name of the sub view type you want to define) and the value being the config object for that type.
+With the example above, you could have also added a ```subViewConfig``` property to the MyView definition at the top, which in this example would be an object with one key value pair, with the key being 'mySubView' (the name of the subview type you want to define) and the value being the config object for that type.
 
-### Getting a Sub View
+### Getting a SubView
 
 Now that you have created a subview, you might want to actually use it some point later on, and you need a way to get it. To retrieve a view you can use:
 
@@ -135,7 +135,7 @@ Now that you have a singleton view, you can always get it easily by calling:
 
 The ```.get``` method, will try to find a single instance first using the 'key' provided before returning an array. If the key passed to get doesn't match a singleton, you will get an array of results.
 
-**Getting a sub view via a model** - If you pass a model to a subview when it's instantiated as an option, the sub view manager makes it possible to retrieve the view using the model. This could be done as follows:
+**Getting a subview via a model** - If you pass a model to a subview when it's instantiated as an option, the subview manager makes it possible to retrieve the view using the model. This could be done as follows:
 
     var testModel = new Backbone.Model();
     testView.subs.add('anotherSubView', new MySubView({ 
@@ -143,18 +143,18 @@ The ```.get``` method, will try to find a single instance first using the 'key' 
     }));
 
     testView.subs.get(testModel);
-    // Returns sub view instance if only one view uses that model, or 
-    // an array of sub views if you have multiple subviews using that model
+    // Returns subview instance if only one view uses that model, or 
+    // an array of subviews if you have multiple subviews using that model
 
 **Underscore methods to access subViews** - The 'subs' SubViewManager includes curried underscore methods to access or modify subViews. These are: 'each', 'find', 'filter', 'sortBy', 'groupBy', 'where', 'findWhere', 'some', 'every', and 'invoke'. Example usage: ```this.subs.where({ collection: myCollection }); // Returns array of subview instances```.
 
-### Rendering Sub Views
+### Rendering SubViews
 
-1. You can get the sub view instances and render them individually:
+1. You can get the subview instances and render them individually:
 
         testView.subs.get('mySubView').render();
 
-2. You can render sub views all at once and append them in their order to a specified selector or element
+2. You can render subviews all at once and append them in their order to a specified selector or element
 
         testView.subs.renderAppend('.subviews-wrapper');
 
@@ -179,13 +179,13 @@ The ```.get``` method, will try to find a single instance first using the 'key' 
 
 ### Features
 
-Okay, well, now that you have this taken care of, a Base View has a few interesting features involving sub view interactions, some of which I will outline here:
+Okay, well, now that you have this taken care of, Backbone.BaseView has a few interesting features involving subview interactions, some of which I will outline here:
 
 1. Accessing the subViews parent:
 
         testSubView.parentView; // Instance of MyView
 
- *Note that you cannot access the '.parentView' property in the initialize method if you instantiate a sub view before it's added to the base view's SubViewManager.*
+ *Note that you cannot access the '.parentView' property in the initialize method if you instantiate a subview before it's added to the base view's SubViewManager.*
 
 2. Triggering an event that bubbles up to the parent view, and then that parent's parent view, and so on:
 
@@ -197,9 +197,9 @@ Like Backbone.Events.trigger, the first argument passed to triggerBubble should 
 
         testView.triggerDescend('myOtherEvent');
 
- Arguments and callbacks work in the same fashion as they do with triggerBubble.
+ Arguments and callbacks work in the same fashion as they do with ```triggerBubble```.
 
-4. Getting the top view of a sub view heirarchy (i.e. the view that doesn't have a parentView of it's own):
+4. Getting the top view of a subview heirarchy (i.e. the view that doesn't have a parentView of it's own):
 
         testSubView.getTopView();
 
@@ -212,7 +212,7 @@ Like Backbone.Events.trigger, the first argument passed to triggerBubble should 
         myView = Backbone.BaseView.extend({
             viewEvents: {
                'change model': 'render',
-               'add subs': function () { console.log('a sub view was added!'); }
+               'add subs': function () { console.log('a subview was added!'); }
             }
         });
 
@@ -222,7 +222,7 @@ Like Backbone.Events.trigger, the first argument passed to triggerBubble should 
 
 8. With the ```descend``` method, instead of just triggrering an event, you can run a function that you pass as a parameter all they way down a view's subview tree.
 
-          myView.descend(function () {
+          myView.subs.descend(function () {
             console.log(this.cid); // logs the current subview's cid
           });
 
@@ -239,7 +239,7 @@ BaseView Example - A Table
 
 Using Backbone.FormView
 -----------------------
-Backbone.FormView adds additional functionality by creating standardized fields and allowing you to specify a *schema*, which is really a subViewConfig with some of the work being done automatically for you. You can define a *schema* as an option. The schema tells the form view how to assemble the Form when it's rendered, and is used to bind all of the model fields to the form fields that it creates. For example, if you have a model field names 'firstName', and a form field named 'firstName', rendering the form field will automatically display the current value of 'firstName'. When the user updates the field input, the model value will be updated accordingly.
+Backbone.FormView adds additional functionality by creating standardized fields and allowing you to specify a *schema*, which is really a subViewConfig where some of the work gets done automatically for you. You can define a *schema* as an option or a property on an extension. The schema tells the form view how to assemble the Form when it's rendered, and is used to bind all of the model fields to the form fields that it creates. For example, if you have a model field named 'firstName', and a form field named 'firstName', rendering the form field will automatically display the current value of 'firstName'. When the user updates the field input, the model value will be updated accordingly.
 
         var myModel = new Backbone.Model();
         var myForm = new Backbone.FormView({
@@ -261,28 +261,28 @@ Backbone.FormView adds additional functionality by creating standardized fields 
 If you do choose to extend the FormView, you can also define schema as a pseudoclass property.
 
 ### FormView Schema
-The schema property of the options object has one field defined in the example above, 'firstName'. The schema tells the FormView that the firstName field should be of type 'Text', and that it should be have the label 'First Name'. Each field is actually a sub view, and the FormView basically automatically sorts some things out for you:
+The schema property of the options object has one field defined in the example above: 'firstName'. The schema tells the FormView that the firstName field should be of type 'Text', and that it should be have the label 'First Name'. Each field is actually a subview, and the FormView basically automatically sorts some things out for you:
 
-1. The *schema* property ```type``` is actually an alias of 'construct' (you can use either), and the value 'Text' is an alias of 'Backbone.FormFieldView'. The Backbone.FormView prototype has several built in aliases for field types: 'Text', 'Checkbox', 'Checklist', 'Select', 'RadioList', 'FieldSet', 'CollectionField'. More on these types will be discussed later.
+1. The *schema* property ```type``` is actually an alias of 'construct' (you can use either), and the value 'Text' is an alias of 'Backbone.FormFieldView'. The Backbone.FormView prototype has several built-in aliases for field types: 'Text', 'Checkbox', 'CheckList', 'Select', 'RadioList', 'FieldSet', 'CollectionField'. More on these types will be discussed later.
   
- If you want to use a custom sub view constructor, you can easily just use that as the value of type. For example, if you created a custom field View constructor called 'App.MyField', you can just use that as the type value. *Note* that if you use a string value as type it will have to be a dot notation object that can be found on the global scope.
+ If you want to use a custom subview constructor, you can easily just use that as the value of type. For example, if you created a custom field View constructor called 'App.MyField', you can just use that as the type value. *Note* that if you use a string value as type it will have to be a dot notation object that can be found on the global scope.
 
 2. The *options* property is really just some custom options that we want to pass to the 'Text' constructor, just like the options paramater passed to Backbone.View instances. More details on each field are discussed later. This makes it really easy to write a custom field because it is just a Backbone.View (preferably a BaseView but not required) and the options will be what you specify here and what are automatically set by the FormView and passed to the initialize function of the custom View.
 
 ### FormView Options
 The FormView constructor allows certain options for each field type so that you don't necessarily need to extend to customize the form the way you want to. These are some of the options you can pass the constructor or set on an extended View's prototype:
 
-1. ```model``` - *Required*. Backbone.Model This is the model that the form will set attributes on. The form field sub-views will automatically be passed a reference to this model to their constructor, so that the fields can manage setting the values of their inputs on the appropriate attribute of the model. If the schema key (in the example this is 'firstName') matches a nested model, the sub views will be passed that nested model instead. This is useful if you use a framework like [backbone-relational](http://backbonerelational.org/), [backbone-associations](https://github.com/dhruvaray/backbone-associations) or [backbone-deep-model](https://github.com/powmedia/backbone-deep-model).
+1. ```model``` - *Required*. Backbone.Model This is the model that the form will set attributes on. The form field sub-views will automatically be passed a reference to this model to their constructor, so that the fields can manage setting the values of their inputs on the appropriate attribute of the model. If the schema key (in the example this is 'firstName') matches a nested model, the subviews will be passed that nested model instead. This is useful if you use a framework like [backbone-relational](http://backbonerelational.org/), [backbone-associations](https://github.com/dhruvaray/backbone-associations) or [backbone-deep-model](https://github.com/powmedia/backbone-deep-model).
 2. ```collection``` - Collections will not be passed to subViews unless the schema defines a collection option for the field. If the value of collection is true, then the sub-view instantiated from the field schema will be passed a the parent view's collection property.
 3. ```templateSrc``` - String. An underscore template string that can be used with the underscore _.template function. This serves as the shell template that the subviews/fields are appended to. The render function looks for an element with a ```data-fields``` attribute and appends the sub-views to that. The FormView default fields have a default template (with [bootstrap](http://getbootstrap.com/) classes), which you can use if you want or easily repace with this variable.
 4. ```templateVars``` - Object. Variables to pass to the template when it is rendered
-5. ```setupOnInit``` - Boolean. If true, the FormView will create all sub view instances from the schema in the initialize function.
+5. ```setupOnInit``` - Boolean. If true, the FormView will create all subview instances from the schema in the initialize function.
 
 ### Saving a Form
 Saving a form is simply matter of saving the model. One way this can be achieved is simply using a templateSrc with a submit button, and then attaching an event to that button that saves the model when the user clicks it.
 
 ### Basic Fields
-The FormView comes with a set of Field subViews that you can use to create forms without having to define any of your own. They are outlined below:
+The FormView comes with a set of field subview constructors (with string aliases for easy access) that you can use to create forms without having to define any of your own (though that's easily done as well). They are outlined below:
 
 #### Text (alias of Backbone.fields.FieldView)
 Creates a field 'text' type input or textarea, wrapped in a shell template. Sets the associated model attribute with the value of the input/textarea on focusout.
@@ -301,7 +301,7 @@ Example schema definition:
 
 **Options**:
 
-1. ```templateSrc``` - String. The source for an underscore template to append the input to. If a data-input attribute on the element is specified, then that will directly wrap the input. Otherwise the input will be appeneded directly to the view's '.el' element.
+1. ```templateSrc``` - String. The source for an underscore template to append the input to. If a data-input attribute on the element is specified, then that will directly wrap the input. Otherwise, the input will be appeneded directly to the view's ```.el``` element.
 2. ```label``` - String. The text you would like to display in the <label> element that is included in part of the template.
 3. ```elementType``` - String. Should be one of 'input' or 'textarea'.
 4. ```placeholder``` -  String. The placeholder attribute of the input or textarea element.
@@ -360,7 +360,7 @@ Example schema definition:
 
 Inherited from Text - *templateSrc*, *label*, *placeholder*, *fieldName*, *inputId*, *templateVars*, *addId*.
 
-1. ```possibleVals``` - Object|Array|Function. Should be an object literal (or a function that returns one) with the options you would like to have in the select. The keys will be the values that are saved on the model attribute. The values are the display text for each option. Note, the select allows you to create optgroups by nesting possible values as follows:
+1. ```possibleVals``` - Object|Array|Function. Like the same property for 'RadioList', should be an object literal (or a function that returns one) with the options you would like to have in the select. The keys will be the values that are saved on the model attribute. The values are the display text for each option. Note, the select allows you to create optgroups by nesting possible values as follows:
 
         possibleVals: {
            'Fiction' : {
@@ -373,7 +373,7 @@ Inherited from Text - *templateSrc*, *label*, *placeholder*, *fieldName*, *input
            }
         }
 
-Another structure is to use an array of objects that have a ```value``` key for the value that should be set on the model and a ```display``` key for the text/html that should be displayed to the user. Select's can also have a ```group``` key instead of a 'value' key that should contain a nested possibleVals array. For example:
+**Another structure for ```possibleVals```** you can use is an array of objects that have a ```value``` key for the value that should be set on the model and a ```display``` key for the text/html that should be displayed to the user. Select's can also have a ```group``` key instead of a 'value' key that should contain a nested possibleVals array. For example:
 
         possibleVals: [
             { 
@@ -382,7 +382,14 @@ Another structure is to use an array of objects that have a ```value``` key for 
                 { value: 'ya', display: 'Young Adult' },
                 { value: 'hf', display: 'Historical Fiction' }
               ]
+            }, {
+                display: 'Non-Fiction',
+                group: [
+                  { value: 'his', display: 'History' },
+                  { value: 'sci', display: 'Scientific' }
+                ]
             }
+
         ]
 
 Remember, if the possible values need to be more dynamic, you can always make this a function that returns one of these object structures.      
