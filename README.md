@@ -309,6 +309,7 @@ Example schema definition:
 6. ```inputId``` - String. The id attribute of the input element you would like to use. This is created automatically from the schema key if it's not provided. It is also used as the name.
 7. ```templateVars``` - Object. Custom variables you would like to pass to the underscore template function
 8. ```inputAttrs``` - Object. If there are other attributes on the input/form element(s) that are not set by the above, then you can specify them with this option.
+9. ```addId``` - Boolean. If you want to prevent the field from automatically creating an id and name for the field. True by default.
 
 #### RadioList (alias of Backbone.fields.RadioListView)
 Like the Text field, except the input is actually just a set of radio buttons. A RadioList field should be associated with a model attribute that expects a single value out of a fixed set of values.
@@ -328,14 +329,14 @@ Example schema definition:
 
 **Options**:
 
-Inherited from Text - *templateSrc*, *label*, *fieldName*, *inputId*, *templateVars*.
+Inherited from Text - *templateSrc*, *label*, *fieldName*, *inputId*, *templateVars*, *addId*.
 
-1. *possibleVals* - Object|Array|Function. Should be an object literal or array (or a function that returns one of those) with the choices you would like to have a radio button for. The object keys will be the values that are saved on the model attribute. The values are the display text for each option. If you use an array of strings, where the model value and the display text will be the values in the array. Another alternative you may prefer is an array of objects with a ```value``` key for the value set on the model and a ```display``` key for the text to display to the user. The example above in this format would look like the following:
+1. ```possibleVals``` - Object|Array|Function. Should be an object literal or array (or a function that returns one of those) with the choices you would like to have a radio button for. The object keys will be the values that are saved on the model attribute. The values are the display text for each option. If you use an array of strings, where the model value and the display text will be the values in the array. Another alternative you may prefer is an array of objects with a ```value``` key for the value set on the model and a ```display``` key for the text to display to the user. The example above in this format would look like the following:
 
-      possibleVals: [
-        { value: 'M', display: 'Male' },
-        { value: 'F', display: 'Female' }
-      ]
+          possibleVals: [
+            { value: 'M', display: 'Male' },
+            { value: 'F', display: 'Female' }
+          ]
 
 #### Select (alias of Backbone.fields.SelectListView)
 Like the RadioList field, except instead of a set of radio buttons, it's displays a select dropdown. Also has the ability to allow multiple select.
@@ -357,9 +358,9 @@ Example schema definition:
 
 **Options**:
 
-Inherited from Text - *templateSrc*, *label*, *placeholder*, *fieldName*, *inputId*, *templateVars*.
+Inherited from Text - *templateSrc*, *label*, *placeholder*, *fieldName*, *inputId*, *templateVars*, *addId*.
 
-1. *possibleVals* - Object|Array|Function. Should be an object literal (or a function that returns one) with the options you would like to have in the select. The keys will be the values that are saved on the model attribute. The values are the display text for each option. Note, the select allows you to create optgroups by nesting possible values as follows:
+1. ```possibleVals``` - Object|Array|Function. Should be an object literal (or a function that returns one) with the options you would like to have in the select. The keys will be the values that are saved on the model attribute. The values are the display text for each option. Note, the select allows you to create optgroups by nesting possible values as follows:
 
         possibleVals: {
            'Fiction' : {
@@ -407,11 +408,11 @@ Example schema definition:
 
 **Options**:
 
-Inherited from Text - *templateSrc*, *label*, *fieldName*, *inputId*, *templateVars*.
+Inherited from Text - *templateSrc*, *label*, *fieldName*, *inputId*, *templateVars*, *addId*.
 
-1. *possibleVals* - Object|Array|Function. Should be an object literal with the choices you would like to have a checkbox for. The keys will be the values that are saved on the model attribute. The values are the display text label for each checkbox. If you prefer, you can also use an array of objects with the keys 'value' and 'display'.
-1. *checkedVal* - Mixed. the value to set on the model when a checkbox is checked for a particular possibleVal. So if the user selected the checkbox with the value 'fluf', and the checkedVal is ```true```, then the 'fluf' attribute on the model will be set to ```true```.
-1. *unCheckedVal* - Mixed. the value to set on the model when a checkbox is unchecked.
+1. ```possibleVals``` - Object|Array|Function. Should be an object literal with the choices you would like to have a checkbox for. The keys will be the values that are saved on the model attribute. The values are the display text label for each checkbox. If you prefer, you can also use an array of objects with the keys 'value' and 'display'.
+1. ```checkedVal``` - Mixed. the value to set on the model when a checkbox is checked for a particular possibleVal. So if the user selected the checkbox with the value 'fluf', and the checkedVal is ```true```, then the 'fluf' attribute on the model will be set to ```true```.
+1. ```unCheckedVal``` - Mixed. the value to set on the model when a checkbox is unchecked.
 
 #### CheckBox (alias of Backbone.fields.CheckBoxView)
 Just a simple checkbox in a shell template, associated with an attribute on the model that can have only two values.
@@ -429,11 +430,11 @@ Example schema definition:
 
 **Options**:
 
-Inherited from Text - *templateSrc*, *label*, *fieldName*, *inputId*, *templateVars*.
+Inherited from Text - *templateSrc*, *label*, *fieldName*, *inputId*, *templateVars*, *addId*.
 
-1. *checkedVal* - Mixed. the value set on the model when the users checks the checkbox. In the example above, the 'email' property of the the checkbox would be set to string 'Yes' .
-1. *unCheckedVal* - Mixed. the value to set on the model when a checkbox is unchecked.
-1. *displayText* - String. Helpful text to display on the right of the checkbox. You can also use a label, but labels display on the left side in the default template.
+1. ```checkedVal``` - Mixed. the value set on the model when the users checks the checkbox. In the example above, the 'email' property of the the checkbox would be set to string 'Yes' .
+1. ```unCheckedVal``` - Mixed. the value to set on the model when a checkbox is unchecked.
+1. ```displayText```- String. Helpful text to display on the right of the checkbox. You can also use a label, but labels display on the left side in the default template.
 
 Backbone.CollectionFormView
 ---------------------------
@@ -550,12 +551,13 @@ As another example, if you wanted a different checklist view that uses an array 
           });
           Backbone.FormView.addFieldAlias('CheckListArray', Backbone.fields.CheckListArrayView);
 
-Again, there are a ton of ways to extend the FormView, and the fields, as there should be.
+Again, there are a ton of ways to extend the FormView and the fields, as there should be.
+
 
 Example FormView Demos
 ----------------------
 
-All of these form's are pretty bare-bones -- just to illustrate the concepts in a simple manner.
+All of these example's are pretty bare-bones -- they are just here to illustrate the concepts in a simple manner.
 
 * [Example simple form](http://1stdibs.github.io/backbone-base-and-form-view/examples/example-simple-form.html)
 
