@@ -85,9 +85,7 @@
 				templateSrc: '<div class="row-fields" data-fields=""></div>' +
 					'<div class="btn delete-row"><i class="icon-trash"></i> Delete</div>',
 				events: {
-					'click .delete-row' : function () {
-						this.parentView.deleteRow(this);
-					}
+					'click .delete-row' : 'deleteSelf'
 				}
 			},
 			events: {
@@ -102,7 +100,7 @@
 						output += 'You submitted a person named ' + model.get('firstName') + ' ' + model.get('lastName') + ' with the status ' + model.get('status') + ' <br />';
 					});
 					this.$('.output').html(output);
-				},
+				}
 			}
 		}).render();
 		$('#wrapper').html(form.$el);
