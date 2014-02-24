@@ -236,7 +236,7 @@
          * @param {Boolean} [singleton]
          *      If you want this view to be a singleton subView. A singleton subView
          *      will only allow one instance of it to be created.
-         * @returns {SubViewManager}
+         * @return {SubViewManager}
          */
         /**
          * Add an configuration for a subview to the SubViewManager.
@@ -256,7 +256,7 @@
          *                      // a function that returns one of these. The subview el will 
          *                      // be appended to that location
          *      }
-         * @returns {SubViewManager}
+         * @return {SubViewManager}
          */
         /**
          * Add an configuration for a subview to the SubViewManager.
@@ -269,7 +269,7 @@
          *      created with this config
          * @param {Object} config
          *      The configuration object (uses the format described above)
-         * @returns {SubViewManager}
+         * @return {SubViewManager}
          */
         addConfig : function (name, config) {
             var map = (_.isObject(name) && !_.isArray(name)) ? name : false;

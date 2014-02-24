@@ -50,7 +50,7 @@
              * on all fields that implement it. If a field doesn't
              * implement this method, it will not be disabled.
              * @memberOf dibsLibs.FormView#
-             * @returns {dibsLibs.FormView}
+             * @return {dibsLibs.FormView}
              */
             disable: function () {
                 this.subs.each(function (field) {
@@ -62,7 +62,7 @@
              * The reverse of disable, naturally. Invokes enable method
              * on all fields and field sets.
              * @memberOf dibsLibs.FormView#
-             * @returns {dibsLibs.FormView}
+             * @return {dibsLibs.FormView}
              */
             enable: function () {
                 this.subs.each(function (field) {
@@ -858,7 +858,7 @@
         /**
          * Disable the input if not already disabled
          * @memberOf dibsLibs.FormFieldView#
-         * @returns {dibsLibs.FormFieldView}
+         * @return {dibsLibs.FormFieldView}
          */
         disable: function () {
             var $input = this.$(this.elementType);
@@ -871,7 +871,7 @@
         /**
          * Enable the input if disabled by the 'disable' method
          * @memberOf dibsLibs.FormFieldView#
-         * @returns {dibsLibs.FormFieldView}
+         * @return {dibsLibs.FormFieldView}
          */
         enable: function () {
             if (this.isDisabled) {
@@ -962,7 +962,7 @@
         /**
          * Returns true or false if the input should be selected.
          * @param {string} key The key of the possibleVal that is being tested
-         * @returns {boolean}
+         * @return {boolean}
          */
         isSelected: function (key) {
             return (this.getModelVal() + '' === '' + key);
@@ -1215,7 +1215,7 @@
          * @param {string} val the value from possibleVals
          * @param {boolean} isChecked if the box should be checked or not
          * @param {number} index the index of the checkbox
-         * @returns {$}
+         * @return {$}
          */
         renderSingleCheckbox: function (key, val, isChecked, index) {
             var $listItem,
@@ -1234,7 +1234,7 @@
          * Returns true or false if the checkbox should be selected.
          * @memberOf Backbone.fields.CheckListView#
          * @param {string} key the key of the possibleVal that is being tested
-         * @returns {boolean}
+         * @return {boolean}
          */
         isSelected: function (key) {
             return this.getModelVal(key) === this.checkedVal;
@@ -1312,7 +1312,7 @@
         /**
          * Returns true or false if the checkbox should be selected
          * @memberOf Backbone.fields.CheckBoxView#
-         * @returns {boolean}
+         * @return {boolean}
          */
         isSelected: function () {
             return this.getModelVal() === this.checkedVal;
