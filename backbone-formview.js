@@ -1014,7 +1014,7 @@
             if (possibleVals.slice && isArray(possibleVals)) {
                 return { value: val, display: val };
             }
-            if (!isNaN(Number(key))) {
+            if (key && !isNaN(Number(key))) {
                 key = Number(key);
             }
             return { value: key, display: val };
