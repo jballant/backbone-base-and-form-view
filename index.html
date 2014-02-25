@@ -95,6 +95,20 @@
 					</ul>
 				</li>
 				
+				<li class="dropdown">
+					<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="global.html#isSelected">isSelected</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
 			</ul>
 		</div>
 	</div>
@@ -135,23 +149,23 @@
         <article><h1>Backbone BaseView and FormView</h1>
 <h2>TLDR</h2>
 <p><strong>Backbone.BaseView</strong> - Organize your views into components (subviews) to decouple them and promote more standard and maintainable code.</p>
-<p><strong>Backbone.FormView</strong> - Extends Backbone.BaseView and allows you to define and generate Backbone-ized forms more easily with less code while keeping the decoupled benefits of the BaseView.</p>
+<p><strong>Backbone.FormView</strong> - Extends Backbone.BaseView and allows you to define and generate Backbone-ized forms more easily with less code while keeping the benefits of the BaseView.</p>
 <h2>Introduction</h2>
 <h3>Backbone.BaseView</h3>
 <p>Adds some additional functionality on top of <a href="http://backbonejs.org">Backbone's</a> native View constructor, and most of this is around <em>subview</em> management and managing a hierarchy of views. This can be useful for things like having a view for a collection and then subviews for each model in the collection, but also for a structure where you have nested models and collections within the model you are building a view for. It adds some useful methods in relation to the interaction between parent views and subviews.</p>
 <p><strong>Why??</strong> </p>
-<p>'Sub-Views' are a concept used often in Backbone without an official way to actually manage them. Backbone is nice enough to let you do pretty much whatever you want, but as a result it doesn't really provide that many structures to help you deal with a more complicated application -- it lets you decide what you want to do. Backbone.BaseView adds the SubViewManager component to standardize a little bit what can often end up being a wild west in terms of what people are doing deal with all the moving pieces inside their views.</p>
-<p><strong>Example scenario</strong>: Say you want to make a table view based on a collection and it's models. You can make a TableView, then RowView sub views for it's rows, and then CellView sub views for each column cell in the RowView instance. (See <a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/example-table.html">our basic implementation</a> as an example.)</p>
+<p>'Subviews' are a concept used often in Backbone without an official way to actually manage them. Backbone is nice enough to let you do pretty much whatever you want, but as a result it doesn't really provide that many structures to help you deal with a more complicated application -- it lets you decide what you want to do. Backbone.BaseView adds the SubViewManager component to help standardize what can often end up being a wild west in terms of what people are doing to deal with all the moving pieces inside their views.</p>
+<p><strong>Example scenario</strong>: Say you want to make a table view based on a collection and it's models. You can make a TableView, then RowView subviews for it's rows, and then CellView subviews for each column cell in the RowView instance. (See <a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/example-table.html">our basic implementation</a> as an example.)</p>
 <p>This allows you to focus only on the functionality of the ColView and it's UI in isolation of the TableView. With Backbone.BaseView, any BaseView can publish events that 'bubble' up or 'descend' down the hierarchy of views, not to mention a set of other functions to help you standardize how your views instantiate each other and communicate with one another.</p>
 <p>This means you can write some nice semantic code like this:</p>
 <p> <code>tableView.subs.add('row', { model: new RowModel(); });</code></p>
 <p><code>tableView.subs.triggerDescend('collapseDetails'); // Triggers an event on all subviews and their subviews</code></p>
 <p>This allows you to write views that can be used in many contexts. In a table scenario, you can have a table cell trigger an event that bubbles up to notify the row when an event should affect the entire row, and then the row view can handle this accordingly, without having to write unique logic to </p>
 <h3>Backbone.FormView</h3>
-<p>Adds functionality on top of <em>Backbone.BaseView</em> to create a framework for generating forms very quickly and standardizing some aspects of this to make augmenting a form is easier for other coders. This is somewhat inspired by <a href="https://github.com/powmedia/backbone-forms">backbone-forms</a> but has a different style and approach to how you can build forms and extend the functionality.</p>
+<p>Adds functionality on top of <em>Backbone.BaseView</em> to create a framework for generating forms very quickly and standardizing some aspects of this to make augmenting a form is easier for other coders. This is somewhat inspired by <a href="https://github.com/powmedia/backbone-forms">backbone-forms</a> but has a different style and approach to how you can build forms and extend the functionality. The FormView and each of the fields are highly extendable, as they should be, and makes it very easy to add the functionality that you need.</p>
 <p><strong>Why??</strong></p>
 <p>If you make a lot of Forms with just vanilla Backbone, it's very easy to write a lot of very similar code. You write a template for the form, then write a view that renders the form, then event handlers to take UI form changes and set associated values on the view's model.</p>
-<p>Worse, a lot of code could be better standardized but often isn't when people write with vanilla Backbone, not through an issue with Backbone but out of fast development needs superseding organization. A lot of that repetitiveness / unintentional obscurity can be taken away using a Backbone.FormView, not to mention less confusing. A javascript schema object can be used to build the form, and this schema is formatted in a way that is very readable and pretty concise.</p>
+<p>Worse, a lot of code could be better standardized but often isn't when people write with vanilla Backbone, not through an issue with Backbone but out of fast development needs superseding organization. A lot of that repetitiveness / unintentional obscurity can be taken away using a Backbone.FormView or an extension. Instead of writing lots of html and then writing lots of javascript to bind itself to the html, a javascript schema object can be used to build the form, and this schema is formatted in a way that is very readable and pretty concise. Visit <a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/example-simple-form.html">the example for a simple form</a> to see the very basics of this.</p>
 <h3>Project Page with 'Class' documentation:</h3>
 <p><a href="http://1stdibs.github.io/backbone-base-and-form-view/">Go to the project page</a></p>
 <h2>Getting Started</h2>
@@ -165,13 +179,13 @@
 <p><strong>FormView</strong> - To use Backbone.FormView, load Backbone.BaseView after Backbone, and then load Backbone.FormView</p>
 <h3>NPM Installation</h3>
 <p>Install it through npm simply by running the command <code>npm install backbone-base-and-form-view</code>. If you use <a href="https://github.com/substack/node-browserify">browserify</a>, you can load these modules like this: </p>
-<p><code>var Backbone = require('backbone-base-and-view'); // loads Backbone for you and re-exports it</code></p>
+<p><code>var Backbone = require('backbone-base-and-form-view'); // loads Backbone for you and re-exports it</code></p>
 <h2>Using Backbone.BaseView</h2>
-<p>You can use Backbone.BaseView like a normal Backbone.View, however, you get some additional functionality in the form of <em>subviews</em>. A subview is a view that is nested in the '.subViews' array in a BaseView instance, and typically would have it's '.el' HTMLelement inside the BaseViews '.el' HTMLelement. </p>
-<p>Backbone.BaseView lets you interact with them through the SubViewManager instance stored in the 'subs' property of the BaseView instance. </p>
+<p>You can use Backbone.BaseView like a normal Backbone.View, however, you get some additional functionality in the form of <em>subviews</em>. A subview is a view that is nested in the '.subViews' array in a BaseView instance, and typically would have it's <code>.el</code> HTMLelement inside the BaseViews <code>.el</code> HTMLelement. </p>
+<p>Backbone.BaseView lets you interact with them through the SubViewManager instance stored in the <code>.subs</code> property of the BaseView instance. </p>
 <p>A subview should get rendered when the parent BaseView is rendered, but the subview can be rendered without rendering the parent view. Subviews have a proptery '.parentView' that stores a reference to it's parent view.</p>
 <h3>Adding a Subview</h3>
-<p>To add a subview is through using the SubViewManager's ('.subs') 'add' method. There are several ways you can use this method.</p>
+<p>To add a subview is through using the SubViewManager's ('.subs') <code>add</code> method. There are several ways you can use this method.</p>
 <ul>
 <li><p><strong>Adding an instance directly</strong></p>
 <pre><code>  var MySubView = Backbone.BaseView.extend();
@@ -184,7 +198,7 @@
   console.log(testView.subViews); // Logs an array with one MySubview instance</code></pre>
 </li>
 </ul>
-<p>This is probably fine if you never need to refer to this sub view by a type. If you provide a string as the first parameter, this serves as a key to refer to the subview by. This would look like <code>this.subs.add('mySubView', new MySubView())</code>. You can continue adding subviews on the same type string (they would be grouped in an array).</p>
+<p>This is probably fine if you never need to refer to this subview by a type. If you provide a string as the first parameter, this serves as a key to refer to the subview by. This would look like <code>this.subs.add('mySubView', new MySubView())</code>. You can continue adding subviews on the same type string (they would be grouped in an array).</p>
 <ul>
 <li><p><strong>Adding a config first</strong>, and then instantiating from that config. A config tells the SubViewManager some standard information about the subview type.</p>
 <pre><code>  var MySubView = Backbone.BaseView.extend();
@@ -196,7 +210,7 @@
                singleton: true,
                location: '.mysub-wrapper'
                options: {
-                    // 'default' options to pass to the sub view on init
+                    // 'default' options to pass to the subview on init
                }
           });
           this.subs.add('mySubView', {
@@ -208,37 +222,37 @@
 </ul>
 <p>The config above has several properties that are important to know:</p>
 <ul>
-<li>construct : This tells the SubViewManager what constructor function to use when creating the view </li>
+<li>construct : This tells the SubViewManager what constructor function to use when creating the view. It can be a string that refers to a global or simply the constructor function itself.</li>
 <li>singleton : This tells the SubViewManager that you only want one instance of this type allowed for this SubViewManager. Once it's instantiated, other instances will not be added to that type.</li>
 <li>location : When you render the subviews, the SubViewManager makes it easier to place them by allowing you to specify in a config where a subview of this type should be appended to. This can be a jQuery selector, a 
 jQuery object, or a function that will be invoked after rendering the subview that returns an instance
 of jQuery.</li>
 <li>options : A default set of options to pass to the constructor. When you instantiate this object later with 'add' you can add additional options.</li>
 </ul>
-<p>With the example above, you could have also added a 'subViewConfig' property to the MyView definition at the top, which in this example would be an object with one key value pair, with the key being 'mySubView' (the name of the sub view type you want to define) and the value being the config object for that type.</p>
-<h3>Getting a Sub View</h3>
-<p>Now that you have created a subview, you might want to actually use it some point later on, and you need a way to get it. To get a view you can use:</p>
+<p>With the example above, you could have also added a <code>subViewConfig</code> property to the MyView definition at the top, which in this example would be an object with one key value pair, with the key being 'mySubView' (the name of the subview type you want to define) and the value being the config object for that type.</p>
+<h3>Getting a SubView</h3>
+<p>Now that you have created a subview, you might want to actually use it some point later on, and you need a way to get it. To retrieve a view you can use:</p>
 <pre><code>testView.subs.get('mySubView'); // Returns array of MySubView instances</code></pre>
-<p>This would return an array, because Backbone.BaseView allows you to add multiple views on a single key. If you want to add a view and ensure that only one of this kind of subview can exist on that key, that's referred to as a <em>singleton</em>. To specify that a view is a singleton when you add it, pass true as the second param like this <code>this.subs.add('mySubView', new MySubView(), true);</code>.</p>
+<p>This would return an array, because Backbone.BaseView allows you to add multiple views on a single key. If you want to add a view and ensure that only one of this kind of subview can exist on that key, that's referred to as a <em>singleton</em>. To specify that a view is a singleton when you add it, pass true as the second param like this <code>this.subs.add('mySubView', new MySubView(), true);</code>. If most or all of your subviews will be singletons, set <code>singletonSubviews</code> to <code>true</code> in your view constructor's definition.</p>
 <p>Now that you have a singleton view, you can always get it easily by calling:</p>
 <pre><code>var testSubView = testView.subs.get('mySubView'); // Returns instance of MySubView</code></pre>
-<p>The '.get' method, will try to find a single instance first using the 'key' provided before returning an array. If the key passed to get doesn't match a singleton, you will get an array of results.</p>
-<p><strong>Getting a sub view via a model</strong> - If you pass a model to a subview when it's instantiated as an option, the sub view manager makes it possible to retrieve the view using the model. This could be done as follows:</p>
+<p>The <code>.get</code> method, will try to find a single instance first using the 'key' provided before returning an array. If the key passed to get doesn't match a singleton, you will get an array of results.</p>
+<p><strong>Getting a subview via a model</strong> - If you pass a model to a subview when it's instantiated as an option, the subview manager makes it possible to retrieve the view using the model. This could be done as follows:</p>
 <pre><code>var testModel = new Backbone.Model();
 testView.subs.add('anotherSubView', new MySubView({ 
     model: testModel
 }));
 
 testView.subs.get(testModel);
-// Returns sub view instance if only one view uses that model, or 
-// an array of sub views if you have multiple subviews using that model</code></pre>
+// Returns subview instance if only one view uses that model, or 
+// an array of subviews if you have multiple subviews using that model</code></pre>
 <p><strong>Underscore methods to access subViews</strong> - The 'subs' SubViewManager includes curried underscore methods to access or modify subViews. These are: 'each', 'find', 'filter', 'sortBy', 'groupBy', 'where', 'findWhere', 'some', 'every', and 'invoke'. Example usage: <code>this.subs.where({ collection: myCollection }); // Returns array of subview instances</code>.</p>
-<h3>Rendering Sub Views</h3>
+<h3>Rendering SubViews</h3>
 <ol>
-<li><p>You can get the sub view instances and render them individually:</p>
+<li><p>You can get the subview instances and render them individually:</p>
 <pre><code> testView.subs.get('mySubView').render();</code></pre>
 </li>
-<li><p>You can render sub views all at once and append them in their order to a specified selector or element</p>
+<li><p>You can render subviews all at once and append them in their order to a specified selector or element</p>
 <pre><code> testView.subs.renderAppend('.subviews-wrapper');</code></pre>
 </li>
 <li><p>If you specified a location in the subview type's config, then any subviews of that type  will be automatically appended to that location if you use the 'renderAppend' method:</p>
@@ -258,13 +272,13 @@ testView.subs.get(testModel);
   // the selector '.type-b-wrapper' and appends the typeB instances to that wrapper</code></pre>
 </li>
 </ol>
-<p><strong>NOTE:</strong> Because renderAppend by sub views are appended to the locations you provide, you may need to clear out the base view's html first. The <code>Backbone.BaseView</code> adds a shortcut 'clear' method to help with this. Additionally, you can pass the 'clearLocations' option to the render methods to clear all locations specified in configurations first: <code>testView.subs.renderAppend({ clearLocations: true });</code>.</p>
+<p><strong>NOTE:</strong> Because <code>renderAppend</code> appends subviews to the locations you provide, you may need to clear out the base view's html first. If the parent view renders first using <code>.$el.html</code> to set the contents, you don't have to worry. Otherwise, you can pass the 'clearLocations' option to the render methods to clear all locations specified in configurations first: <code>testView.subs.renderAppend({ clearLocations: true });</code>. Or, you can remove and recreate the subview using <code>remove</code> and <code>add</code> if you need a pristine view.</p>
 <h3>Features</h3>
-<p>Okay, well, now that you have this taken care of, a Base View has a few interesting features involving sub view interactions, some of which I will outline here:</p>
+<p>Okay, well, now that you have this taken care of, Backbone.BaseView has a few interesting features involving subview interactions, some of which I will outline here:</p>
 <ol>
 <li><p>Accessing the subViews parent:</p>
 <pre><code> testSubView.parentView; // Instance of MyView</code></pre>
-<p><em>Note that you cannot access the '.parentView' property in the initialize method if you instantiate a sub view before it's added to the base view's SubViewManager.</em></p>
+<p><em>Note that you cannot access the '.parentView' property in the initialize method if you instantiate a subview before it's added to the base view's SubViewManager.</em></p>
 </li>
 <li><p>Triggering an event that bubbles up to the parent view, and then that parent's parent view, and so on:</p>
 <pre><code> testSubView.triggerBubble('myEvent');</code></pre>
@@ -274,9 +288,9 @@ testView.subs.get(testModel);
 <ol>
 <li><p>Triggering an event that descends down through all subViews, and if those subViews also have subViews, it will trigger the event on those as well, and so on:</p>
 <pre><code> testView.triggerDescend('myOtherEvent');</code></pre>
-<p>Arguments and callbacks work in the same fashion as they do with triggerBubble.</p>
+<p>Arguments and callbacks work in the same fashion as they do with <code>triggerBubble</code>.</p>
 </li>
-<li><p>Getting the top view of a sub view heirarchy (i.e. the view that doesn't have a parentView of it's own):</p>
+<li><p>Getting the top view of a subview heirarchy (i.e. the view that doesn't have a parentView of it's own):</p>
 <pre><code> testSubView.getTopView();</code></pre>
 </li>
 <li><p>Getting an ancestor view that matches a specific type of subview key:</p>
@@ -286,12 +300,17 @@ testView.subs.get(testModel);
 <pre><code> myView = Backbone.BaseView.extend({
      viewEvents: {
         'change model': 'render',
-        'add subs': function () { console.log('a sub view was added!'); }
+        'add subs': function () { console.log('a subview was added!'); }
      }
  });</code></pre>
 <p>In the example above, the instance of myView will listen to the model for a 'change' event, and will call render when the event occurs. The key is split on the space where the left side is the event name, and the right side is a Backbone object property on the view. We are also listening to the subs object for the 'add' event and logging to the console when it is fired.  </p>
 </li>
-<li><p>You can access an array of all subViews attached to a BaseView instance at any time with the '.subViews' property. <em>It is recommended that you do not push directly to this array to avoid issues where you cannot use some functionality of the SubViewManager, use the 'add' method instead</em>.</p>
+<li><p>You can access an array of all subViews attached to a BaseView instance at any time with the '.subViews' property. <em>It is recommended that you do not push directly to this array to avoid issues where you cannot use some functionality of the SubViewManager, use the <code>add</code> method instead</em>.</p>
+</li>
+<li><p>With the <code>descend</code> method, instead of just triggrering an event, you can run a function that you pass as a parameter all they way down a view's subview tree.</p>
+<pre><code>   myView.subs.descend(function () {
+     console.log(this.cid); // logs the current subview's cid
+   });</code></pre>
 </li>
 </ol>
 <h2>BaseView Example - A Table</h2>
@@ -299,7 +318,7 @@ testView.subs.get(testModel);
 <p><strong>For more information on Backbone.BaseView</strong> you can consult the inline documentation in the source code.</p>
 <hr>
 <h2>Using Backbone.FormView</h2>
-<p>Backbone.FormView adds additional functionality by creating standardized fields and allowing you to specify a <em>schema</em>, which is really a subViewConfig with some of the work being done automatically for you. You can define a <em>schema</em> as an option. The schema tells the form view how to assemble the Form when it's rendered.</p>
+<p>Backbone.FormView adds additional functionality by creating standardized fields and allowing you to specify a <em>schema</em>, which is really a subViewConfig where some of the work gets done automatically for you. You can define a <em>schema</em> as an option or a property on an extension. The schema tells the form view how to assemble the Form when it's rendered, and is used to bind all of the model fields to the form fields that it creates. For example, if you have a model field named 'firstName', and a form field named 'firstName', rendering the form field will automatically display the current value of 'firstName'. When the user updates the field input, the model value will be updated accordingly.</p>
 <pre><code>    var myModel = new Backbone.Model();
     var myForm = new Backbone.FormView({
         model: myModel,
@@ -318,10 +337,10 @@ testView.subs.get(testModel);
     // which contains a field '&lt;div&gt;' wrapper which contains a text &lt;input&gt;</code></pre>
 <p>If you do choose to extend the FormView, you can also define schema as a pseudoclass property.</p>
 <h3>FormView Schema</h3>
-<p>The schema property of the options object has one field defined in the example above, 'firstName'. The schema tells the FormView that the firstName field should be of type 'Text', and that it should be have the label 'First Name'. Each field is actually a sub view, and the FormView basically automatically sorts some things out for you:</p>
+<p>The schema property of the options object has one field defined in the example above: 'firstName'. The schema tells the FormView that the firstName field should be of type 'Text', and that it should be have the label 'First Name'. Each field is actually a subview, and the FormView basically automatically sorts some things out for you:</p>
 <ol>
-<li><p>The <em>schema</em> property 'type' is actually an alias of 'construct' (you can use either), and the value 'Text' is an alias of 'Backbone.FormFieldView'. The Backbone.FormView prototype has several built in aliases for field types: 'Text', 'Checkbox', 'Checklist', 'Select', 'Chosen', 'RadioList', 'FieldSet', 'CollectionField'. More on these types will be discussed later.</p>
-<p>If you want to use a custom sub view constructor, you can easily just use that as the value of type. For example, if you created a custom field View constructor called 'App.MyField', you can just use that as the type value. <em>Note</em> that if you use a string value as type it will have to be a dot notation object that can be found on the global scope.</p>
+<li><p>The <em>schema</em> property <code>type</code> is actually an alias of 'construct' (you can use either), and the value 'Text' is an alias of 'Backbone.FormFieldView'. The Backbone.FormView prototype has several built-in aliases for field types: 'Text', 'Checkbox', 'CheckList', 'Select', 'RadioList', 'FieldSet', 'CollectionField'. More on these types will be discussed later.</p>
+<p>If you want to use a custom subview constructor, you can easily just use that as the value of type. For example, if you created a custom field View constructor called 'App.MyField', you can just use that as the type value. <em>Note</em> that if you use a string value as type it will have to be a dot notation object that can be found on the global scope.</p>
 </li>
 <li><p>The <em>options</em> property is really just some custom options that we want to pass to the 'Text' constructor, just like the options paramater passed to Backbone.View instances. More details on each field are discussed later. This makes it really easy to write a custom field because it is just a Backbone.View (preferably a BaseView but not required) and the options will be what you specify here and what are automatically set by the FormView and passed to the initialize function of the custom View.</p>
 </li>
@@ -329,16 +348,16 @@ testView.subs.get(testModel);
 <h3>FormView Options</h3>
 <p>The FormView constructor allows certain options for each field type so that you don't necessarily need to extend to customize the form the way you want to. These are some of the options you can pass the constructor or set on an extended View's prototype:</p>
 <ol>
-<li><em>model</em> - <em>Required</em>. Backbone.Model This is the model that the form will set attributes on. The form field sub-views will automatically be passed a reference to this model to their constructor, so that the fields can manage setting the values of their inputs on the appropriate attribute of the model. If the schema key (in the example this is 'firstName') matches a nested model, the sub views will be passed that nested model instead. This is useful if you use a framework like <a href="http://backbonerelational.org/">backbone-relational</a>, <a href="https://github.com/dhruvaray/backbone-associations">backbone-associations</a> or <a href="https://github.com/powmedia/backbone-deep-model">backbone-deep-model</a>.</li>
-<li><em>collection</em> - Collections will not be passed to subViews unless the schema defines a collection option for the field. If the value of collection is true, then the sub-view instantiated from the field schema will be passed a the parent view's collection property.</li>
-<li><em>templateSrc</em> - String. An underscore template string that can be used with the underscore _.template function. This serves as the shell template that the subviews/fields are appended to. The render function looks for an element with a <em>data-fields</em> attribute and appends the sub-views to that. The FormView default fields have a default template (with <a href="http://getbootstrap.com/">bootstrap</a> classes), which you can use if you want or easily repace with this variable.</li>
-<li><em>templateVars</em> - Object. Variables to pass to the template when it is rendered</li>
-<li><em>setupOnInit</em> - Boolean. If true, the FormView will create all sub view instances from the schema in the initialize function.</li>
+<li><code>model</code> - <em>Required</em>. Backbone.Model This is the model that the form will set attributes on. The form field sub-views will automatically be passed a reference to this model to their constructor, so that the fields can manage setting the values of their inputs on the appropriate attribute of the model. If the schema key (in the example this is 'firstName') matches a nested model, the subviews will be passed that nested model instead. This is useful if you use a framework like <a href="http://backbonerelational.org/">backbone-relational</a>, <a href="https://github.com/dhruvaray/backbone-associations">backbone-associations</a> or <a href="https://github.com/powmedia/backbone-deep-model">backbone-deep-model</a>.</li>
+<li><code>collection</code> - Collections will not be passed to subViews unless the schema defines a collection option for the field. If the value of collection is true, then the sub-view instantiated from the field schema will be passed a the parent view's collection property.</li>
+<li><code>templateSrc</code> - String. An underscore template string that can be used with the underscore _.template function. This serves as the shell template that the subviews/fields are appended to. The render function looks for an element with a <code>data-fields</code> attribute and appends the sub-views to that. The FormView default fields have a default template (with <a href="http://getbootstrap.com/">bootstrap</a> classes), which you can use if you want or easily repace with this variable.</li>
+<li><code>templateVars</code> - Object. Variables to pass to the template when it is rendered</li>
+<li><code>setupOnInit</code> - Boolean. If true, the FormView will create all subview instances from the schema in the initialize function.</li>
 </ol>
 <h3>Saving a Form</h3>
 <p>Saving a form is simply matter of saving the model. One way this can be achieved is simply using a templateSrc with a submit button, and then attaching an event to that button that saves the model when the user clicks it.</p>
 <h3>Basic Fields</h3>
-<p>The FormView comes with a set of Field subViews that you can use to create forms without having to define any of your own. They are outlined below:</p>
+<p>The FormView comes with a set of field subview constructors (with string aliases for easy access) that you can use to create forms without having to define any of your own (though that's easily done as well). They are outlined below:</p>
 <h4>Text (alias of Backbone.fields.FieldView)</h4>
 <p>Creates a field 'text' type input or textarea, wrapped in a shell template. Sets the associated model attribute with the value of the input/textarea on focusout.</p>
 <p>Example schema definition:</p>
@@ -353,14 +372,15 @@ testView.subs.get(testModel);
  }</code></pre>
 <p><strong>Options</strong>:</p>
 <ol>
-<li><em>templateSrc</em> - String. The source for an underscore template to append the input to. If a data-input attribute on the element is specified, then that will directly wrap the input. Otherwise the input will be appeneded directly to the view's '.el' element.</li>
-<li><em>label</em> - String. The text you would like to display in the &lt;label&gt; element that is included in part of the template.</li>
-<li><em>elementType</em> - String. Should be one of 'input' or 'textarea'.</li>
-<li><em>placeholder</em> -  String. The placeholder attribute of the input or textarea element.</li>
-<li><em>fieldName</em> - String. The attribute on the model that you want to set on the focus out event. If left out, this field will default to the schema key (in the example this is 'description').</li>
-<li><em>inputId</em> - String. The id attribute of the input element you would like to use. This is created automatically from the schema key if it's not provided. It is also used as the name.</li>
-<li><em>templateVars</em> - Object. Custom variables you would like to pass to the underscore template function</li>
-<li>Input Attrs - Object. If there are other attributes on the input/form element(s) that are not set by the above, then you can specify them with this option.</li>
+<li><code>templateSrc</code> - String. The source for an underscore template to append the input to. If a data-input attribute on the element is specified, then that will directly wrap the input. Otherwise, the input will be appeneded directly to the view's <code>.el</code> element.</li>
+<li><code>label</code> - String. The text you would like to display in the &lt;label&gt; element that is included in part of the template.</li>
+<li><code>elementType</code> - String. Should be one of 'input' or 'textarea'.</li>
+<li><code>placeholder</code> -  String. The placeholder attribute of the input or textarea element.</li>
+<li><code>fieldName</code> - String. The attribute on the model that you want to set on the focus out event. If left out, this field will default to the schema key (in the example this is 'description').</li>
+<li><code>inputId</code> - String. The id attribute of the input element you would like to use. This is created automatically from the schema key if it's not provided. It is also used as the name.</li>
+<li><code>templateVars</code> - Object. Custom variables you would like to pass to the underscore template function</li>
+<li><code>inputAttrs</code> - Object. If there are other attributes on the input/form element(s) that are not set by the above, then you can specify them with this option.</li>
+<li><code>addId</code> - Boolean. If you want to prevent the field from automatically creating an id and name for the field. True by default.</li>
 </ol>
 <h4>RadioList (alias of Backbone.fields.RadioListView)</h4>
 <p>Like the Text field, except the input is actually just a set of radio buttons. A RadioList field should be associated with a model attribute that expects a single value out of a fixed set of values.</p>
@@ -376,9 +396,14 @@ testView.subs.get(testModel);
      }
  }</code></pre>
 <p><strong>Options</strong>:</p>
-<p>Inherited from Text - <em>templateSrc</em>, <em>label</em>, <em>fieldName</em>, <em>inputId</em>, <em>templateVars</em>.</p>
+<p>Inherited from Text - <em>templateSrc</em>, <em>label</em>, <em>fieldName</em>, <em>inputId</em>, <em>templateVars</em>, <em>addId</em>.</p>
 <ol>
-<li><em>possibleVals</em> - Object|Array|Function. Should be an object literal or array (or a function that returns one of those) with the choices you would like to have a radio button for. The object keys will be the values that are saved on the model attribute. The values are the display text for each option. If you use an array, the value and the display text will be the values in the array.</li>
+<li><p><code>possibleVals</code> - Object|Array|Function. Should be an object literal or array (or a function that returns one of those) with the choices you would like to have a radio button for. The object keys will be the values that are saved on the model attribute. The values are the display text for each option. If you use an array of strings, where the model value and the display text will be the values in the array. Another alternative you may prefer is an array of objects with a <code>value</code> key for the value set on the model and a <code>display</code> key for the text to display to the user. The example above in this format would look like the following:</p>
+<pre><code>   possibleVals: [
+     { value: 'M', display: 'Male' },
+     { value: 'F', display: 'Female' }
+   ]</code></pre>
+</li>
 </ol>
 <h4>Select (alias of Backbone.fields.SelectListView)</h4>
 <p>Like the RadioList field, except instead of a set of radio buttons, it's displays a select dropdown. Also has the ability to allow multiple select.</p>
@@ -396,9 +421,9 @@ testView.subs.get(testModel);
      }
  }</code></pre>
 <p><strong>Options</strong>:</p>
-<p>Inherited from Text - <em>templateSrc</em>, <em>label</em>, <em>placeholder</em>, <em>fieldName</em>, <em>inputId</em>, <em>templateVars</em>.</p>
+<p>Inherited from Text - <em>templateSrc</em>, <em>label</em>, <em>placeholder</em>, <em>fieldName</em>, <em>inputId</em>, <em>templateVars</em>, <em>addId</em>.</p>
 <ol>
-<li><p><em>possibleVals</em> - Object|Function. Should be an object literal (or a function that returns one) with the options you would like to have in the select. The keys will be the values that are saved on the model attribute. The values are the display text for each option. Note, the select allows you to create optgroups by nesting possible values as follows:</p>
+<li><p><code>possibleVals</code> - Object|Array|Function. Like the same property for 'RadioList', should be an object literal (or a function that returns one) with the options you would like to have in the select. The keys will be the values that are saved on the model attribute. The values are the display text for each option. Note, the select allows you to create optgroups by nesting possible values as follows:</p>
 <pre><code> possibleVals: {
     'Fiction' : {
        ya: 'Young Adult',
@@ -411,6 +436,24 @@ testView.subs.get(testModel);
  }</code></pre>
 </li>
 </ol>
+<p><strong>Another structure for <code>possibleVals</code></strong> you can use is an array of objects that have a <code>value</code> key for the value that should be set on the model and a <code>display</code> key for the text/html that should be displayed to the user. Select's can also have a <code>group</code> key instead of a 'value' key that should contain a nested possibleVals array. For example:</p>
+<pre><code>    possibleVals: [
+        { 
+          display: 'Fiction', 
+          group: [
+            { value: 'ya', display: 'Young Adult' },
+            { value: 'hf', display: 'Historical Fiction' }
+          ]
+        }, {
+            display: 'Non-Fiction',
+            group: [
+              { value: 'his', display: 'History' },
+              { value: 'sci', display: 'Scientific' }
+            ]
+        }
+
+    ]</code></pre>
+<p>Remember, if the possible values need to be more dynamic, you can always make this a function that returns one of these object structures.      </p>
 <h4>CheckList (alias of Backbone.fields.CheckListView)</h4>
 <p>Like the RadioList field, except with checkboxes instead of radio buttons. A CheckList field should have an associated field for each checkbox, as each can be either 'on' or 'off'.</p>
 <p>Example schema definition:</p>
@@ -428,11 +471,11 @@ testView.subs.get(testModel);
      }
  }</code></pre>
 <p><strong>Options</strong>:</p>
-<p>Inherited from Text - <em>templateSrc</em>, <em>label</em>, <em>fieldName</em>, <em>inputId</em>, <em>templateVars</em>.</p>
+<p>Inherited from Text - <em>templateSrc</em>, <em>label</em>, <em>fieldName</em>, <em>inputId</em>, <em>templateVars</em>, <em>addId</em>.</p>
 <ol>
-<li><em>possibleVals</em> - Object|Function. Should be an object literal with the choices you would like to have a checkbox for. The keys will be the values that are saved on the model attribute. The values are the display text label for each checkbox.</li>
-<li><em>checkedVal</em> - Mixed. the value to set on the model when a checkbox is checked for a particular possibleVal. So if the user selected the checkbox with the value 'fluf', and the checkedVal is <code>true</code>, then the 'fluf' attribute on the model will be set to <code>true</code>.</li>
-<li><em>unCheckedVal</em> - Mixed. the value to set on the model when a checkbox is unchecked.</li>
+<li><code>possibleVals</code> - Object|Array|Function. Should be an object literal with the choices you would like to have a checkbox for. The keys will be the values that are saved on the model attribute. The values are the display text label for each checkbox. If you prefer, you can also use an array of objects with the keys 'value' and 'display'.</li>
+<li><code>checkedVal</code> - Mixed. the value to set on the model when a checkbox is checked for a particular possibleVal. So if the user selected the checkbox with the value 'fluf', and the checkedVal is <code>true</code>, then the 'fluf' attribute on the model will be set to <code>true</code>.</li>
+<li><code>unCheckedVal</code> - Mixed. the value to set on the model when a checkbox is unchecked.</li>
 </ol>
 <h4>CheckBox (alias of Backbone.fields.CheckBoxView)</h4>
 <p>Just a simple checkbox in a shell template, associated with an attribute on the model that can have only two values.</p>
@@ -446,11 +489,11 @@ testView.subs.get(testModel);
      }
  }</code></pre>
 <p><strong>Options</strong>:</p>
-<p>Inherited from Text - <em>templateSrc</em>, <em>label</em>, <em>fieldName</em>, <em>inputId</em>, <em>templateVars</em>.</p>
+<p>Inherited from Text - <em>templateSrc</em>, <em>label</em>, <em>fieldName</em>, <em>inputId</em>, <em>templateVars</em>, <em>addId</em>.</p>
 <ol>
-<li><em>checkedVal</em> - Mixed. the value set on the model when the users checks the checkbox. In the example above, the 'email' property of the the checkbox would be set to string 'Yes' .</li>
-<li><em>unCheckedVal</em> - Mixed. the value to set on the model when a checkbox is unchecked.</li>
-<li><em>displayText</em> - String. Helpful text to display on the right of the checkbox. You can also use a label, but labels display on the left side in the default template.</li>
+<li><code>checkedVal</code> - Mixed. the value set on the model when the users checks the checkbox. In the example above, the 'email' property of the the checkbox would be set to string 'Yes' .</li>
+<li><code>unCheckedVal</code> - Mixed. the value to set on the model when a checkbox is unchecked.</li>
+<li><code>displayText</code>- String. Helpful text to display on the right of the checkbox. You can also use a label, but labels display on the left side in the default template.</li>
 </ol>
 <h2>Backbone.CollectionFormView</h2>
 <p>A variant of Backbone.FormView that works in a very similar manner, except that instead of rendering one subView for each field defined in the schema, a 'row' or 'fieldset' will be rendered for each model in the collection passed to the Backbone.CollectionFormView. </p>
@@ -459,8 +502,9 @@ testView.subs.get(testModel);
 <h2>Extending the FormView and FormFields</h2>
 <p>Backbone.FormView and the field views are designed to be extended, like Backbone.BaseView or any Backbone.View. Here are some ways you can extend the Backbone.FormView and form view fields.</p>
 <h3>Overriding the default templates</h3>
-<p>It's likely that you would want to use your own templates most of the time. First you need to define the template you want to use.Backbone.FormView instances append the field elements to the <code>fieldsWrapper</code> property by defualt. This property is a jQuery selector that looks for the the first element with a 'data-fields' attribute. Note that you can override this property in your extension if you wish. Most of the time, it's easiest just to create a template with this element:</p>
+<p>It's likely that you would want to use your own templates most of the time. First you need to define the template you want to use. Backbone.FormView instances append the field elements to the <code>fieldsWrapper</code> property by defualt. This property is a jQuery selector that looks for the the first element with a 'data-fields' attribute. Note that you can override this property in your extension if you wish. Most of the time, it's easiest just to create a template with this element:</p>
 <pre><code>    &lt;script type=&quot;text/template&quot; id=&quot;my-form-template&quot;&gt;
+      &lt;p&gt;&lt;%= obj.someTemplateVariable %&gt;&lt;/p&gt;
       &lt;div data-fields=&quot;&quot;&gt;&lt;/div&gt;
     &lt;/script&gt;</code></pre>
 <p>Backbone.fields.FieldView (aka the 'Text' field) instances render a template that serves to wrap the actual input element for the purposes of adding formatting, help text, labels, etc. When you define a custom template, by default, you would create a blank element with a 'data-input' attribute, which tells the field instance to put the input there when it renders. </p>
@@ -492,6 +536,7 @@ testView.subs.get(testModel);
         }
       }
     });</code></pre>
+<p>If you want to change the default template used by all fields, you can call the static function <code>Backbone.fields.FieldView.setDefaultFieldTemplate</code> and pass the underscore template function you would like to use.</p>
 <h3>Overriding how and when model attributes are set</h3>
 <p>Backbone.FormView field views, by default, uses 'blur' events for Text fields, 'change' events for SelectList fields, and 'click' events for CheckList, Checkbox, and RadioList fields. When these events occur, the field calls <code>setModelAttrs</code>. If you just want to tweak the value that is set on the model, you can probably just override the <code>getValue</code> method (note that CheckList doesn't use this method). The <code>getValue</code> method simply returns the value for the model field that you want to set, which should be the current value of the input. </p>
 <p>Lets say you want to make a number text field, an extension of the Text field where values are converted to a number when set on the model:</p>
@@ -509,10 +554,38 @@ testView.subs.get(testModel);
           'keypress input' : 'setModelAttrs'
         }
       });
-      Backbone.FormView.addfieldAlias('KeyPressText', KeyPressTextFieldView);</code></pre>
+      Backbone.FormView.addFieldAlias('KeyPressText', KeyPressTextFieldView);</code></pre>
 <p>You could write a custom function and use <code>_.debounce</code> if you want to wait till the user stops typing to set the attributes. If you want to preserve the original 'blur' event functionality, then you just need to add another event for 'blur' that calls <code>setModelAttrs</code>.</p>
+<p>As another example, if you wanted a different checklist view that uses an array as it's assigned model attribute, you can do that with an extension like this:</p>
+<pre><code>      Backbone.fields.CheckListArrayView = Backbone.fields.CheckListView.extend({
+
+          // override getModelVal to simply return the value of the assigned field
+          getModelVal: function () {
+              return this.model.get(this.fieldName);
+          },
+
+          // override isSelected to look inside the model field's array for the key
+          // we are interested in
+          isSelected: function (key) {
+              return _.indexOf(this.getModelVal(), key) &gt; -1;
+          },
+
+          // overrride getAttrs to return an array with the 'value' attribute for each
+          // checked checkbox and put it in an attributes object that can be set on the
+          // model
+          getAttrs: function () {
+              var attrs = {}, checked = [];
+              this.$(this.elementType + ':checked').each(function (index, input) {
+                  checked.push($(input).val());
+              });
+              attrs[this.fieldName] = checked;
+              return attrs;
+          }
+      });
+      Backbone.FormView.addFieldAlias('CheckListArray', Backbone.fields.CheckListArrayView);</code></pre>
+<p>Again, there are a ton of ways to extend the FormView and the fields, as there should be.</p>
 <h2>Example FormView Demos</h2>
-<p>All of these form's are pretty bare-bones -- just to illustrate the concepts in a simple manner.</p>
+<p>All of these example's are pretty bare-bones -- they are just here to illustrate the concepts in a simple manner.</p>
 <ul>
 <li><p><a href="http://1stdibs.github.io/backbone-base-and-form-view/examples/example-simple-form.html">Example simple form</a></p>
 </li>

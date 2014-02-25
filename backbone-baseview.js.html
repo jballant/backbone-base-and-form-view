@@ -95,6 +95,20 @@
 					</ul>
 				</li>
 				
+				<li class="dropdown">
+					<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="global.html#isSelected">isSelected</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
 			</ul>
 		</div>
 	</div>
@@ -112,7 +126,7 @@
     
     <section>
         <article>
-            <pre class="sunlight-highlight-javascript linenums">//     Backbone.BaseView 0.4
+            <pre class="sunlight-highlight-javascript linenums">//     Backbone.BaseView 0.5.0
 
 //     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.BaseView may be freely distributed under the MIT license.
@@ -350,7 +364,7 @@
          * @param {Boolean} [singleton]
          *      If you want this view to be a singleton subView. A singleton subView
          *      will only allow one instance of it to be created.
-         * @returns {SubViewManager}
+         * @return {SubViewManager}
          */
         /**
          * Add an configuration for a subview to the SubViewManager.
@@ -370,7 +384,7 @@
          *                      // a function that returns one of these. The subview el will 
          *                      // be appended to that location
          *      }
-         * @returns {SubViewManager}
+         * @return {SubViewManager}
          */
         /**
          * Add an configuration for a subview to the SubViewManager.
@@ -383,7 +397,7 @@
          *      created with this config
          * @param {Object} config
          *      The configuration object (uses the format described above)
-         * @returns {SubViewManager}
+         * @return {SubViewManager}
          */
         addConfig : function (name, config) {
             var map = (_.isObject(name) && !_.isArray(name)) ? name : false;
@@ -682,7 +696,7 @@
                         location = $locations[location];
                     } else if (typeof location === 'function') {
                         location = location.call(subViews[i]);
-                        if (!(location instanceof $)) { throw new Error('location function must return instance of jQuery'); }
+                        if (!(location instanceof Backbone.$)) { throw new Error('location function must return instance of jQuery'); }
                     }
                     location.append(subViews[i].$el);
                 }
@@ -800,7 +814,7 @@
 
             Construct = (typeof Construct === 'string') ? _stringToObj(Construct) : Construct;
             if (!Construct) {
-                console.log('Construct for key ' + key + ' was not found', config ? config.construct : '');
+                console.error('Construct for key "' + key + '" was not found', config ? config.construct : '');
             }
             instance = new Construct(options, this.parent);
             this._setInst(key, instance, (singleton !== undefined) ? singleton : config.singleton);
@@ -809,13 +823,16 @@
     };
 
     // Add underscore methods to SubViewManager (e.g. myView.subs.each(function (subView) { console.log(subView.cid); });)
-    _.each(['each', 'initial', 'rest', 'last', 'first', 'find', 'filter', 'sortBy',
-        'groupBy', 'where', 'findWhere', 'some', 'every', 'invoke'], function (funcName) {
+    _.each(['each', 'map', 'initial', 'rest', 'last', 'first', 'find', 'filter', 'sortBy',
+        'groupBy', 'where', 'findWhere', 'some', 'every', 'invoke', 'contains', 'max', 'min',
+        'size', 'without', 'indexOf', 'lastIndexOf', 'isEmpty', 'reject'], function (funcName) {
         /**
          * Partial applications of underscore (or lodash if you use that instead) functions 
          * of the same name (operates on the subViews array).
          * List of available underscore methods:
-         * each, initial, rest, last, first, find, filter, sortBy, groupBy, where, findWhere, some, every, and invoke
+         * 'each', 'map', 'initial', 'rest', 'last', 'first', 'find', 'filter', 'sortBy',
+         * 'groupBy', 'where', 'findWhere', 'some', 'every', 'invoke', 'contains', 'max', 'min',
+         * 'size', 'without', 'indexOf', 'lastIndexOf', 'isEmpty', 'reject'
          * @method underscore_methods
          * @memberOf SubViewManager#
          * @see http://underscorejs.org
@@ -870,7 +887,7 @@
         // If this is a subView of another Backbone.BaseView, this will be a ref to that view instance
         parentView: null,
         // Add events that will not bubble events up app the view's ancestor tree
-        _stopPropogation: {},
+        _stopPropogation: false,
         constructor: function (options, parentView) {
             var subViewCfg = (options && options.subViewConfig) ?
                     _.result(options, 'subViewConfig') : _.result(this, 'subViewConfig');
@@ -918,16 +935,15 @@
             return this;
         },
         /**
-         * Stops an event matching the passed event name from
-         * proceeding up the ancestor tree of BaseView instances.
-         * Must be called each time the event is triggered on this
-         * view.
+         * Stops the current event from propagating up or down the 
+         * ancestor tree of BaseView instances. Resets immediately
+         * after stopping the event, and has to be callled every 
+         * time you want an event to be stopped.
          * @memberOf Backbone.BaseView#
-         * @param {String} event Name of the event you want to stop
          * @return {Backbone.BaseView}
          */
-        stopEvent: function (event) {
-            this._stopPropogation[event] = true;
+        stopEvent: function () {
+            this._stopPropogation = true;
             return this;
         },
         /**
@@ -948,18 +964,13 @@
                 anscestor;
             args.unshift(event);
             args.push(this);
-            this.trigger.apply(this, args);
-            if (this._stopPropogation[event]) {
-                this._stopPropogation[event] = false;
-                return this;
-            }
-            anscestor = this.parentView;
+            anscestor = this;
             while (anscestor) {
-                if (anscestor._stopPropogation && anscestor._stopPropogation[event]) {
-                    anscestor._stopPropogation[event] = false;
+                anscestor.trigger.apply(anscestor, args);
+                if (anscestor._stopPropogation) {
+                    anscestor._stopPropogation = false;
                     return this;
                 }
-                anscestor.trigger.apply(anscestor, args);
                 anscestor = anscestor.parentView;
             }
             return this;
@@ -982,13 +993,12 @@
                     var i = -1,
                         len = subViews.length,
                         subSubs,
-                        stop,
                         descend;
                     while (++i &lt; len) {
                         descend = true;
                         subViews[i].trigger.apply(subViews[i], args);
-                        if ((stop = subViews[i]._stopPropogation) && stop[event]) {
-                            stop[event] = false;
+                        if (subViews[i]._stopPropogation) {
+                            subViews[i]._stopPropogation = false;
                             descend = false;
                         }
                         subSubs = subViews[i].subViews;
