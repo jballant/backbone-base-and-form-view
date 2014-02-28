@@ -862,7 +862,7 @@
          */
         disable: function () {
             var $input = this.$(this.elementType);
-            if (!this.isDisabled && !$input.attr('disabled')) {
+            if (!this.isDisabled || !$input.attr('disabled')) {
                 $input.attr('disabled', true);
                 this.isDisabled = true;
             }
