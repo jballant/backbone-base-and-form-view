@@ -710,6 +710,7 @@
         addId: true,
         elementType: 'input',
         inputWrapper: '[data-input]:first',
+        disabledDataKey: 'formViewDisabled',
         events: function () {
             var events = {};
             events['blur ' + this.elementType] = 'setModelAttrs';
@@ -862,9 +863,9 @@
          */
         disable: function () {
             var $input = this.$(this.elementType);
-            if (!this.isDisabled && !$input.attr('disabled')) {
-                $input.attr('disabled', true);
+            if (!$input.data(this.disabledDataKey) && !$input.prop('disabled')) {
                 this.isDisabled = true;
+                $input.prop('disabled', true).data(this.disabledDataKey, true);
             }
             return this;
         },
@@ -874,9 +875,10 @@
          * @return {dibsLibs.FormFieldView}
          */
         enable: function () {
-            if (this.isDisabled) {
-                this.$(this.elementType).removeAttr('disabled');
+            var $input = this.$(this.elementType);
+            if ($input.data(this.disabledDataKey)) {
                 this.isDisabled = false;
+                $input.prop('disabled', false).data(this.disabledDataKey, false);
             }
             return this;
         },

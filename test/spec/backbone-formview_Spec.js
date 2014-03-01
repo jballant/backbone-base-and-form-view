@@ -537,23 +537,28 @@
                     testField.disable();
                     expect(testField.isDisabled).toBe(true);
                 });
+                it('should set a data boolean on the input based on the property "disabledDataKey" to true when disable is called', function () {
+                    expect(testField.$(testField.elementType).data(testField.disabledDataKey)).toBeFalsy();
+                    testField.disable();
+                    expect(testField.$(testField.elementType).data(testField.disabledDataKey)).toBeTruthy();
+                });
                 it('should not set "isDisabled" to true if disabled attribute is already on element', function () {
                     testField.$(testField.elementType).attr('disabled', true);
                     testField.disable();
                     expect(testField.isDisabled).toBeFalsy();
                 });
                 describe('"enable" method', function () {
-                    it('should remove disabled attribute and set "isDisabled" to false if "isDisabled" is true', function () {
+                    it('should remove disabled attribute and set "isDisabled" to false if the data value based on property "disabledDataKey" is true', function () {
                         testField.$(testField.elementType).attr('disabled', true);
-                        testField.isDisabled = true;
+                        testField.$(testField.elementType).data(testField.disabledDataKey, true);
                         testField.enable();
                         expect(testField.isDisabled).toBe(false);
                         expect(testField.$(testField.elementType).attr('disabled')).toBeFalsy();
                     });
-                    it('should not remove disabled attribute if "isDisabled" is falsy', function () {
-                        testField.$(testField.elementType).attr('disabled', true);
+                    it('should set the custom data value based on property on "disabledDataKey" on the input to false', function () {
+                        testField.disable();
                         testField.enable();
-                        expect(testField.$(testField.elementType).attr('disabled')).toBeTruthy();
+                        expect(testField.$(testField.elementType).data(testField.disabledDataKey)).toBeFalsy();
                     });
                 });
             });
