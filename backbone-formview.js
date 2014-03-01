@@ -1117,7 +1117,7 @@
                     } else {
                         $option = Backbone.$('<option>').text(val.display).attr('value', val.value);
                         if (this.isSelected(val.value)) {
-                            $option.attr('selected', 'selected');
+                            $option.prop('selected', true);
                         }
                         $option.appendTo($wrapper);
                     }
@@ -1306,7 +1306,7 @@
             CheckBoxView.__super__.initialize.call(this, options);
         },
         getValue: function () {
-            if (this.$('input:checkbox').prop('checked')) {
+            if (this.$(this.elementType).prop('checked')) {
                 return this.checkedVal;
             }
             return this.unCheckedVal;
@@ -1326,7 +1326,7 @@
 
             if (this.addId) { $input.attr({ id: id, name: id }); }
             if (this.isSelected()) {
-                $input.attr('checked', 'checked');
+                $input.prop('checked', true);
             }
             $label.append($input);
             if (this.displayText) {
