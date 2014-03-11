@@ -1,4 +1,4 @@
-//     Backbone.BaseView 0.5.1
+//     Backbone.BaseView 0.6.0
 
 //     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.BaseView may be freely distributed under the MIT license.
