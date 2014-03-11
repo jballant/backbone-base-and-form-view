@@ -213,7 +213,7 @@
             'Checkbox' : 'Backbone.fields.CheckBoxView',
             'CollectionField' : 'Backbone.CollectionFieldSetView'
         },
-        templateSrc: '<div data-fields=""></div>',
+        template: _.template('<div data-fields=""></div>'),
         fieldsWrapper: '[data-fields]:first',
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
@@ -229,14 +229,11 @@
                 autoUpdateModel: (!isUndefined(options.autoUpdateModel)) ? options.autoUpdateModel : this.autoUpdateModel,
                 fieldsWrapper: options.fieldsWrapper || this.fieldsWrapper
             });
-            this.template = options.template || _.template(this.templateSrc);
+            this.template = options.template || (this.templateSrc ? _.template(this.templateSrc) : this.template);
             this.subViewConfig = options.subViewConfig || null;
             if (schema) {
                 this.setSchema(schema);
                 if (setUpOnInit) { this.setupFields(); }
-            }
-            if (this.autoUpdateModel) {
-                this._setupAutoUpdate();
             }
         },
         /**
@@ -259,6 +256,7 @@
         setupFields: function () {
             this.subViewConfig = this._setupSubViewConfig(result(this, 'schema'));
             this.subs.addConfig(this.subViewConfig);
+            this._hasSetupFields = true;
             return this;
         },
         /**
@@ -270,7 +268,11 @@
          * @return {Backbone.FormView}
          */
         setModelAttrs: function () {
-            this.subs.invoke('setModelAttrs');
+            this.subs.each(function (field) {
+                if (isFunction(field.setModelAttrs)) {
+                    field.setModelAttrs();
+                }
+            });
             return this;
         },
         /**
@@ -296,7 +298,8 @@
         render : function () {
             var order = this.options.fieldOrder || this.fieldOrder;
 
-            if (!this.subViewConfig) {
+            this.subs.detachElems();
+            if (!this._hasSetupFields) {
                 this.setupFields();
             }
             this.$el.html(this.template(this.templateVars));
@@ -309,50 +312,7 @@
             } else {
                 this.subs.renderAppend();
             }
-            return this;
-        },
-        /**
-         * Loops through each field and fieldset in the form and makes sure that
-         * they have the correct model based on the top level model. Only necessary
-         * if Form utitlizes a nested model paradigm and something might cause
-         * the field models to not be correct (ie if a nested model was changed but
-         * a field that should that nested model is using one that is out of date).
-         * NOTE: Events are not copied when you use this method. It is strongly
-         * recommended that if you need your subview models to be switched out
-         * that you reinstantiate the FormView, because that is the best way to 
-         * ensure functionality remains.
-         * @memberOf Backbone.FormView#
-         * @return {Backbone.FormView}
-         */
-        resetModels: function () {
-            var subModel, newModel, collection, key, schemaOptions, hasChanged,
-                i = 0,
-                subViews = this.subViews,
-                subsByMod,
-                len = subViews.length;
-            for (i; i < len; i++) {
-                hasChanged = false;
-                key = this.subs.getSubViewType(subViews[i]);
-                schemaOptions = this.schema[key].options || {};
-                subModel = subViews[i].model;
-                newModel = getSubModel(schemaOptions.model, key, this.model);
-                if (subModel && newModel && newModel.cid !== subModel.cid) {
-                    subViews[i].model = newModel;
-                    subsByMod = this.subs._subViewsByModelCid;
-                    if (subsByMod[newModel.cid]) {
-                        if (isArray(subsByMod[newModel.cid])) { subsByMod[newModel.cid].push(subViews[i]);
-                            } else { subsByMod[newModel.cid] = [subsByMod[newModel.cid], subViews[i]];  }
-                    } else { subsByMod[newModel.cid] = subViews[i]; }
-                    hasChanged = true;
-                }
-                collection = getSubCollection(schemaOptions.collection, key, this.model, this.collection);
-                if (collection && subViews[i].collection instanceof Collection && subViews[i].collection !== collection) {
-                    subViews[i].collection = collection;
-                    hasChanged = true;
-                }
-                if (hasChanged && subViews[i] instanceof Backbone.BaseView) { subViews[i].bindViewEvents(); }
-                if (subViews[i] instanceof Backbone.FormView) { subViews[i]._resetModels(); }
-            }
+
             return this;
         },
         _setupSubViewConfig: function (baseSchema, model, collection) {
@@ -383,14 +343,6 @@
                 options.schemaKey = key;
             }, this);
             return subViewConfig;
-        },
-        _setupAutoUpdate: function () {
-            this.model.on('change', function (changedAttrs) {
-                each(changedAttrs, function (value) {
-                    if (value instanceof Model) { this.resetModels(); }
-                }, this);
-            }, this);
-            return this;
         }
     }, {
         /**
@@ -478,6 +430,7 @@
         className: 'form',
         rowTemplateSrc: '',
         rowWrapper : '[data-rows]:first',
+        template: _.template('<div data-rows=""></div>'),
         rowConfig: {
             singleton: false,
             construct: Backbone.CollectionFormRowView
@@ -485,7 +438,7 @@
         initialize: function (options) {
             this.options = defaults(options || {}, this.options);
             this.templateSrc = !isUndefined(this.options.templateSrc) ? this.options.templateSrc : this.templateSrc;
-            this.template = this.options.template || this.template || _.template(this.templateSrc || '');
+            this.template = this.options.template || (this.templateSrc ? _.template(this.templateSrc) : this.template);
             this.setupOnInit = !isUndefined(this.options.setupOnInit) ? this.options.setupOnInit : this.setupOnInit;
             this.rowOptions = this.options.rowOptions || this.rowOptions;
             this.templateVars = defaults(this.options.templateVars || {}, { label: this.options.label });
@@ -525,6 +478,7 @@
          * @return {Backbone.CollectionFormView}
          */
         render: function () {
+            this.subs.detachElems();
             this.$el.html(this.template(this.templateVars));
             if (!this.subs.get('row') || !this.subs.get('row').length) {
                 this.setupRows();
@@ -862,11 +816,8 @@
          * @return {dibsLibs.FormFieldView}
          */
         disable: function () {
-            var $input = this.$(this.elementType);
-            if (!$input.data(this.disabledDataKey) && !$input.prop('disabled')) {
-                this.isDisabled = true;
-                $input.prop('disabled', true).data(this.disabledDataKey, true);
-            }
+            this.$(this.elementType).prop('disabled', true);
+            this.isDisabled = true;
             return this;
         },
         /**
@@ -875,13 +826,15 @@
          * @return {dibsLibs.FormFieldView}
          */
         enable: function () {
-            var $input = this.$(this.elementType);
-            if ($input.data(this.disabledDataKey)) {
-                this.isDisabled = false;
-                $input.prop('disabled', false).data(this.disabledDataKey, false);
-            }
+            this.$(this.elementType).prop('disabled', false);
+            this.isDisabled = false;
             return this;
         },
+        /**
+         * Generate the string to use for the id attribute of 
+         * the input element.
+         * @return {string}
+         */
         _getInputId : function () {
             return this.options.inputId || this.inputId ||
                 this.inputPrefix + this._getParentPrefix() + this.fieldName;
@@ -942,8 +895,10 @@
      */
     RadioListView = Backbone.fields.RadioListView = Backbone.fields.FieldView.extend({
         tagName: 'div',
-        events : {
-            'click input:radio' : 'setModelAttrs'
+        events : function () {
+            var events = {};
+            events['click ' + this.elementType] = 'setModelAttrs';
+            return events;
         },
         type: 'radio-list',
         initialize: function (options) {
@@ -1174,11 +1129,6 @@
         type: 'check-list',
         checkedVal: true,
         unCheckedVal: false,
-        events : function () {
-            var events = {};
-            events['click ' + this.elementType] = 'setModelAttrs';
-            return events;
-        },
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             this.checkedVal = options.checkedVal || this.checkedVal;

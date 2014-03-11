@@ -244,6 +244,24 @@
                     expect(testForm.subs.get('bar').$el.index()).toBe(2);
                 });
 
+                it('should preserve DOM events of subviews/fields when rerendering if they are attached to the DOM', function () {
+                    testForm.render();
+                    var $testWrapper = $('<div id="test"></div>').hide(),
+                        wasTriggered;
+                    testForm.subs.get('foo').$el.on('test', function () {
+                        wasTriggered = true;
+                    });
+                    $('body').append($testWrapper);
+                    $testWrapper.append(testForm.$el);
+                    testForm.subs.get('foo').$el.trigger('test');
+                    expect(wasTriggered).toBe(true);
+                    wasTriggered = false;
+                    testForm.render();
+                    testForm.subs.get('foo').$el.trigger('test');
+                    expect(wasTriggered).toBe(true);
+                    $testWrapper.remove();
+                });
+
             });
 
         });
@@ -320,7 +338,7 @@
                     testForm.render();
                     expect(testForm.template).toHaveBeenCalled();
                 });
-                it('should render rach row subview and place them in the rowWrapper', function () {
+                it('should render each row subview and place them in the rowWrapper', function () {
                     var rows = testForm.setupRows().subs.get('row');
                     testForm.render();
                     expect(testForm.getRowWrapper().children().length).toBe(3);
@@ -537,28 +555,13 @@
                     testField.disable();
                     expect(testField.isDisabled).toBe(true);
                 });
-                it('should set a data boolean on the input based on the property "disabledDataKey" to true when disable is called', function () {
-                    expect(testField.$(testField.elementType).data(testField.disabledDataKey)).toBeFalsy();
-                    testField.disable();
-                    expect(testField.$(testField.elementType).data(testField.disabledDataKey)).toBeTruthy();
-                });
-                it('should not set "isDisabled" to true if disabled attribute is already on element', function () {
-                    testField.$(testField.elementType).attr('disabled', true);
-                    testField.disable();
-                    expect(testField.isDisabled).toBeFalsy();
-                });
                 describe('"enable" method', function () {
-                    it('should remove disabled attribute and set "isDisabled" to false if the data value based on property "disabledDataKey" is true', function () {
-                        testField.$(testField.elementType).attr('disabled', true);
-                        testField.$(testField.elementType).data(testField.disabledDataKey, true);
+                    it('should remove disabled attribute and set "isDisabled" to false', function () {
+                        testField.$(testField.elementType).prop('disabled', true);
+                        testField.isDisabled = true;
                         testField.enable();
                         expect(testField.isDisabled).toBe(false);
-                        expect(testField.$(testField.elementType).attr('disabled')).toBeFalsy();
-                    });
-                    it('should set the custom data value based on property on "disabledDataKey" on the input to false', function () {
-                        testField.disable();
-                        testField.enable();
-                        expect(testField.$(testField.elementType).data(testField.disabledDataKey)).toBeFalsy();
+                        expect(testField.$(testField.elementType).prop('disabled')).toBe(false);
                     });
                 });
             });
