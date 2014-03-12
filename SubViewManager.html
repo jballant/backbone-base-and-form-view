@@ -102,6 +102,10 @@
 					<ul class="dropdown-menu ">
 						
 						<li>
+							<a href="global.html#_getInputId">_getInputId</a>
+						</li>
+						
+						<li>
 							<a href="global.html#isSelected">isSelected</a>
 						</li>
 						
@@ -2109,7 +2113,7 @@ that the subViews were added or a custom sorted order.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-530">line 530</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-553">line 553</a>
     </li></ul></dd>
     
 
@@ -2373,7 +2377,7 @@ that the subViews were added or a custom sorted order.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-539">line 539</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-562">line 562</a>
     </li></ul></dd>
     
 
@@ -2558,6 +2562,146 @@ the function/method.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-384">line 384</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="detachElems">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>detachElems
+        </span><span class="signature">(subViews)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Shortcut method to invoke jQuery's detach function
+on each of the '.$el' elements for each of the 
+subviews, or if an array of subViews is passed,
+on each of those. Useful if you want to re-render
+a parent view and want to prevent subviews from
+losing their events and other data that is removed
+when jQuery 'remove' is called on that element.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>subViews</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Backbone.View[]</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-486">line 486</a>
     </li></ul></dd>
     
 
@@ -2853,7 +2997,7 @@ match your key.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-485">line 485</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-508">line 508</a>
     </li></ul></dd>
     
 
@@ -2990,7 +3134,7 @@ match your key.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-505">line 505</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-528">line 528</a>
     </li></ul></dd>
     
 
@@ -3119,7 +3263,7 @@ match your key.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-518">line 518</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-541">line 541</a>
     </li></ul></dd>
     
 
@@ -3396,6 +3540,11 @@ list of subViews, removes only the elements in those.</p>
             
 
             <td class="type">
+            
+                
+<span class="param-type">Backbone.View[]</span>
+
+
             
             </td>
 
@@ -4092,7 +4241,7 @@ List of available underscore methods:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-701">line 701</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-724">line 724</a>
     </li></ul></dd>
     
 
