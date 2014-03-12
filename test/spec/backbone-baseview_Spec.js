@@ -501,6 +501,25 @@
                 });
             });
 
+            describe('"detachElems" method', function () {
+                beforeEach(function () {
+                    testView.setup();
+                    testView.render();
+                    testView.renderSubs();
+                });
+                it('should invoke jQuery\'s detach method on each subview\'s \'$el\' elem', function () {
+                    testView.subs.each(function (subview) {
+                        spyOn(subview.$el, 'detach');
+                    });
+                    testView.subs.detachElems();
+                    var i = -1, len = testView.subs.subViews.length;
+                    while (++i < len) {
+                        expect(testView.subs.at(i).$el.detach).toHaveBeenCalled();
+                    }
+                });
+
+            });
+
         });
 
         describe('"bindViewEvents" method', function () {

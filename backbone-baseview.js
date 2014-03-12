@@ -1,4 +1,4 @@
-//     Backbone.BaseView 0.5.0
+//     Backbone.BaseView 0.6.0
 
 //     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.BaseView may be freely distributed under the MIT license.
@@ -45,7 +45,7 @@
          * @param [options]
          */
         SubViewManager = function (subViewCfg, parent, options) {
-            this._subViews = {}; // Refers to configuration (construct, options)
+            this.config = {}; // Refers to configuration (construct, options)
             this.clear(true);
             this.parent = parent; // Should refer to parent BaseView instance
 
@@ -360,7 +360,7 @@
         filteredSubs: function (key) {
             var i = -1, len, subViews,
                 subMgr = new SubViewManager(null, this.parent, this.options);
-            subMgr._subViews = this._subViews;
+            subMgr.config = this.config;
             subViews = (_.isArray(key)) ? key : (_.isFunction(key)) ? this.filter(key) : this.getByType(key);
             len = subViews.length;
             while (++i < len) {
@@ -421,7 +421,7 @@
             this._subViewsByCid = {};
             this._subViewsByModelCid = {};
             if (clearConfigs) {
-                this._subViews = {};
+                this.config = {};
             }
             return this;
         },
@@ -457,7 +457,7 @@
          * list of subViews, removes only the elements in those.
          * @memberOf SubViewManager#
          * @type {SubViewManager}
-         * @param subViews
+         * @param {Backbone.View[]} subViews
          * @return {SubViewManager}
          */
         removeElems: function (subViews) {
@@ -467,6 +467,29 @@
                 len = subViews.length;
             while (++i < len) {
                 subViews[i].remove();
+            }
+            return this;
+        },
+        /**
+         * Shortcut method to invoke jQuery's detach function
+         * on each of the '.$el' elements for each of the 
+         * subviews, or if an array of subViews is passed,
+         * on each of those. Useful if you want to re-render
+         * a parent view and want to prevent subviews from
+         * losing their events and other data that is removed
+         * when jQuery 'remove' is called on that element.
+         * @memberOf SubViewManager#
+         * @type {SubViewManager}
+         * @param {Backbone.View[]} subViews
+         * @return {SubViewManager}
+         */
+        detachElems: function (subViews) {
+            subViews = subViews || this.subViews;
+
+            var i = -1,
+                len = subViews.length;
+            while (++i < len) {
+                subViews[i].$el.detach();
             }
             return this;
         },
@@ -537,7 +560,7 @@
          * @return {SubViewManager}
          */
         clearLocations : function (type) {
-            var confs = type ? _.pick(this._subViews, type) : this._subViews;
+            var confs = type ? _.pick(this.config, type) : this.config;
             _.each(confs, function (config) {
                 this.parent.$(config.location).html('');
             }, this);
@@ -560,7 +583,7 @@
                 subViews[i].render();
                 if ($appendTo) {
                     subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo).first() : $appendTo);
-                } else if (place && (location = this._subViews[this.getSubViewType(subViews[i])].location)) {
+                } else if (place && (location = this.config[this.getSubViewType(subViews[i])].location)) {
                     if (typeof location === 'string') {
                         if (!$locations[location]) {
                             $locations[location] = this.parent.$(location).first();
@@ -578,7 +601,7 @@
         _addInstance : function (key, subViews, singleton) {
             var i = -1, len, self = this;
 
-            key = key || '_svid_' + _.size(this._subViews);
+            key = key || '_svid_' + _.size(this.config);
 
             if (self._subViewSingletons[key]) { return self; }
 
@@ -588,15 +611,15 @@
 
             len = subViews.length;
 
-            if (!self._subViews[key] && subViews[0].constructor) {
-                self._subViews[key] = {
+            if (!self.config[key] && subViews[0].constructor) {
+                self.config[key] = {
                     options : subViews[0].options || {},
                     construct : subViews[0].constructor,
                     singleton : singleton
                 };
             }
 
-            singleton = (singleton === undefined) ? self._subViews[key].singleton : singleton;
+            singleton = (singleton === undefined) ? self.config[key].singleton : singleton;
 
             while (++i < len) {
                 self._setInst(key, subViews[i], singleton);
@@ -604,7 +627,7 @@
             return self;
         },
         _addConfig : function (config, name) {
-            this._subViews[name] = config;
+            this.config[name] = config;
             if (this.autoInitSingletons && config.singleton) {
                 return this._init(name);
             }
@@ -675,7 +698,7 @@
         },
         _init: function (key, options, singleton) {
             var instance,
-                config = this._subViews[key],
+                config = this.config[key],
                 Construct = (config && config.construct) ? config.construct : null;
 
             options = _.extend({}, config.options || {}, options || {});
