@@ -299,7 +299,7 @@
             var order = this.options.fieldOrder || this.fieldOrder;
 
             this.subs.detachElems();
-            if (!this._hasSetupFields) {
+            if (!this._hasSetupFields || !this.subs.config) {
                 this.setupFields();
             }
             this.$el.html(this.template(this.templateVars));
