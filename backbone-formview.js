@@ -836,7 +836,7 @@
          * @return {string}
          */
         _getInputId : function () {
-            return this.options.inputId || this.inputId ||
+            return this.options.inputId || this.inputId || (this.options.inputAttrs && this.options.inputAttrs.id) ||
                 this.inputPrefix + this._getParentPrefix() + this.fieldName;
         },
         /**
