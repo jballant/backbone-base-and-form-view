@@ -19,6 +19,35 @@
         module.exports = Backbone;
     }
 
+    var combineOptions = function () {
+        // Use `wrap` to wrap a list of functions that will be composed together to progressively modify an options object.
+        // If `thing` is a function, wrap `thing` inside a function that can be composed with another function, `next`
+        // and returns a function that when supplied with `options`, will run next(thing(options)).
+        // If `thing` is just an options object, return a wrap of a function that returns a merge of thing with its
+        // first argument.
+        var wrap = function (thing) {
+            if ("function" !== typeof thing) {
+                return wrap(function (newOptions) { 
+                    return _.extend({}, newOptions, thing);
+                });
+            }
+            return function (next) {
+                return function (options) {
+                    var optionsPrime = thing.call(this, options || {});
+                    return next ? next.call(this, optionsPrime) : optionsPrime;
+                };
+            };
+        };
+        return _.compose(
+            // kick off the chain by passing in a null argument
+            function () {return arguments[0]();},
+            // compose all the function-wrapped options together into one big hairy ball
+            function (wrappedOptions) {return _.compose.apply(undefined, wrappedOptions)},
+            // run everything through wrap
+            function (allOptions) {return _.map(allOptions, wrap);}
+        );
+    }();
+
     var
         // Finds globally dot noted namespaced objects from a string
         _stringToObj = function (str) {
@@ -702,6 +731,7 @@
                 Construct = (config && config.construct) ? config.construct : null;
 
             options = _.extend({}, config.options || {}, options || {});
+            options = combineOptions([{}, config.options || {}, options || {}]);
 
             if (this._subViewSingletons[key]) {
                 return this;
@@ -784,6 +814,9 @@
         // Add events that will not bubble events up app the view's ancestor tree
         _stopPropogation: false,
         constructor: function (options, parentView) {
+            if ("function" === typeof options) {
+                options = options.call(this);
+            }
             var subViewCfg = (options && options.subViewConfig) ?
                     _.result(options, 'subViewConfig') : _.result(this, 'subViewConfig');
             // Assign a parentView if second param is a Backbone View
