@@ -730,7 +730,6 @@
                 config = this.config[key],
                 Construct = (config && config.construct) ? config.construct : null;
 
-            options = _.extend({}, config.options || {}, options || {});
             options = combineOptions([{}, config.options || {}, options || {}]);
 
             if (this._subViewSingletons[key]) {
