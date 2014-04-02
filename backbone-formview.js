@@ -299,7 +299,7 @@
             var order = this.options.fieldOrder || this.fieldOrder;
 
             this.subs.detachElems();
-            if (!this._hasSetupFields || !this.subs.config) {
+            if (!this._hasSetupFields) {
                 this.setupFields();
             }
             this.$el.html(this.template(this.templateVars));
@@ -431,10 +431,6 @@
         rowTemplateSrc: '',
         rowWrapper : '[data-rows]:first',
         template: _.template('<div data-rows=""></div>'),
-        rowConfig: {
-            singleton: false,
-            construct: Backbone.CollectionFormRowView
-        },
         initialize: function (options) {
             this.options = defaults(options || {}, this.options);
             this.templateSrc = !isUndefined(this.options.templateSrc) ? this.options.templateSrc : this.templateSrc;
@@ -447,6 +443,10 @@
                 this.rowConfig = this.options.rowConfig;
                 this.rowConfig = result(this, 'rowConfig');
             } else {
+                this.rowConfig = result(this, 'rowConfig') || {
+                    singleton: false,
+                    construct: Backbone.CollectionFormRowView
+                };
                 var rowOpts = extend({}, result(this, 'rowOptions'), {
                     schema : this.options.rowSchema || this.rowSchema ||
                         ((this.rowConfig && this.rowConfig.options) ? this.rowConfig.options.schema : null)
