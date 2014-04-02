@@ -784,6 +784,9 @@
         // Add events that will not bubble events up app the view's ancestor tree
         _stopPropogation: false,
         constructor: function (options, parentView) {
+            if ("function" === typeof options) {
+                options = options.call(this);
+            }
             var subViewCfg = (options && options.subViewConfig) ?
                     _.result(options, 'subViewConfig') : _.result(this, 'subViewConfig');
             // Assign a parentView if second param is a Backbone View
