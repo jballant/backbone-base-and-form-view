@@ -217,7 +217,7 @@
         fieldsWrapper: '[data-fields]:first',
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
-            var schema = options.schema || this.schema,
+            var schema = _.result(options, 'schema') || this.schema,
                 setUpOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
             this.subs.autoInitSingletons = true;
             extend(this, {
