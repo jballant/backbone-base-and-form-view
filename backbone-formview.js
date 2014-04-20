@@ -40,6 +40,7 @@
         isUndefined = _.isUndefined,
         isFunction = _.isFunction,
         isArray = _.isArray,
+        isString = _.isString,
         result = _.result,
 
         // Form Disable Mixin -- added to FormView prototype's
@@ -221,7 +222,6 @@
                 setUpOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
             this.subs.autoInitSingletons = true;
             extend(this, {
-                templateSrc : options.templateSrc || this.templateSrc,
                 templateVars : defaults(options.templateVars || this.templateVars || {}, { label: options.label }),
                 setupOnInit : options.setupOnInit || this.setupOnInit,
                 validateOnSet : (!isUndefined(options.validateOnSet)) ? options.validateOnSet : this.validateOnSet,
@@ -229,7 +229,7 @@
                 autoUpdateModel: (!isUndefined(options.autoUpdateModel)) ? options.autoUpdateModel : this.autoUpdateModel,
                 fieldsWrapper: options.fieldsWrapper || this.fieldsWrapper
             });
-            this.template = options.template || (this.templateSrc ? _.template(this.templateSrc) : this.template);
+            this.template = options.template || (isString(this.template) ? _.template(this.template) : this.template);
             this.subViewConfig = options.subViewConfig || null;
             if (schema) {
                 this.setSchema(schema);
@@ -428,30 +428,28 @@
     Backbone.CollectionFormView = Backbone.BaseView.extend({
         tagName: 'form',
         className: 'form',
-        rowTemplateSrc: '',
+        rowTemplate: '',
         rowWrapper : '[data-rows]:first',
         template: _.template('<div data-rows=""></div>'),
         initialize: function (options) {
-            this.options = defaults(options || {}, this.options);
-            this.templateSrc = !isUndefined(this.options.templateSrc) ? this.options.templateSrc : this.templateSrc;
-            this.template = this.options.template || (this.templateSrc ? _.template(this.templateSrc) : this.template);
-            this.setupOnInit = !isUndefined(this.options.setupOnInit) ? this.options.setupOnInit : this.setupOnInit;
-            this.rowOptions = this.options.rowOptions || this.rowOptions;
-            this.templateVars = defaults(this.options.templateVars || {}, { label: this.options.label });
-            this.rowWrapper = this.options.rowWrapper || this.rowWrapper;
-            if (this.options.rowConfig) {
-                this.rowConfig = this.options.rowConfig;
+            options = this.options = defaults(options || {}, this.options);
+            this.template = options.template || (isString(this.template) ? _.template(this.template) : this.template);
+            this.setupOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
+            this.rowOptions = options.rowOptions || this.rowOptions;
+            this.templateVars = defaults(options.templateVars || {}, { label: options.label });
+            this.rowWrapper = options.rowWrapper || this.rowWrapper;
+            if (options.rowConfig) {
+                this.rowConfig = options.rowConfig;
                 this.rowConfig = result(this, 'rowConfig');
             } else {
                 this.rowConfig = result(this, 'rowConfig') || {
                     singleton: false,
-                    construct: Backbone.CollectionFormRowView
+                    construct: Backbone.CollectionFormRowView,
+                    location: this.rowWrapper
                 };
-                var rowOpts = extend({}, result(this, 'rowOptions'), {
-                    schema : this.options.rowSchema || this.rowSchema ||
-                        ((this.rowConfig && this.rowConfig.options) ? this.rowConfig.options.schema : null)
-                });
+                var rowOpts = clone(result(this, 'rowOptions'));
                 this.rowConfig.options = rowOpts;
+                this.setRowSchema(options.rowSchema || this.rowSchema || this.rowConfig.options.schema);
             }
             this.subs.addConfig('row', this.rowConfig);
             if (this.setupOnInit) {
@@ -492,7 +490,7 @@
          * @return {$} 
          */
         getRowWrapper: function () {
-            var $wrapper = this.$(this.rowWrapper);
+            var $wrapper = this.$(this.subs.config.row.location);
             if (!$wrapper.length) {
                 return this.$el;
             }
@@ -578,14 +576,17 @@
             return this;
         },
         _addRow: function (model) {
-            var row = this.subs
-                    .add('row', this._getRowOptions(model))
+            var opts = this._getRowOptions(model),
+                row = this.subs
+                    .add('row', opts)
                     .last();
+            row.rowIndex = opts.index;
             row.setSchema(this.rowSchema).setupFields();
             return this;
         },
         _getRowOptions: function (model) {
-            return { model: model, index: this.subViews.length };
+            var rows = this.subs.get('row') || [];
+            return { model: model, index: rows.length };
         }
     });
 
@@ -676,7 +677,6 @@
                 templateVars : options.templateVars || this.templateVars || {},
                 fieldName : options.fieldName || options.schemaKey,
                 elementType : options.elementType || this.elementType,
-                templateSrc : !isUndefined(options.templateSrc) ? options.templateSrc : this.templateSrc,
                 template : options.template || this.template,
                 setOpts : defaults(options.setOpts || {}, this.setOpts),
                 twoWay : !isUndefined(options.twoWay) ? options.twoWay : this.twoWay,
@@ -692,7 +692,7 @@
                 fieldName : this.fieldName,
                 label : options.label
             });
-            this.template = this.templateSrc ? _.template(this.templateSrc) : this.template;
+            this.template = isString(this.template) ? _.template(this.template) : this.template;
             // Add a class name based on the field name if a custom class name wasn't specified
             if (!options.className || !this.className) {
                 this.$el.addClass(this.fieldPrefix + this.fieldName);
@@ -1329,8 +1329,8 @@
          * @return {string}
          */
         getFieldPrefix: getFieldPrefix,
-        templateSrc: '<% if(obj && obj.label) { %><label class="fieldset-label">' +
-            '<strong><%= obj.label %></strong></label><% } %><fieldset data-fields=""></fieldset>'
+        template: _.template('<% if(obj && obj.label) { %><label class="fieldset-label">' +
+            '<strong><%= obj.label %></strong></label><% } %><fieldset data-fields=""></fieldset>')
     });
 
     /**
@@ -1342,8 +1342,8 @@
      */
     CollectionFieldSetView = Backbone.CollectionFieldSetView = Backbone.CollectionFormView.extend({
         tagName: 'div',
-        templateSrc: '<% if(obj && obj.label) { %><p><strong><%= obj.label %></strong></p><% } %>' +
-            '<fieldset class="fieldset" data-rows=""></fieldset>',
+        template: _.template('<% if(obj && obj.label) { %><p><strong><%= obj.label %></strong></p><% } %>' +
+            '<fieldset class="fieldset" data-rows=""></fieldset>'),
         setupOnInit: true,
         className: '',
         initialize: function (options) {

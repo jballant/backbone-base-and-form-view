@@ -599,14 +599,16 @@
         });
 
         describe('Backbone events view heirarchy cascading', function () {
-            var topView, cView;
+            var topView, cView, bView, aView;
             beforeEach(function () {
                 topView = new Backbone.BaseView();
                 cView = new Backbone.BaseView();
+                bView = new Backbone.BaseView();
+                aView = new Backbone.BaseView();
                 topView.subs
-                    .add('a', new Backbone.BaseView(), true)
+                    .add('a', aView, true)
                     .last().subs
-                    .add('b', new Backbone.BaseView())
+                    .add('b', bView)
                     .last().subs
                     .add('c', cView);
             });
@@ -696,9 +698,44 @@
                     expect(firedOnC).toBe(false);
                 });
             });
+
+            describe('"findAncestor" method', function () {
+                it("should return the first ancestor that passes a truth test function", function () {
+                    var foundView = cView.findAncestor(function (view) {
+                        return view.cid === aView.cid;
+                    });
+                    expect(foundView).toBeTruthy();
+                    expect(foundView.cid).toBe(aView.cid);
+                });
+            });
+
+            describe('"ascend" method', function () {
+                it("if passed a function, should call it for each ancestor in ascending order", function () {
+                    var i = 0;
+                    cView.ascend(function () {
+                        if (i === 0) {
+                            expect(this.cid).toBe(bView.cid);
+                        } else if (i === 1) {
+                            expect(this.cid).toBe(aView.cid);
+                        } else if (i === 2) {
+                            expect(this.cid).toBe(topView.cid);
+                        }
+                        i++;
+                    });
+                });
+                it("if passed a method name, should call it on each ancestor in ascending order", function () {
+                    var testEvents = { test: 'render' };
+                    spyOn(bView, 'bindViewEvents');
+                    spyOn(aView, 'bindViewEvents');
+                    spyOn(topView, 'bindViewEvents');
+                    cView.ascend('bindViewEvents', [testEvents]);
+                    expect(bView.bindViewEvents).toHaveBeenCalledWith(testEvents);
+                    expect(aView.bindViewEvents).toHaveBeenCalledWith(testEvents);
+                    expect(topView.bindViewEvents).toHaveBeenCalledWith(testEvents);
+                });
+            });
+
         });
-
-
 
     });
 }(this, jQuery, Backbone, _));

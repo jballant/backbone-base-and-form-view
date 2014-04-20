@@ -293,7 +293,7 @@
                     var proto = Backbone.CollectionFormView.prototype,
                         old = proto.setupRows,
                         view;
-                    spyOn(proto, 'setupRows').andCallThrough();
+                    spyOn(proto, 'setupRows').and.callThrough();
                     view = new Backbone.CollectionFormView(testOpts);
                     expect(proto.setupRows).toHaveBeenCalled();
                     proto.setupRows = old;
@@ -334,7 +334,7 @@
             describe('"render" method', function () {
                 it('should invoke the template function', function () {
                     testForm.template = _.template('<div class="test-div"></div>');
-                    spyOn(testForm, 'template').andCallThrough();
+                    spyOn(testForm, 'template').and.callThrough();
                     testForm.render();
                     expect(testForm.template).toHaveBeenCalled();
                 });
@@ -390,7 +390,7 @@
                         foo: 'Test 5',
                         bar: 'E'
                     }]);
-                    spyOn(testForm, 'setupRows').andCallThrough();
+                    spyOn(testForm, 'setupRows').and.callThrough();
                     testForm.reset();
                     expect(testForm.setupRows).toHaveBeenCalled();
                     expect(testForm.subs.get('row').length).toBe(2);
@@ -415,7 +415,7 @@
                     it('should invoke "deleteRow" method of the parentView with the row instance as the param', function () {
                         var row = testForm.subs.get('row')[1],
                             length = testForm.subs.get('row').length;
-                        spyOn(testForm, 'deleteRow').andCallThrough();
+                        spyOn(testForm, 'deleteRow').and.callThrough();
                         row.deleteSelf();
                         expect(testForm.deleteRow).toHaveBeenCalledWith(row);
                         expect(testForm.subs.subViews.length).toBe(length - 1);
@@ -470,7 +470,7 @@
             });
             describe('"render" method', function () {
                 it('should invoke the "renderWrapper" and "renderInput" methods', function () {
-                    spyOn(testField, 'renderWrapper').andCallThrough();
+                    spyOn(testField, 'renderWrapper').and.callThrough();
                     spyOn(testField, 'renderInput');
                     testField.render();
                     expect(testField.renderWrapper).toHaveBeenCalled();
@@ -481,7 +481,7 @@
                         vars = { label: 'Test Label' };
                     testField.template = _.template(html);
                     testField.templateVars = vars;
-                    spyOn(testField, 'template').andCallThrough();
+                    spyOn(testField, 'template').and.callThrough();
                     testField.renderWrapper();
                     expect(testField.template).toHaveBeenCalledWith(vars);
                     expect(testField.$el.html()).toBe(html);
@@ -513,7 +513,7 @@
                         expect(testField.$(testField.elementType).attr('data-test-attr')).toBe(attrs['data-test-attr']);
                     });
                     it('should set the value of the input to be the return value of the getModelVal method', function () {
-                        spyOn(testField, 'getModelVal').andCallFake(function () {
+                        spyOn(testField, 'getModelVal').and.callFake(function () {
                             return 'test input val';
                         });
                         testField.renderInput();
@@ -584,14 +584,14 @@
                     it('should return an object with the field name as the key and the input value as the result', function () {
                         var attrs = {};
                         attrs[testField.fieldName] = testVal;
-                        spyOn(testField, 'getValue').andCallThrough();
+                        spyOn(testField, 'getValue').and.callThrough();
                         expect(testField.getAttrs()).toEqual(attrs);
                         expect(testField.getValue).toHaveBeenCalled();
                     });
                 });
                 describe('"setModelAttrs" method', function () {
                     it('should set the object returned by getAttrs method on the model', function () {
-                        spyOn(testField, 'getAttrs').andCallThrough();
+                        spyOn(testField, 'getAttrs').and.callThrough();
                         testField.setModelAttrs();
                         expect(testField.model.get(testField.fieldName)).toBe(testVal);
                         expect(testField.getAttrs).toHaveBeenCalled();
@@ -944,7 +944,7 @@
                 it('should be invoked when click event occurs on the input', function () {
                     $('body').append('<div id="page" style="display: none;"></div>');
                     $('#page').append(testField.render().$el);
-                    spyOn(testField, 'getValue').andCallThrough();
+                    spyOn(testField, 'getValue').and.callThrough();
                     testField.$('input').trigger('click');
                     expect(testField.getValue).toHaveBeenCalled();
                     expect(testField.model.get(testField.fieldName)).toBe(testField.checkedVal);
