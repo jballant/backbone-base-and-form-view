@@ -15,7 +15,7 @@
     if (typeof module !== 'undefined') {
         _ = require('underscore');
         root = root || {};
-        root.Backbone = Backbone = require('Backbone');
+        root.Backbone = Backbone = require('backbone');
         module.exports = Backbone;
     }
 
@@ -908,22 +908,70 @@
             return this;
         },
         /**
+         * Invoke a function or method on ancestors
+         * @memberOf Backbone.BaseView#
+         * @param {Function|String} fnName
+         * @param {*[]} [args]
+         *        An array of arguments to pass to
+         *        the invocation
+         * @return {Backbone.BaseView}
+         */
+        ascend: function (fnName, args) {
+            var func,
+                ancestor = this,
+                isFunc = _.isFunction(fnName);
+            while (ancestor.parentView) {
+                ancestor = ancestor.parentView;
+                if (ancestor) {
+                    func = isFunc ? fnName : ancestor[fnName];
+                    func.apply(ancestor, args);
+                }
+            }
+            return this;
+        },
+        /**
+         * Ascends up the ancestor line until an
+         * a test function returns true
+         * @param  {Function} testFn
+         *         A function that returns a truthy
+         *         value if the current ancestor should be 
+         *         returned
+         * @return {Backbone.BaseView|null}
+         */
+        findAncestor: function (testFn) {
+            var ancestor = this;
+            while (ancestor.parentView) {
+                ancestor = ancestor.parentView;
+                if (ancestor && testFn(ancestor)) {
+                    return ancestor;
+                }
+            }
+            return null;
+        },
+        /**
+         * Returns the first ancestor to be an instance
+         * of the Construct argument
+         * @param  {Function} Construct 
+         *         A Backbone.BaseView constructor function
+         * @return {Backbone.BaseView|null}
+         */
+        findAncestorByConstruct: function (Construct) {
+            return this.findAncestor(function (ancestor) {
+                return ancestor instanceof Construct;
+            });
+        },
+        /**
          * Get the first ancestor that matches a type.
          * @memberOf Backbone.BaseView#
          * @param {String} type 
          *        The subView 'type' the ancestor should match. The
          *        first ancestor with this type will be returned
-         * @return {null|Backbone.View}
+         * @return {null|Backbone.BaseView}
          */
-        findAncestor: function (type) {
-            var ancestor = this;
-            while (ancestor.parentView) {
-                ancestor = ancestor.parentView;
-                if (ancestor && type && type === ancestor._subviewtype) {
-                    return ancestor;
-                }
-            }
-            return null;
+        findAncestorByType: function (type) {
+            return this.findAncestor(function (ancestor) {
+                return type && ancestor._subviewtype === type;
+            });
         },
         /**
          * Return the subview type if this view a subview and was a assigned a
