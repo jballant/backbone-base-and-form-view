@@ -686,18 +686,23 @@
                 addId: !isUndefined(options.addId) ? options.addId : this.addId,
                 inputWrapper: options.inputWrapper || this.inputWrapper
             });
-            extend(this.templateVars, {
+            extend(result(this, 'templateVars'), {
                 inputId : this.addId ? this._getInputId() : false,
                 help : options.help,
                 fieldName : this.fieldName,
                 label : options.label
             });
             this.template = isString(this.template) ? _.template(this.template) : this.template;
-            // Add a class name based on the field name if a custom class name wasn't specified
+
+            // If there is no class name specified, then we create one with the 'classDefaults' property
+            // and another class based on the fieldPrefix and fieldName properties
             if (!options.className || !this.className) {
                 this.$el.addClass(this.fieldPrefix + this.fieldName);
+                this.$el.addClass(this.classDefaults);
             }
-            this.$el.addClass(this.classDefaults).attr('data-field', '');
+
+            // Add data attribute to view element to indicate that it's a FormView field
+            this.$el.attr('data-field', '');
 
             // If the twoWay option is true, then setup the events to make the field/model-attribute changes twoWay
             if (this.twoWay && this.setupTwoWay) {  this.setupTwoWay(); }
@@ -791,8 +796,8 @@
             $input = Backbone.$('<' + this.elementType + '>');
             if (this.elementType === 'input') { attrs.type = 'text'; }
             if (this.placeholder) { attrs.placeholder = this.placeholder; }
-            $input.attr(defaults(attrs, this.inputAttrs));
-            if (this.inputClass) { $input.addClass(this.inputClass); }
+            $input.attr(extend(attrs, this.inputAttrs));
+            if (this.inputClass) { $input.attr('class', this.inputClass); }
             this.getInputWrapper().html($input);
             if (modelVal) { $input.val(modelVal); }
             return this;
@@ -933,35 +938,35 @@
             var possibleVals = result(this, 'possibleVals'),
                 key,
                 i = 0,
-                self = this,
-                id = this.templateVars.inputId,
                 possibleVal,
                 $checkbox,
                 isSelected,
-                $inputWrapper = this.getInputWrapper().empty(),
-                labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'radio' }),
-                renderCheckbox = function (val, key, isChecked) {
-                    var $listItem, $label,
-                        attributes = { type: 'radio', value: key };
-                    if (self.addId) { extend(attributes, { name: id, id: (id + '-' + i) }); }
-                    if (isChecked) { attributes.checked = 'checked'; }
-                    $listItem = Backbone.$('<input>').attr(defaults(attributes, self.inputAttrs));
-                    if (self.inputClass) { $listItem.addClass(self.inputClass); }
-                    $label = Backbone.$('<label>').attr(labelAttrs);
-                    $label.append($listItem).append(val);
-                    return $label;
-                };
+                $inputWrapper = this.getInputWrapper().empty();
 
             for (key in possibleVals) {
                 if (possibleVals.hasOwnProperty(key)) {
                     possibleVal = this._parsePossibleVal(possibleVals, key);
                     isSelected = this.isSelected(possibleVal.value);
-                    $checkbox = renderCheckbox(possibleVal.display, possibleVal.value, isSelected);
+                    $checkbox = this._renderInput(possibleVal, isSelected, i);
                     $inputWrapper.append($checkbox);
                     i++;
                 }
             }
             return this;
+        },
+        _renderInput: function (possibleVal, isChecked, index) {
+            var $listItem, $label,
+                id = this.templateVars.inputId,
+                attributes = { type: 'radio' },
+                labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'radio' });
+            if (this.addId) { extend(attributes, { name: id, id: (id + '-' + index) }); }
+            if (isChecked) { attributes.checked = 'checked'; }
+            extend(attributes, this.inputAttrs, { value: possibleVal.value });
+            if (this.inputClass) { attributes['class'] = this.inputClass; }
+            $listItem = Backbone.$('<' + this.elementType + '>').attr(attributes);
+            $label = Backbone.$('<label>').attr(labelAttrs);
+            $label.append($listItem).append(possibleVal.display);
+            return $label;
         },
         _parsePossibleVal: function (possibleVals, key) {
             var val = possibleVals[key];
@@ -1051,7 +1056,7 @@
             var possibleVals = result(this, 'possibleVals'),
                 id = this.templateVars.inputId,
                 $select = Backbone.$('<' + this.elementType + '>')
-                    .attr(defaults((this.addId ? { id: id, name: id } : {}), this.inputAttrs));
+                    .attr(extend((this.addId ? { id: id, name: id } : {}), this.inputAttrs));
 
             this.getInputWrapper().html($select);
             if (this.multiple) { $select.attr('multiple', 'multiple'); }
@@ -1169,18 +1174,19 @@
          * @param {number} index the index of the checkbox
          * @return {$}
          */
-        renderSingleCheckbox: function (key, val, isChecked, index) {
+        renderSingleCheckbox: function (possibleVal, isChecked, index) {
             var $listItem,
                 $label,
                 id = this.templateVars.inputId,
-                attributes = { type: 'checkbox', value: key};
+                attributes = { type: 'checkbox', value: possibleVal.value};
 
             if (this.addId) { extend(attributes, { name: id, id: (id + '-' + index) }); }
+            attributes = extend(attributes, this.inputAttrs);
+            if (this.inputClass) { attributes['class'] = this.inputClass; }
             if (isChecked) { attributes.checked = 'checked'; }
-            $listItem = Backbone.$('<input>').attr(defaults(attributes, this.inputAttrs));
-            if (this.inputClass) { $listItem.addClass(this.inputClass); }
+            $listItem = Backbone.$('<input>').attr(attributes);
             $label = Backbone.$('<label>').attr(defaults(this.labelAttrs || {}, { 'class': 'checkbox' }));
-            return $label.append($listItem).append(val);
+            return $label.append($listItem).append(possibleVal.display);
         },
         /**
          * Returns true or false if the checkbox should be selected.
@@ -1204,7 +1210,7 @@
                 if (possibleVals.hasOwnProperty(key)) {
                     possibleVal = this._parsePossibleVal(possibleVals, key);
                     isSelected = this.isSelected(possibleVal.value);
-                    $checkbox = this.renderSingleCheckbox(possibleVal.value, possibleVal.display, isSelected, i);
+                    $checkbox = this.renderSingleCheckbox(possibleVal, isSelected, i);
                     $inputWrapper.append($checkbox);
                     i++;
                 }
@@ -1271,10 +1277,14 @@
         },
         renderInput: function () {
             var $label = Backbone.$('<label>').attr(defaults(this.labelAttrs || {}, { 'class': 'checkbox' })),
-                $input = Backbone.$('<input>').attr({ type: 'checkbox', value: this.checkedVal }),
+                $input = Backbone.$('<' + this.elementType + '>'),
+                attributes = { type: 'checkbox' },
                 id = this.templateVars.inputId;
 
-            if (this.addId) { $input.attr({ id: id, name: id }); }
+            if (this.addId) { extend(attributes, { id: id, name: id, value: this.checkedVal }); }
+            extend(attributes, this.inputAttrs);
+            if (this.inputClass) { attributes['class'] = this.inputClass; }
+            $input.attr(attributes);
             if (this.isSelected()) {
                 $input.prop('checked', true);
             }
@@ -1283,7 +1293,6 @@
                 $label.append(this.displayText);
             }
             this.getInputWrapper().html($label);
-            if (this.inputClass) { $input.addClass(this.inputClass); }
 
             return this;
         }
