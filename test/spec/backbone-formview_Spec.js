@@ -837,12 +837,12 @@
 
             describe('"renderSingleCheckbox" method', function () {
                 it('should create a checked checkbox input if passed true', function () {
-                    var $checkbox = testField.renderSingleCheckbox('foo', testOpts.possibleVals.foo, true, 1);
+                    var $checkbox = testField.renderSingleCheckbox({ value: 'foo', display: testOpts.possibleVals.foo }, true, 1);
                     expect($checkbox.find('input').val()).toBe('foo');
                     expect($checkbox.find('input').is(':checked')).toBe(true);
                 });
                 it('should create an un checked checkbox input if passed false', function () {
-                    var $checkbox = testField.renderSingleCheckbox('foo', testOpts.possibleVals.foo, false, 1);
+                    var $checkbox = testField.renderSingleCheckbox({ value: 'foo', display: testOpts.possibleVals.foo }, false, 1);
                     expect($checkbox.find('input').val()).toBe('foo');
                     expect($checkbox.find('input').is(':checked')).toBe(false);
                 });
@@ -900,7 +900,7 @@
             beforeEach(function () {
                 testOpts = {
                     schemaKey: 'testField',
-                    model: testModel
+                    model: new Backbone.Model()
                 };
                 testField = new Backbone.fields.CheckBoxView(testOpts);
             });
