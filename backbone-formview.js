@@ -82,6 +82,16 @@
             return prefPref + this.fieldSetName + '-';
         },
 
+        /** 
+         * Function used by FormView, CollectionFormView, FieldSet,
+         * CollectionFieldSet, and the FieldViews to generate
+         * template variables in the 'render' methods
+         * @return {object}
+         */
+        getTemplateVars = function () {
+            return extend({}, this._defaultTemplateVars, result(this, 'templateVars'));
+        },
+
         // ------------------------
         // Local utility functions
 
@@ -229,7 +239,7 @@
                 autoUpdateModel: (!isUndefined(options.autoUpdateModel)) ? options.autoUpdateModel : this.autoUpdateModel,
                 fieldsWrapper: options.fieldsWrapper || this.fieldsWrapper
             });
-            this.templateVars = defaults(result(this, 'templateVars'), { label: options.label });
+            this._defaultTemplateVars = this._defaultTemplateVars || { label: options.label };
             this.template = options.template || (isString(this.template) ? _.template(this.template) : this.template);
             this.subViewConfig = options.subViewConfig || null;
             if (schema) {
@@ -303,7 +313,7 @@
             if (!this._hasSetupFields) {
                 this.setupFields();
             }
-            this.$el.html(this.template(this.templateVars));
+            this.$el.html(this.template(this._getTemplateVars()));
 
             if (order && order.length) {
                 order = order.slice(0);
@@ -344,7 +354,12 @@
                 options.schemaKey = key;
             }, this);
             return subViewConfig;
-        }
+        },
+        /**
+         * A reference to the template vars function
+         * @type {[type]}
+         */
+        _getTemplateVars: getTemplateVars
     }, {
         /**
          * Add a Field Alias to the list of field aliases. For example
@@ -441,7 +456,7 @@
             this.setupOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
             this.rowOptions = options.rowOptions || this.rowOptions;
             this.templateVars = options.templateVars || this.templateVars;
-            this.templateVars = defaults(result(this, 'templateVars'), { label: options.label });
+            this._defaultTemplateVars = { label: options.label };
             this.rowWrapper = options.rowWrapper || this.rowWrapper;
             if (options.rowConfig) {
                 this.rowConfig = options.rowConfig;
@@ -482,7 +497,7 @@
          */
         render: function () {
             this.subs.detachElems();
-            this.$el.html(this.template(this.templateVars));
+            this.$el.html(this.template(this._getTemplateVars()));
             if (!this.subs.get('row') || !this.subs.get('row').length) {
                 this.setupRows();
             }
@@ -592,7 +607,8 @@
         _getRowOptions: function (model) {
             var rows = this.subs.get('row') || [];
             return { model: model, index: rows.length };
-        }
+        },
+        _getTemplateVars: getTemplateVars
     });
 
     // Add disable/enable functionality
@@ -692,15 +708,17 @@
                 placeholder: options.placeholder || this.placeholder,
                 inputClass: options.inputClass || this.inputClass,
                 addId: !isUndefined(options.addId) ? options.addId : this.addId,
-                inputWrapper: options.inputWrapper || this.inputWrapper
+                inputWrapper: options.inputWrapper || this.inputWrapper,
+                inputId: options.inputId || this.inputId
             });
-            extend(result(this, 'templateVars'), {
-                inputId : this.addId ? this._getInputId() : false,
+            this.inputId = this.addId ? this._getInputId() : false;
+            this.template = isString(this.template) ? _.template(this.template) : this.template;
+            this._defaultTemplateVars = this._defaultTemplateVars || {
+                inputId : this.inputId,
                 help : options.help,
                 fieldName : this.fieldName,
                 label : options.label
-            });
-            this.template = isString(this.template) ? _.template(this.template) : this.template;
+            };
 
             // If there is no class name specified, then we create one with the 'classDefaults' property
             // and another class based on the fieldPrefix and fieldName properties
@@ -787,7 +805,7 @@
          * @return {Backbone.fields.FieldView}
          */
         renderWrapper: function (vars) {
-            this.$el.html(this.template(vars || this.templateVars));
+            this.$el.html(this.template(vars || this._getTemplateVars()));
             return this;
         },
         /**
@@ -798,7 +816,7 @@
          */
         renderInput: function () {
             var $input,
-                id = this.templateVars.inputId,
+                id = this.inputId,
                 attrs =  this.addId ? { id : id, name: id } : {},
                 modelVal = this.getModelVal();
             $input = Backbone.$('<' + this.elementType + '>');
@@ -848,10 +866,15 @@
          * the input element.
          * @return {string}
          */
-        _getInputId : function () {
-            return this.options.inputId || this.inputId ||
+        _getInputId: function () {
+            return this.inputId ||
                 this.inputPrefix + this._getParentPrefix() + this.fieldName;
         },
+        /**
+         * Get the template vars used for the wrapper template
+         * @return {object}
+         */
+        _getTemplateVars: getTemplateVars,
         /**
          * If the parent FormView/FieldSetView defines a 'getFieldPrefix'
          * function, it can be used to construct the input id, name
@@ -964,7 +987,7 @@
         },
         _renderInput: function (possibleVal, isChecked, index) {
             var $listItem, $label,
-                id = this.templateVars.inputId,
+                id = this.inputId,
                 attributes = { type: 'radio' },
                 labelAttrs = defaults(this.labelAttrs || {}, { 'class': 'radio' });
             if (this.addId) { extend(attributes, { name: id, id: (id + '-' + index) }); }
@@ -1062,7 +1085,7 @@
          */
         renderInput: function () {
             var possibleVals = result(this, 'possibleVals'),
-                id = this.templateVars.inputId,
+                id = this.inputId,
                 $select = Backbone.$('<' + this.elementType + '>')
                     .attr(extend((this.addId ? { id: id, name: id } : {}), this.inputAttrs));
 
@@ -1185,7 +1208,7 @@
         renderSingleCheckbox: function (possibleVal, isChecked, index) {
             var $listItem,
                 $label,
-                id = this.templateVars.inputId,
+                id = this.inputId,
                 attributes = { type: 'checkbox', value: possibleVal.value};
 
             if (this.addId) { extend(attributes, { name: id, id: (id + '-' + index) }); }
@@ -1287,7 +1310,7 @@
             var $label = Backbone.$('<label>').attr(defaults(this.labelAttrs || {}, { 'class': 'checkbox' })),
                 $input = Backbone.$('<' + this.elementType + '>'),
                 attributes = { type: 'checkbox' },
-                id = this.templateVars.inputId;
+                id = this.inputId;
 
             if (this.addId) { extend(attributes, { id: id, name: id, value: this.checkedVal }); }
             extend(attributes, this.inputAttrs);
