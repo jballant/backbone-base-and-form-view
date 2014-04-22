@@ -5,7 +5,7 @@
 //     For all details and documentation:
 //     https://github.com/1stdibs/backbone-base-and-form-view
 
-/*global Backbone, window, jQuery, _, exports, module, require */
+/*global Backbone, window, jQuery, _, exports, module, require, console */
 (function (root) {
     "use strict";
 
@@ -691,6 +691,7 @@
                 if (!this._subViewsByType[key]) { this._subViewsByType[key] = []; }
                 this._subViewsByType[key].push(instance);
             }
+            this.newest = instance;
             if (!silent) {
                 return this.trigger('add', instance).trigger('add:' + key, instance);
             }
@@ -709,7 +710,7 @@
 
             Construct = (typeof Construct === 'string') ? _stringToObj(Construct) : Construct;
             if (!Construct) {
-                console.error('Construct for key "' + key + '" was not found', config ? config.construct : '');
+                console.error('Construct for key "' + key + '" was not found:', config ? config.construct : '');
             }
             instance = new Construct(options, this.parent);
             this._setInst(key, instance, (singleton !== undefined) ? singleton : config.singleton);
