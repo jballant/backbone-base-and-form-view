@@ -711,17 +711,23 @@
 
             describe('"ascend" method', function () {
                 it("if passed a function, should call it for each ancestor in ascending order", function () {
-                    var i = 0;
+                    var i = 0,
+                        aCid,
+                        bCid,
+                        topCid;
                     cView.ascend(function () {
                         if (i === 0) {
-                            expect(this.cid).toBe(bView.cid);
+                            bCid = this.cid;
                         } else if (i === 1) {
-                            expect(this.cid).toBe(aView.cid);
+                            aCid = this.cid;
                         } else if (i === 2) {
-                            expect(this.cid).toBe(topView.cid);
+                            topCid = this.cid;
                         }
                         i++;
                     });
+                    expect(bCid).toBe(bView.cid);
+                    expect(aCid).toBe(aView.cid);
+                    expect(topCid).toBe(topView.cid);
                 });
                 it("if passed a method name, should call it on each ancestor in ascending order", function () {
                     var testEvents = { test: 'render' };
