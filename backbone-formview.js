@@ -232,7 +232,7 @@
                 setUpOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
             this.subs.autoInitSingletons = true;
             extend(this, {
-                templateVars : options.templateVars || this.templateVars,
+                templateVars : options.templateVars || this.templateVars || {},
                 setupOnInit : options.setupOnInit || this.setupOnInit,
                 validateOnSet : (!isUndefined(options.validateOnSet)) ? options.validateOnSet : this.validateOnSet,
                 twoWay: (!isUndefined(options.twoWay)) ? options.twoWay : this.twoWay,
@@ -455,7 +455,7 @@
             this.template = options.template || (isString(this.template) ? _.template(this.template) : this.template);
             this.setupOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
             this.rowOptions = options.rowOptions || this.rowOptions;
-            this.templateVars = options.templateVars || this.templateVars;
+            this.templateVars = options.templateVars || this.templateVars || {};
             this._defaultTemplateVars = { label: options.label };
             this.rowWrapper = options.rowWrapper || this.rowWrapper;
             if (options.rowConfig) {
