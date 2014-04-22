@@ -468,7 +468,7 @@
                     location: this.rowWrapper
                 };
                 var rowOpts = clone(result(this, 'rowOptions'));
-                this.rowConfig.options = rowOpts;
+                this.rowConfig.options = rowOpts || {};
                 this.setRowSchema(options.rowSchema || this.rowSchema || this.rowConfig.options.schema);
             }
             this.subs.addConfig('row', this.rowConfig);
