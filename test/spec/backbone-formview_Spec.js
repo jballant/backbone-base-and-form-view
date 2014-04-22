@@ -457,8 +457,8 @@
                         expect(testField.addId).toBe(true);
                     });
                     it('should automatically generate an id for the input and set it as a templateVar if true, and not if false', function () {
-                        expect(testField.templateVars.inputId).toBeDefined();
-                        expect(testField.templateVars.inputId).toBe(testField.inputPrefix + testField.options.schemaKey);
+                        expect(testField.inputId).toBeDefined();
+                        expect(testField.inputId).toBe(testField.inputPrefix + testField.options.schemaKey);
                     });
                 });
             });
@@ -477,14 +477,16 @@
                     expect(testField.renderInput).toHaveBeenCalled();
                 });
                 it('should invoke the template function and place it view el when "renderWrapper" is called', function () {
-                    var html = '<div class="test-wrapper-div"></div>',
-                        vars = { label: 'Test Label' };
+                    var html = '<div class="test-wrapper-div"><label><%= obj.label %></label></div>',
+                        testLabel = 'Test Label',
+                        renderedHtml = html.replace('<%= obj.label %>', testLabel),
+                        vars = { label: testLabel };
                     testField.template = _.template(html);
                     testField.templateVars = vars;
                     spyOn(testField, 'template').and.callThrough();
                     testField.renderWrapper();
-                    expect(testField.template).toHaveBeenCalledWith(vars);
-                    expect(testField.$el.html()).toBe(html);
+                    expect(testField.template).toHaveBeenCalled();
+                    expect(testField.$el.html()).toBe(renderedHtml);
                 });
                 describe('"renderInput" method', function () {
                     beforeEach(function () {
@@ -495,7 +497,7 @@
                         expect(testField.$('input').length).toBe(1);
                     });
                     it('should assign field properties "inputId" as the id and name, and "inputClass" as the class attribute of the input', function () {
-                        testField.templateVars.inputId = 'test-id';
+                        testField.inputId = 'test-id';
                         testField.inputClass = 'test-class';
                         testField.renderInput();
                         expect(testField.$('input').attr('id')).toBe('test-id');
@@ -859,9 +861,9 @@
                 });
                 it('should add an id attribute with the inputId property plus the index of the checkbox', function () {
                     testField.renderInput();
-                    expect(testField.$('input[type="checkbox"]').eq(0).attr('id')).toBe(testField.templateVars.inputId + '-' + '0');
-                    expect(testField.$('input[type="checkbox"]').eq(1).attr('id')).toBe(testField.templateVars.inputId + '-' + '1');
-                    expect(testField.$('input[type="checkbox"]').eq(2).attr('id')).toBe(testField.templateVars.inputId + '-' + '2');
+                    expect(testField.$('input[type="checkbox"]').eq(0).attr('id')).toBe(testField.inputId + '-' + '0');
+                    expect(testField.$('input[type="checkbox"]').eq(1).attr('id')).toBe(testField.inputId + '-' + '1');
+                    expect(testField.$('input[type="checkbox"]').eq(2).attr('id')).toBe(testField.inputId + '-' + '2');
                 });
                 it('should set the checkboxes as checked based on whether the checkbox value in the model is equal to the "checkedVal" property', function () {
                     testField.model.set('foo', testField.unCheckedVal);
