@@ -460,9 +460,10 @@
             this.rowWrapper = options.rowWrapper || this.rowWrapper;
             if (options.rowConfig) {
                 this.rowConfig = options.rowConfig;
-                this.rowConfig = result(this, 'rowConfig') || {};
+                this.rowConfig = clone(result(this, 'rowConfig')) || {};
+                this.rowConfig.options = this.rowConfig.options ? clone(this.rowConfig.options) : {};
             } else {
-                this.rowConfig = result(this, 'rowConfig') || {
+                this.rowConfig = clone(result(this, 'rowConfig')) || {
                     singleton: false,
                     construct: Backbone.CollectionFormRowView
                 };
