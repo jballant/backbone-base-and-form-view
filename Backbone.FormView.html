@@ -106,6 +106,18 @@
 						</li>
 						
 						<li>
+							<a href="global.html#_getTemplateVars">_getTemplateVars</a>
+						</li>
+						
+						<li>
+							<a href="global.html#findAncestor">findAncestor</a>
+						</li>
+						
+						<li>
+							<a href="global.html#findAncestorByConstruct">findAncestorByConstruct</a>
+						</li>
+						
+						<li>
 							<a href="global.html#isSelected">isSelected</a>
 						</li>
 						
@@ -254,47 +266,16 @@ prototype property, or by passing a 'schema' option when you initialize the view
 
         <tr>
             
-                <td class="name"><code>templateSrc</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>An underscore formatted template string. In order for the FormViews render
-     method to work, the template requires a data-fields attribute to be set
-     on an element in the template. This element will serve as a wrapper
-     for all the subViews that will be generated on render.</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
                 <td class="name"><code>template</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Function</span>
+|
+
+<span class="param-type">Template</span>
 
 
             
@@ -312,7 +293,11 @@ prototype property, or by passing a 'schema' option when you initialize the view
 
             
 
-            <td class="description last"><p>an underscore template function</p></td>
+            <td class="description last"><p>An underscore template function or a string that serves as the source
+      of an underscore template function. In order for the FormView's &quot;render&quot;
+      method to work, the template requires a data-fields attribute to be set
+      on an element in the template. This element will serve as a wrapper
+      for all the subViews that will be generated on render.</p></td>
         </tr>
 
 	
@@ -344,7 +329,7 @@ prototype property, or by passing a 'schema' option when you initialize the view
             
 
             <td class="description last"><p>Schema to use to create form fields automatically on render (or initialization
-          if setupOnInit is true)</p></td>
+      if setupOnInit is true)</p></td>
         </tr>
 
 	
@@ -551,7 +536,7 @@ prototype property, or by passing a 'schema' option when you initialize the view
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-123">line 123</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-134">line 134</a>
     </li></ul></dd>
     
 
@@ -763,7 +748,7 @@ static function to add an allias 'Date' for that constructor</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-357">line 357</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-373">line 373</a>
     </li></ul></dd>
     
 
@@ -790,11 +775,197 @@ static function to add an allias 'Date' for that constructor</p>
 
         
             
-<dt class="method" id="findAncestor">
+<dt class="method" id="ascend">
     <h4 class="function">
         <span class="name">
-            <span class="type-signature"></span>findAncestor
-        </span><span class="signature">(type)</span><span class="type-signature"> &rarr; {null|Backbone.View}</span>
+            <span class="type-signature"></span>ascend
+        </span><span class="signature">(fnName, <span class="optional">args</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Invoke a function or method on ancestors</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>fnName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Function</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of arguments to pass to
+       the invocation</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Backbone.BaseView.html#ascend">Backbone.BaseView#ascend</a>
+    </li></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-920">line 920</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="findAncestorByType">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>findAncestorByType
+        </span><span class="signature">(type)</span><span class="type-signature"> &rarr; {null|<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
     </h4>
     
     
@@ -874,7 +1045,7 @@ static function to add an allias 'Date' for that constructor</p>
     
     <dt class="inherited-from">Inherited From:</dt>
     <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#findAncestor">Backbone.BaseView#findAncestor</a>
+        <a href="Backbone.BaseView.html#findAncestorByType">Backbone.BaseView#findAncestorByType</a>
     </li></dd>
     
 
@@ -891,7 +1062,7 @@ static function to add an allias 'Date' for that constructor</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-918">line 918</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-972">line 972</a>
     </li></ul></dd>
     
 
@@ -920,7 +1091,7 @@ static function to add an allias 'Date' for that constructor</p>
 <span class="param-type">null</span>
 |
 
-<span class="param-type">Backbone.View</span>
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
 
 </li>
     
@@ -979,7 +1150,7 @@ static function to add an allias 'Date' for that constructor</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-283">line 283</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-294">line 294</a>
     </li></ul></dd>
     
 
@@ -1070,7 +1241,7 @@ type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-934">line 934</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-983">line 983</a>
     </li></ul></dd>
     
 
@@ -1165,7 +1336,7 @@ type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-942">line 942</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-991">line 991</a>
     </li></ul></dd>
     
 
@@ -1255,7 +1426,7 @@ type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-954">line 954</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-1003">line 1003</a>
     </li></ul></dd>
     
 
@@ -1439,7 +1610,7 @@ default it is appended to the location.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-819">line 819</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-820">line 820</a>
     </li></ul></dd>
     
 
@@ -1527,7 +1698,7 @@ appended to that. Otherwise they will be directly appended to the template.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-298">line 298</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-309">line 309</a>
     </li></ul></dd>
     
 
@@ -1615,7 +1786,7 @@ from the inputs all at once.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-270">line 270</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-281">line 281</a>
     </li></ul></dd>
     
 
@@ -1749,7 +1920,7 @@ from the inputs all at once.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-245">line 245</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-256">line 256</a>
     </li></ul></dd>
     
 
@@ -1836,7 +2007,7 @@ but fleshed out for the baseView's subView manager.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-256">line 256</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-267">line 267</a>
     </li></ul></dd>
     
 
@@ -1929,7 +2100,7 @@ time you want an event to be stopped.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-840">line 840</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-841">line 841</a>
     </li></ul></dd>
     
 
@@ -2119,7 +2290,7 @@ on to the end of the arguments, so you can access it if needed.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-857">line 857</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-858">line 858</a>
     </li></ul></dd>
     
 
@@ -2308,7 +2479,7 @@ work in the same manner as they do with triggerBubble.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-885">line 885</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-886">line 886</a>
     </li></ul></dd>
     
 

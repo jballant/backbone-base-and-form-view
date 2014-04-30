@@ -106,6 +106,18 @@
 						</li>
 						
 						<li>
+							<a href="global.html#_getTemplateVars">_getTemplateVars</a>
+						</li>
+						
+						<li>
+							<a href="global.html#findAncestor">findAncestor</a>
+						</li>
+						
+						<li>
+							<a href="global.html#findAncestorByConstruct">findAncestorByConstruct</a>
+						</li>
+						
+						<li>
 							<a href="global.html#isSelected">isSelected</a>
 						</li>
 						
@@ -635,7 +647,7 @@ in the form schema to create a field with the select type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-984">line 984</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-1021">line 1021</a>
     </li></ul></dd>
     
 
@@ -686,11 +698,197 @@ in the form schema to create a field with the select type.</p>
 
         <dl>
             
-<dt class="method" id="findAncestor">
+<dt class="method" id="ascend">
     <h4 class="function">
         <span class="name">
-            <span class="type-signature"></span>findAncestor
-        </span><span class="signature">(type)</span><span class="type-signature"> &rarr; {null|Backbone.View}</span>
+            <span class="type-signature"></span>ascend
+        </span><span class="signature">(fnName, <span class="optional">args</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Invoke a function or method on ancestors</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>fnName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Function</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of arguments to pass to
+       the invocation</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Backbone.BaseView.html#ascend">Backbone.BaseView#ascend</a>
+    </li></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-920">line 920</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="findAncestorByType">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>findAncestorByType
+        </span><span class="signature">(type)</span><span class="type-signature"> &rarr; {null|<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
     </h4>
     
     
@@ -770,7 +968,7 @@ in the form schema to create a field with the select type.</p>
     
     <dt class="inherited-from">Inherited From:</dt>
     <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#findAncestor">Backbone.BaseView#findAncestor</a>
+        <a href="Backbone.BaseView.html#findAncestorByType">Backbone.BaseView#findAncestorByType</a>
     </li></dd>
     
 
@@ -787,7 +985,7 @@ in the form schema to create a field with the select type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-918">line 918</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-972">line 972</a>
     </li></ul></dd>
     
 
@@ -816,7 +1014,7 @@ in the form schema to create a field with the select type.</p>
 <span class="param-type">null</span>
 |
 
-<span class="param-type">Backbone.View</span>
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
 
 </li>
     
@@ -880,7 +1078,7 @@ in the form schema to create a field with the select type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-723">line 723</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-755">line 755</a>
     </li></ul></dd>
     
 
@@ -971,7 +1169,7 @@ with data-input attribute. If not found, it will return this.$el</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-806">line 806</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-838">line 838</a>
     </li></ul></dd>
     
 
@@ -1061,7 +1259,7 @@ with data-input attribute. If not found, it will return this.$el</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-756">line 756</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-788">line 788</a>
     </li></ul></dd>
     
 
@@ -1164,7 +1362,7 @@ type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-934">line 934</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-983">line 983</a>
     </li></ul></dd>
     
 
@@ -1259,7 +1457,7 @@ type.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-942">line 942</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-991">line 991</a>
     </li></ul></dd>
     
 
@@ -1350,7 +1548,7 @@ and gets the value attribue of that input.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-916">line 916</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-953">line 953</a>
     </li></ul></dd>
     
 
@@ -1484,7 +1682,7 @@ and gets the value attribue of that input.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-1040">line 1040</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-1077">line 1077</a>
     </li></ul></dd>
     
 
@@ -1574,7 +1772,7 @@ and gets the value attribue of that input.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-954">line 954</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-1003">line 1003</a>
     </li></ul></dd>
     
 
@@ -1758,7 +1956,7 @@ default it is appended to the location.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-819">line 819</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-820">line 820</a>
     </li></ul></dd>
     
 
@@ -1851,7 +2049,7 @@ to the elem in the shell template found through the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-767">line 767</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-799">line 799</a>
     </li></ul></dd>
     
 
@@ -1936,7 +2134,7 @@ to the elem in the shell template found through the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-1050">line 1050</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-1087">line 1087</a>
     </li></ul></dd>
     
 
@@ -2087,7 +2285,7 @@ to the elem in the shell template found through the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-776">line 776</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-808">line 808</a>
     </li></ul></dd>
     
 
@@ -2182,7 +2380,7 @@ then use that as the options passed to Backbone.Model's
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-738">line 738</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-770">line 770</a>
     </li></ul></dd>
     
 
@@ -2273,7 +2471,7 @@ function will update the view on a model change (unless it was done by the view)
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-711">line 711</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-743">line 743</a>
     </li></ul></dd>
     
 
@@ -2366,7 +2564,7 @@ time you want an event to be stopped.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-840">line 840</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-841">line 841</a>
     </li></ul></dd>
     
 
@@ -2556,7 +2754,7 @@ on to the end of the arguments, so you can access it if needed.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-857">line 857</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-858">line 858</a>
     </li></ul></dd>
     
 
@@ -2745,7 +2943,7 @@ work in the same manner as they do with triggerBubble.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-885">line 885</a>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-886">line 886</a>
     </li></ul></dd>
     
 

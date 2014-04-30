@@ -106,6 +106,18 @@
 						</li>
 						
 						<li>
+							<a href="global.html#_getTemplateVars">_getTemplateVars</a>
+						</li>
+						
+						<li>
+							<a href="global.html#findAncestor">findAncestor</a>
+						</li>
+						
+						<li>
+							<a href="global.html#findAncestorByConstruct">findAncestorByConstruct</a>
+						</li>
+						
+						<li>
 							<a href="global.html#isSelected">isSelected</a>
 						</li>
 						
@@ -189,6 +201,128 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id="_getTemplateVars"><span class="type-signature"></span>_getTemplateVars<span class="type-signature"> :object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>A reference to the template vars function</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-362">line 362</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_getTemplateVars"><span class="type-signature"></span>_getTemplateVars<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Get the template vars used for the wrapper template</p>
+    </div>
+    
+    
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-878">line 878</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -242,7 +376,7 @@ the input element.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-838">line 838</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-870">line 870</a>
     </li></ul></dd>
     
 
@@ -269,6 +403,284 @@ the input element.</p>
 <ul class="inline">
         <li>
 <span class="param-type">string</span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="findAncestor">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>findAncestor
+        </span><span class="signature">(testFn)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>|null}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Ascends up the ancestor line until an
+a test function returns true</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>testFn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that returns a truthy
+        value if the current ancestor should be 
+        returned</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-942">line 942</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
+|
+
+<span class="param-type">null</span>
+
+</li>
+    
+</ul>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt class="method" id="findAncestorByConstruct">
+    <h4 class="function">
+        <span class="name">
+            <span class="type-signature"></span>findAncestorByConstruct
+        </span><span class="signature">(Construct)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>|null}</span>
+    </h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Returns the first ancestor to be an instance
+of the Construct argument</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>Construct</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A Backbone.BaseView constructor function</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-959">line 959</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<ul class="inline">
+        <li>
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
+|
+
+<span class="param-type">null</span>
 
 </li>
     
@@ -376,7 +788,7 @@ the input element.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-924">line 924</a>
+        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-961">line 961</a>
     </li></ul></dd>
     
 
