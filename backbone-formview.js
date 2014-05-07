@@ -700,7 +700,7 @@
             options = this.options = defaults(options || {}, this.options);
             extend(this, {
                 templateVars : options.templateVars || this.templateVars || {},
-                fieldName : options.fieldName || options.schemaKey,
+                fieldName : options.fieldName || this.fieldName || options.schemaKey,
                 elementType : options.elementType || this.elementType,
                 template : options.template || this.template,
                 setOpts : defaults(options.setOpts || {}, this.setOpts),
