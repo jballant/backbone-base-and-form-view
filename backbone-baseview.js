@@ -797,6 +797,7 @@
                 this.subs.addConfig(subViewCfg);
             }
             this.subViews = this.subs.subViews;
+            this._stopPropogation = {};
             BaseView.__super__.constructor.call(this, options);
             // To maintain parity with how Backbone handles the 'events'
             // property on a view, we will overwrite the 'viewEvents'
@@ -838,8 +839,8 @@
          * @memberOf Backbone.BaseView#
          * @return {Backbone.BaseView}
          */
-        stopEvent: function () {
-            this._stopPropogation = true;
+        stopEvent: function (event) {
+            this._stopPropogation[event] = true;
             return this;
         },
         /**
@@ -863,8 +864,8 @@
             anscestor = this;
             while (anscestor) {
                 anscestor.trigger.apply(anscestor, args);
-                if (anscestor._stopPropogation) {
-                    anscestor._stopPropogation = false;
+                if (anscestor._stopPropogation[event]) {
+                    anscestor._stopPropogation[event] = false;
                     return this;
                 }
                 anscestor = anscestor.parentView;
@@ -893,8 +894,8 @@
                     while (++i < len) {
                         descend = true;
                         subViews[i].trigger.apply(subViews[i], args);
-                        if (subViews[i]._stopPropogation) {
-                            subViews[i]._stopPropogation = false;
+                        if (subViews[i]._stopPropogation[event]) {
+                            subViews[i]._stopPropogation[event] = false;
                             descend = false;
                         }
                         subSubs = subViews[i].subViews;
