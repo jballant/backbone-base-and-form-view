@@ -837,6 +837,7 @@
          * after stopping the event, and has to be callled every 
          * time you want an event to be stopped.
          * @memberOf Backbone.BaseView#
+         * @param {string} event The name of the event
          * @return {Backbone.BaseView}
          */
         stopEvent: function (event) {
