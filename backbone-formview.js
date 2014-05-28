@@ -468,7 +468,7 @@
                     construct: Backbone.CollectionFormRowView
                 };
                 var rowOpts = clone(result(this, 'rowOptions'));
-                this.rowConfig.options = rowOpts || {};
+                this.rowConfig.options = rowOpts || this.rowConfig.options || {};
                 this.setRowSchema(options.rowSchema || this.rowSchema || this.rowConfig.options.schema);
             }
             this.rowConfig.location = this.rowWrapper;
