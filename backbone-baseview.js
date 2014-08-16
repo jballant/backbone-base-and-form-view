@@ -286,13 +286,11 @@
          * @type {SubViewManager}
          * @param {object} [options]
          *      [options.appendTo] A selector, HTMLElement, or $ instance to append the subViews to
-         *      [options.useLocation] 
+         *      [options.useLocation=false]
          *          True if you want to append the subviews to the locations in their config if they 
          *          have one.
-         *      [options.clearLocations]
+         *      [options.clearLocations=false]
          *          True if you want to use empty on the configured locations
-         * @param {Boolean} [clearLocations]
-         *      True if you want to remove all subView elements from the DOM before rendering
          *
          * @return {SubViewManager}
          */
@@ -309,7 +307,8 @@
          * @type {SubViewManager}
          * @param {string|HTMLElement|$} [appendTo]
          *        Location to append the rendered subiews to
-         * @param {object} [options] Other options (clearLocations)
+         * @param {object} [options]
+         * @param {boolean} [options.clearLocations=false] Clear configured locations of subviews before rendering
          * @return {SubViewManager}
          */
         renderAppend: function (appendTo, options) {
@@ -333,10 +332,10 @@
          *      or subViews. For example, passing the view cid 'view4' will render only
          *      the view with that cid, and passing the type 'creatorNames' will render
          *      views matching the type 'creatorNames'.
-         * @param {Boolean|String|HTMLElement} [useLocation]
-         *      True if you want to use the subView's configuration 'location' to place the
-         *      element the subView elems automatically. You can also pass a selector or
-         *      DOM element that all subviews matched by the 'key' will be appended to
+         * @param {object} [options]
+         * @param {string|$|HTMLElement} [options.appendTo] Element or selector to append subview(s) to
+         * @param {boolean} [options.useLocation=false] Append subviews to locations specified in config
+         * @param {boolean} [options.clearLocations=false] Clear configured locations of subviews before rendering
          *
          * @return {SubViewManager}
          */
@@ -390,7 +389,7 @@
                         _func = isFunc ? func : subView[func];
                         if (_func) {
                             if (args) { _func.apply(subView, args);
-                                } else { _func.call(subViews[i]); }
+                            } else { _func.call(subViews[i]); }
                         }
                         if (subView.subViews && subView.subViews.length) {
                             desc(subView.subViews);
@@ -612,7 +611,6 @@
 
             if (!self.config[key] && subViews[0].constructor) {
                 self.config[key] = {
-                    options : subViews[0].options || {},
                     construct : subViews[0].constructor,
                     singleton : singleton
                 };
@@ -663,7 +661,7 @@
                 delete this._subViewSingletons[key];
             }
             if (!silent) {
-                return this.trigger('remove:' + key, subView);
+                this.trigger('remove:' + key, subView);
             }
         },
         _setInst: function (key, instance, singleton, silent) {

@@ -50,8 +50,8 @@
              * Disables the form by invoking the disable method
              * on all fields that implement it. If a field doesn't
              * implement this method, it will not be disabled.
-             * @memberOf dibsLibs.FormView#
-             * @return {dibsLibs.FormView}
+             * @memberOf Backbone.FormView#
+             * @return {Backbone.FormView}
              */
             disable: function () {
                 this.subs.each(function (field) {
@@ -62,8 +62,8 @@
             /**
              * The reverse of disable, naturally. Invokes enable method
              * on all fields and field sets.
-             * @memberOf dibsLibs.FormView#
-             * @return {dibsLibs.FormView}
+             * @memberOf Backbone.FormView#
+             * @return {Backbone.FormView}
              */
             enable: function () {
                 this.subs.each(function (field) {
@@ -523,8 +523,8 @@
          * property constructor. The model(s) will then be tied
          * to the new row(s).
          * @memberOf Backbone.CollectionFormView#
-         * @param  {Backbone.Model|Backbone.Model[]} 
-         *         [models] A model or array of models to add rows for.
+         * @param {Backbone.Model|Backbone.Model[]} [models]
+         *      A model or array of models to add rows for.
          * @return {Backbone.CollectionFormView}
          */
         addRow: function (models) {
