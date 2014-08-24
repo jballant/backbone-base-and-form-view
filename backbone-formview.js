@@ -404,6 +404,20 @@
         deleteSelf: function () {
             this.parentView.deleteRow(this);
             return this;
+        },
+        /**
+         * @memberOf Backbone.CollectionFormRowView#
+         * @return {number}
+         *         The index of the row
+         */
+        rowIndex: function () {
+            if (this.parentView && this.parentView.subs) {
+                var rows = this.parentView.subs.get('row');
+                if (rows) {
+                    return rows.indexOf(this);
+                }
+            }
+            return null;
         }
     });
 
@@ -499,7 +513,7 @@
         render: function () {
             this.subs.detachElems();
             this.$el.html(this.template(this._getTemplateVars()));
-            if (!this.subs.get('row') || !this.subs.get('row').length) {
+            if (!this.getRows() || !this.getRows().length) {
                 this.setupRows();
             }
             this.subs.renderByKey('row', { appendTo: this.getRowWrapper() });
@@ -586,6 +600,12 @@
             return this;
         },
         /**
+         * @return {Backbone.View[]} An array of the row subviews 
+         */
+        getRows: function () {
+            return this.subs.get('row');
+        },
+        /**
          * When you are ready to set up your rows (ie initialize
          * each Row view instance based on the collection
          * @memberOf Backbone.CollectionFormView#
@@ -601,7 +621,6 @@
                 row = this.subs
                     .add('row', opts)
                     .last();
-            row.rowIndex = opts.index;
             row.setSchema(this.rowSchema).setupFields();
             return this;
         },
@@ -693,7 +712,7 @@
         disabledDataKey: 'formViewDisabled',
         events: function () {
             var events = {};
-            events['blur ' + this.elementType] = 'setModelAttrs';
+            events['blur ' + this.elementType] = 'onUserUpdate';
             return events;
         },
         initialize: function (options) {
@@ -778,7 +797,7 @@
          * @return {String|Boolean|Array|Number|Object}
          */
         getValue: function () {
-            return Backbone.$.trim(this.$(this.elementType).val());
+            return Backbone.$.trim(this.getInputEl().val());
         },
         /**
          * Gets the value of the field as it appears in the model
@@ -843,12 +862,20 @@
             return $wrapper.first();
         },
         /**
+         * Get the element that takes user input.
+         * @memberOf Backbone.fields.FieldView#
+         * @return {$} 
+         */
+        getInputEl: function () {
+            return this.$(this.elementType);
+        },
+        /**
          * Disable the input if not already disabled
          * @memberOf dibsLibs.FormFieldView#
          * @return {dibsLibs.FormFieldView}
          */
         disable: function () {
-            this.$(this.elementType).prop('disabled', true);
+            this.getInputEl().prop('disabled', true);
             this.isDisabled = true;
             return this;
         },
@@ -858,13 +885,23 @@
          * @return {dibsLibs.FormFieldView}
          */
         enable: function () {
-            this.$(this.elementType).prop('disabled', false);
+            this.getInputEl().prop('disabled', false);
             this.isDisabled = false;
             return this;
         },
         /**
+         * Handle updates from a user interaction
+         * @memberOf Backbone.fields.FieldView#
+         * @protected
+         */
+        onUserUpdate: function () {
+            this.setModelAttrs();
+        },
+        /**
          * Generate the string to use for the id attribute of 
          * the input element.
+         * @memberOf Backbone.fields.FieldView#
+         * @protected
          * @return {string}
          */
         _getInputId: function () {
@@ -873,6 +910,7 @@
         },
         /**
          * Get the template vars used for the wrapper template
+         * @memberOf Backbone.fields.FieldView#
          * @return {object}
          */
         _getTemplateVars: getTemplateVars,
@@ -880,6 +918,7 @@
          * If the parent FormView/FieldSetView defines a 'getFieldPrefix'
          * function, it can be used to construct the input id, name
          * attribute, and class attributes
+         * @memberOf Backbone.fields.FieldView#
          * @return {string}
          * @private
          */
@@ -1066,7 +1105,7 @@
             SelectListView.__super__.initialize.call(this, options);
         },
         getValue: function () {
-            return this.$(this.elementType).val();
+            return this.getInputEl().val();
         },
         /**
          * Returns true or false if the option should be selected
@@ -1184,7 +1223,7 @@
         },
         getAttrs: function () {
             var attrs = {}, self = this;
-            this.$(this.elementType).each(function (index, input) {
+            this.getInputEl().each(function (index, input) {
                 var $input = Backbone.$(input),
                     key = $input.val(),
                     val = ($input.prop('checked')) ? self.checkedVal : self.unCheckedVal;
@@ -1294,7 +1333,7 @@
             CheckBoxView.__super__.initialize.call(this, options);
         },
         getValue: function () {
-            if (this.$(this.elementType).prop('checked')) {
+            if (this.getInputEl().prop('checked')) {
                 return this.checkedVal;
             }
             return this.unCheckedVal;
