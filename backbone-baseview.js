@@ -1,4 +1,4 @@
-//     Backbone.BaseView 0.7.2
+//     Backbone.BaseView 0.7.4
 
 //     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.BaseView may be freely distributed under the MIT license.
@@ -569,7 +569,6 @@
         _render : function (subViews, place, clearLocations) {
             var $appendTo,
                 i = -1,
-                len = subViews.length,
                 location,
                 $locations = {};
             if (place !== true) {
@@ -579,7 +578,7 @@
                 this.clearLocations();
             }
 
-            while (++i < len) {
+            while (++i < subViews.length) {
                 subViews[i].render();
                 if ($appendTo) {
                     subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo).first() : $appendTo);

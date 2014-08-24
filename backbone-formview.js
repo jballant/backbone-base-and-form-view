@@ -1,4 +1,4 @@
-//     Backbone.FormView 0.7.2
+//     Backbone.FormView 0.7.4
 
 //     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.FormView may be freely distributed under the MIT license.
@@ -468,7 +468,7 @@
                     construct: Backbone.CollectionFormRowView
                 };
                 var rowOpts = clone(result(this, 'rowOptions'));
-                this.rowConfig.options = rowOpts || {};
+                this.rowConfig.options = rowOpts || this.rowConfig.options || {};
                 this.setRowSchema(options.rowSchema || this.rowSchema || this.rowConfig.options.schema);
             }
             this.rowConfig.location = this.rowWrapper;
