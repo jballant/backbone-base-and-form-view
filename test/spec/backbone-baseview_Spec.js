@@ -109,141 +109,239 @@
 
             describe('Adding and Retrieving SubViews', function () {
 
-                var data = {
-                        firstName: 'Jeff',
-                        lastName: 'Schmeff',
-                        registered: false
-                    },
-                    model = new Backbone.Model(data);
+                describe('with the "add" method', function () {
 
-                it('should allow you to add subviews for prededfined non-singleton types', function () {
+                    var data = {
+                            firstName: 'Jeff',
+                            lastName: 'Schmeff',
+                            registered: false
+                        },
+                        model = new Backbone.Model(data);
 
-                    var beforeLength = testView.subs.subViews.length;
+                    it('should allow you to add subviews for prededfined non-singleton types', function () {
 
-                    testView.subs.add('row', {
-                        model: model
-                    });
+                        var beforeLength = testView.subs.subViews.length;
 
-                    expect(testView.subs.subViews.length).toBeGreaterThan(beforeLength);
-                    expect(testView.subs.last().model.cid).toEqual(model.cid);
-                });
-
-                it('should return an array when asking for non-singleton types', function () {
-                    testView.subs.add('row', {
-                        model: model
-                    });
-                    expect(toString.call(testView.subs.get('row'))).toBe('[object Array]');
-                });
-
-                it('should allow you to only add one prededfined singleton subview', function () {
-                    var headingRow = testView.subs.get('headingRow');
-                    expect(headingRow).toBeUndefined();
-                    testView.subs.add('headingRow', {
-                        testFlag: 'First Addition'
-                    });
-                    testView.subs.add('headingRow', {
-                        testFlag: 'Second Addition'
-                    });
-                    expect(testView.subs.last().options.testFlag).toBe('First Addition');
-                });
-
-                it('should return an instance when asking for a singleton', function () {
-                    testView.subs.add('headingRow', {
-                        testFlag: 'First Addition'
-                    });
-                    testView.subs.add('headingRow', {
-                        testFlag: 'Second Addition'
-                    });
-                    expect(testView.subs.get('headingRow') instanceof HeadingRowView).toBe(true);
-                    expect(testView.subs.get('headingRow').options.testFlag).toBe('First Addition');
-                });
-
-                it('should allow you to dynamically add a subview of a type that hasn\'t been defined yet', function () {
-                    var view = new Backbone.View({
+                        testView.subs.add('row', {
                             model: model
-                        }),
-                        beforeLen = testView.subs.subViews.length;
-                    testView.subs.add('testNotPredefinedType', view);
-                    expect(testView.subs.last().cid).toBe(view.cid);
-                    expect(testView.subs.subViews.length).toBeGreaterThan(beforeLen);
-                });
-
-                it('should allow you to dynamically add a singleton subview that hasn\'t been defined yet', function () {
-                    var view = new Backbone.View({
-                            model: model
-                        }),
-                        beforeLen = testView.subs.subViews.length;
-                    testView.subs.add('testNotPredefinedType', view, true);
-                    expect(testView.subs.last().cid).toBe(view.cid);
-                    expect(testView.subs.subViews.length).toBeGreaterThan(beforeLen);
-                    expect(testView.subs.get('testNotPredefinedType').cid).toBe(view.cid);
-                });
-
-                it('should allow you add an array of instances as a particular type of subviews', function () {
-                    var model1 = testCollection.at(0),
-                        model2 = testCollection.at(1),
-                        view1 = new RowView({
-                            model: model1
-                        }),
-                        view2 = new RowView({
-                            model: model2
                         });
 
-                    testView.subs.add('row', [{
-                        model: model1
-                    }, {
-                        model: model2
-                    }]);
-                    expect(testView.subs.get('row').length).toBe(2);
-                    expect(testView.subs.get('row')[0].model.cid).toBe(model1.cid);
-                    expect(testView.subs.get('row')[1].model.cid).toBe(model2.cid);
+                        expect(testView.subs.subViews.length).toBeGreaterThan(beforeLength);
+                        expect(testView.subs.last().model.cid).toEqual(model.cid);
+                    });
 
-                    testView.subs.add('row', [view1, view2]);
-                    expect(testView.subs.get('row').length).toBe(4);
-                    expect(testView.subs.last().cid).toBe(view2.cid);
-                    expect(testView.subs.get('row')[2].cid).toBe(view1.cid);
-                });
+                    it('should return an array when asking for non-singleton types with "get"', function () {
+                        testView.subs.add('row', {
+                            model: model
+                        });
+                        expect(toString.call(testView.subs.get('row'))).toBe('[object Array]');
+                    });
 
-                it('should allow you to add subviews by passing an object literal map', function () {
-                    var testName = 'Test Name of Heading Row';
-                    testView.subs.add({
-                        headingRow: {
-                            testFlag: testName
-                        },
-                        row: [{
-                            model: testCollection.at(0)
+                    it('should allow you to only add one prededfined singleton subview', function () {
+                        var headingRow = testView.subs.get('headingRow');
+                        expect(headingRow).toBeUndefined();
+                        testView.subs.add('headingRow', {
+                            testFlag: 'First Addition'
+                        });
+                        testView.subs.add('headingRow', {
+                            testFlag: 'Second Addition'
+                        });
+                        expect(testView.subs.last().options.testFlag).toBe('First Addition');
+                    });
+
+                    it('should return an instance when asking for a singleton with "get"', function () {
+                        testView.subs.add('headingRow', {
+                            testFlag: 'First Addition'
+                        });
+                        testView.subs.add('headingRow', {
+                            testFlag: 'Second Addition'
+                        });
+                        expect(testView.subs.get('headingRow') instanceof HeadingRowView).toBe(true);
+                        expect(testView.subs.get('headingRow').options.testFlag).toBe('First Addition');
+                    });
+
+                    it('should allow you to dynamically add a subview of a type that hasn\'t been defined yet', function () {
+                        var view = new Backbone.View({
+                                model: model
+                            }),
+                            beforeLen = testView.subs.subViews.length;
+                        testView.subs.add('testNotPredefinedType', view);
+                        expect(testView.subs.last().cid).toBe(view.cid);
+                        expect(testView.subs.subViews.length).toBeGreaterThan(beforeLen);
+                    });
+
+                    it('should allow you to dynamically add a singleton subview that hasn\'t been defined yet', function () {
+                        var view = new Backbone.View({
+                                model: model
+                            }),
+                            beforeLen = testView.subs.subViews.length;
+                        testView.subs.add('testNotPredefinedType', view, true);
+                        expect(testView.subs.last().cid).toBe(view.cid);
+                        expect(testView.subs.subViews.length).toBeGreaterThan(beforeLen);
+                        expect(testView.subs.get('testNotPredefinedType').cid).toBe(view.cid);
+                    });
+
+                    it('should allow you add an array of instances as a particular type of subviews', function () {
+                        var model1 = testCollection.at(0),
+                            model2 = testCollection.at(1),
+                            view1 = new RowView({
+                                model: model1
+                            }),
+                            view2 = new RowView({
+                                model: model2
+                            });
+
+                        testView.subs.add('row', [{
+                            model: model1
                         }, {
-                            model: testCollection.at(1)
-                        }]
+                            model: model2
+                        }]);
+                        expect(testView.subs.get('row').length).toBe(2);
+                        expect(testView.subs.get('row')[0].model.cid).toBe(model1.cid);
+                        expect(testView.subs.get('row')[1].model.cid).toBe(model2.cid);
+
+                        testView.subs.add('row', [view1, view2]);
+                        expect(testView.subs.get('row').length).toBe(4);
+                        expect(testView.subs.last().cid).toBe(view2.cid);
+                        expect(testView.subs.get('row')[2].cid).toBe(view1.cid);
                     });
-                    expect(testView.subs.get('headingRow').options.testFlag).toBe(testName);
-                    expect(testView.subs.get('row').length).toBe(2);
-                    expect(testView.subs.get('row')[0].model.cid).toBe(testCollection.at(0).cid);
-                    expect(testView.subs.get('row')[1].model.cid).toBe(testCollection.at(1).cid);
+
+                    it('should allow you to add subviews by passing an object literal map', function () {
+                        var testName = 'Test Name of Heading Row';
+                        testView.subs.add({
+                            headingRow: {
+                                testFlag: testName
+                            },
+                            row: [{
+                                model: testCollection.at(0)
+                            }, {
+                                model: testCollection.at(1)
+                            }]
+                        });
+                        expect(testView.subs.get('headingRow').options.testFlag).toBe(testName);
+                        expect(testView.subs.get('row').length).toBe(2);
+                        expect(testView.subs.get('row')[0].model.cid).toBe(testCollection.at(0).cid);
+                        expect(testView.subs.get('row')[1].model.cid).toBe(testCollection.at(1).cid);
+                    });
+
+                    it('should allow you to add a config for a subview type before adding it', function () {
+                        testView.subs.addConfig('testTypeA', {
+                            construct: 'ActionsView',
+                            options: { testOpt: 'A' }
+                        }).addConfig({
+                            testTypeB : {
+                                construct: 'Backbone.View',
+                                singleton: true
+                            }
+                        });
+                        testView.subs
+                            .add('testTypeA', { foo: 'bar' })
+                            .add('testTypeA', { foo: 'baz' })
+                            .add('testTypeA', { testOpt: 'B' });
+                        expect(testView.subs.get('testTypeA').length).toBe(3);
+                        expect(testView.subs.get('testTypeA')[0].options.testOpt).toBe('A');
+                        expect(testView.subs.get('testTypeA')[1].options.testOpt).toBe('A');
+                        expect(testView.subs.get('testTypeA')[0].options.foo).toBe('bar');
+                        expect(testView.subs.get('testTypeA')[1].options.foo).toBe('baz');
+                        expect(testView.subs.get('testTypeA')[2].options.testOpt).toBe('B');
+                        testView.subs.add('testTypeB');
+                        expect(testView.subs.get('testTypeB') instanceof Backbone.View).toBeTruthy();
+                    });
+
                 });
 
-                it('should allow you to add a config for a subview type before adding it', function () {
-                    testView.subs.addConfig('testTypeA', {
-                        construct: 'ActionsView',
-                        options: { testOpt: 'A' }
-                    }).addConfig({
-                        testTypeB : {
-                            construct: 'Backbone.View',
-                            singleton: true
-                        }
+                describe('with the "create" method', function () {
+                    var model;
+                    beforeEach(function () {
+                        model = new Backbone.Model();
                     });
-                    testView.subs
-                        .add('testTypeA', { foo: 'bar' })
-                        .add('testTypeA', { foo: 'baz' })
-                        .add('testTypeA', { testOpt: 'B' });
-                    expect(testView.subs.get('testTypeA').length).toBe(3);
-                    expect(testView.subs.get('testTypeA')[0].options.testOpt).toBe('A');
-                    expect(testView.subs.get('testTypeA')[1].options.testOpt).toBe('A');
-                    expect(testView.subs.get('testTypeA')[0].options.foo).toBe('bar');
-                    expect(testView.subs.get('testTypeA')[1].options.foo).toBe('baz');
-                    expect(testView.subs.get('testTypeA')[2].options.testOpt).toBe('B');
-                    testView.subs.add('testTypeB');
-                    expect(testView.subs.get('testTypeB') instanceof Backbone.View).toBeTruthy();
+                    it('should instantiate a subview from a config and add it (', function () {
+                        var created = testView.subs.create('row', { model: model });
+                        expect(testView.subs.subViews[0].model).toBe(model);
+                        expect(testView.subs.subViews[0]).toBe(created);
+                        expect(testView.subs.get('row')[0]).toBe(created);
+                        testView.subs.create('headingRow', { flag: 'test-flag' });
+                        expect(testView.subs.subViews[1].options.flag).toBe('test-flag');
+                        testView.subs.create('headingRow', { cols: ['foo'], flag: 'error' });
+                        expect(testView.subs.subViews[1].options.flag).toBe('test-flag');
+                        expect(testView.subs.subViews.length).toBe(2);
+                        created = testView.subs.create('row');
+                        expect(testView.subs.last()).toBe(created);
+                        expect(testView.subs.subViews.length).toBe(3);
+                    });
+                });
+
+                describe('with the "addInstance" method', function () {
+                    it('should allow you to add an existing instance to the subviews and associate it with a key', function () {
+                        var view = new Backbone.BaseView(),
+                            view2 = new Backbone.BaseView();
+                        testView.subs.addInstance('testType', view);
+                        expect(testView.subs.get('testType')[0]).toBe(view);
+                        testView.subs.addInstance('testType', view2);
+                        expect(testView.subs.get('testType')[1]).toBe(view2);
+                        testView.subs.addInstance('headingRow', new HeadingRowView());
+                        expect(testView.subs.get('headingRow') instanceof HeadingRowView).toBe(true);
+                    });
+                    it('should allow you to add existing instance as a subview without a key', function () {
+                        var view = new Backbone.BaseView();
+                        testView.subs.addInstance(view);
+                        expect(testView.subs.subViews.length).toBe(1);
+                        expect(testView.subs.subViews[0]).toBe(view);
+                    });
+                });
+
+                describe('with "createFromKeys"', function () {
+                    var init = function (options) {
+                            this.options = options;
+                        },
+                        ConstructA = Backbone.BaseView.extend({ initialize: init }),
+                        ConstructB = Backbone.BaseView.extend({ initialize: init });
+                    beforeEach(function () {
+                        testView.subs.addConfig('a', {
+                            construct: ConstructA,
+                            options: { foo: 1 }
+                        });
+                        testView.subs.addConfig('b', {
+                            construct: ConstructB,
+                            options: { foo: 2 },
+                            singleton: true
+                        });
+                    });
+                    it('should allow you to add subviews predefined in configs with an array of keys', function () {
+                        testView.subs.createFromKeys(['a', 'b']);
+                        expect(testView.subs.get('a')[0] instanceof ConstructA).toBe(true);
+                        expect(testView.subs.get('b') instanceof ConstructB).toBe(true);
+                    });
+                    it('should allow you to pass a map of key-options to instantiate view with additional keys', function () {
+                        testView.subs.createFromKeys({ a : { bar: 'test' }, b : { bar: 'test-again' } });
+                        expect(testView.subs.get('a')[0] instanceof ConstructA).toBe(true);
+                        expect(testView.subs.get('b') instanceof ConstructB).toBe(true);
+                        expect(testView.subs.get('a')[0].options.foo).toBe(1);
+                        expect(testView.subs.get('a')[0].options.bar).toBe('test');
+                        expect(testView.subs.get('b').options.foo).toBe(2);
+                        expect(testView.subs.get('b').options.bar).toBe('test-again');
+                    });
+                });
+
+                describe('with "setSingleton"', function () {
+                    it('should allow you to set a singleton instance for a type that isn\'t predefined', function () {
+                        var view = new Backbone.BaseView();
+                        testView.subs.setSingleton('singletonType', view);
+                        expect(testView.subs.get('singletonType')).toBe(view);
+                        testView.subs.setSingleton('singletonType', new Backbone.BaseView());
+                        expect(testView.subs.get('singletonType')).toBe(view);
+                    });
+                });
+
+                describe('with "overrideSingleton"', function () {
+                    it('should allow you to override an existing singleton instance for a type that isn\'t predefined', function () {
+                        var view = new Backbone.BaseView(),
+                            view2  = new Backbone.BaseView();
+                        testView.subs.overrideSingleton('singletonType', view);
+                        expect(testView.subs.get('singletonType')).toBe(view);
+                        testView.subs.overrideSingleton('singletonType', view2);
+                        expect(testView.subs.get('singletonType')).toBe(view2);
+                    });
                 });
 
                 it('should allow switching the default state of subviews types to being singletons', function () {
@@ -304,6 +402,7 @@
                     expect(toString.call(testView.subs.getByType('headingRow'))).toBe('[object Array]');
                     expect(testView.subs.getByType('row').length).toBe(testView.collection.length);
                 });
+
             });
 
             describe('Removing Subviews', function () {

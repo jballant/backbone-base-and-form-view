@@ -223,7 +223,13 @@
          * config. If the config specifies that the
          * view is a singleton an a view for that
          * key already exists, it will not be added.
-         * @param {string|number}
+         * @param {string|number} key
+         * @param {Backbone.View} instance
+         */
+        /**
+         * Add a subview instance, without a key.
+         * Since it doesn't have a key, it will
+         * simply be added to the subViews array.
          * @param {Backbone.View} instance
          */
         addInstance: function (key, instance) {
@@ -232,6 +238,7 @@
                 key = undefined;
             }
             this._addInstance(key, instance);
+            return this;
         },
         /**
          * Instanciates a view from it's config
@@ -242,7 +249,7 @@
          * @return {Backbone.View}
          *         The new view instance
          */
-        instantiate: function (key, options) {
+        create: function (key, options) {
             return this._init(key, options);
         },
         /**
@@ -270,7 +277,7 @@
          * @param {Object} map
          * @return {SubViewManager}
          */
-        instantiateFromKeys: function (keys, options) {
+        createFromKeys: function (keys, options) {
             var keysIsArr = _.isArray(keys),
                 views = [];
             each(keys, function (key, index) {
