@@ -29,6 +29,7 @@
         CheckListView,
         CheckBoxView,
         FieldSetView,
+        CollectionFormRowView,
         CollectionFieldSetView,
         // Local copies
         Model = Backbone.Model,
@@ -42,6 +43,7 @@
         isArray = _.isArray,
         isString = _.isString,
         result = _.result,
+        toStr = String,
 
         // Form Disable Mixin -- added to FormView prototype's
         // in order to allow disabling and enabling fields.
@@ -258,6 +260,23 @@
             return this;
         },
         /**
+         * The subViewConfig is the schema fleshed by the 
+         * _setupSubViewConfig method. Set the subViewConfig
+         * property and register the config with the subview
+         * manager. The property autoInitSingletons on the
+         * SubViewManager is true by default with a FormView
+         * and that will instantiate the SubViews when the
+         * config is added.
+         * @memberOf Backbone.FormView#
+         * @param {object} config
+         * @return {Backbone.FormView}
+         */
+        setSubViewConfig: function (config) {
+            this.subViewConfig = config;
+            this.subs.addConfig(config);
+            return this;
+        },
+        /**
          * Creates the subViewConfig property, derived from the
          * form's schema. The subViewConfig is like the schema
          * but fleshed out for the baseView's subView manager.
@@ -265,8 +284,8 @@
          * @return {Backbone.FormView}
          */
         setupFields: function () {
-            this.subViewConfig = this._setupSubViewConfig(result(this, 'schema'));
-            this.subs.addConfig(this.subViewConfig);
+            var config = this._setupSubViewConfig(result(this, 'schema'));
+            this.setSubViewConfig(config);
             this._hasSetupFields = true;
             return this;
         },
@@ -386,15 +405,16 @@
     // CollectionFormView
 
     // CollectionFormRowView - used by CollectionFormView for each row
-    Backbone.CollectionFormRowView = Backbone.FormView.extend({
+    CollectionFormRowView = Backbone.CollectionFormRowView = Backbone.FormView.extend({
         className: 'form-field-row controls-row',
         tagName: 'div',
         getFieldPrefix: function () {
-            var parentPref = '';
+            var parentPref = '',
+                index = this.rowIndex();
             if (this.parentView && this.parentView.getFieldPrefix) {
                 parentPref = this.parentView.getFieldPrefix(this) || '';
             }
-            return parentPref + this.options.index  + '-';
+            return parentPref + ((_.isNumber(index) && index > -1) ? index + '-' : '');
         },
         /**
          * Asks the parent collection form view to delete this row
@@ -465,30 +485,32 @@
         rowWrapper : '[data-rows]:first',
         template: _.template('<div data-rows=""></div>'),
         initialize: function (options) {
-            options = this.options = defaults(options || {}, this.options);
-            this.template = options.template || (isString(this.template) ? _.template(this.template) : this.template);
-            this.setupOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
-            this.rowOptions = options.rowOptions || this.rowOptions;
-            this.templateVars = options.templateVars || this.templateVars || {};
-            this._defaultTemplateVars = { label: options.label };
-            this.rowWrapper = options.rowWrapper || this.rowWrapper;
+            var self = this,
+                rowOpts;
+            options = self.options = defaults(options || {}, self.options);
+            self.template = options.template || (isString(self.template) ? _.template(self.template) : self.template);
+            self.setupOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : self.setupOnInit;
+            self.rowOptions = options.rowOptions || self.rowOptions;
+            self.templateVars = options.templateVars || self.templateVars || {};
+            self._defaultTemplateVars = { label: options.label };
+            self.rowWrapper = options.rowWrapper || self.rowWrapper;
             if (options.rowConfig) {
-                this.rowConfig = options.rowConfig;
-                this.rowConfig = clone(result(this, 'rowConfig')) || {};
-                this.rowConfig.options = this.rowConfig.options ? clone(this.rowConfig.options) : {};
+                self.rowConfig = options.rowConfig;
+                self.rowConfig = clone(result(self, 'rowConfig')) || {};
+                self.rowConfig.options = self.rowConfig.options ? clone(self.rowConfig.options) : {};
             } else {
-                this.rowConfig = clone(result(this, 'rowConfig')) || {
+                self.rowConfig = clone(result(self, 'rowConfig')) || {
                     singleton: false,
                     construct: Backbone.CollectionFormRowView
                 };
-                var rowOpts = clone(result(this, 'rowOptions'));
-                this.rowConfig.options = rowOpts || this.rowConfig.options || {};
-                this.setRowSchema(options.rowSchema || this.rowSchema || this.rowConfig.options.schema);
+                rowOpts = clone(result(self, 'rowOptions'));
+                self.rowConfig.options = rowOpts || self.rowConfig.options || {};
+                self.setRowSchema(options.rowSchema || self.rowSchema || self.rowConfig.options.schema);
             }
-            this.rowConfig.location = this.rowWrapper;
-            this.subs.addConfig('row', this.rowConfig);
-            if (this.setupOnInit) {
-                this.setupRows();
+            self.rowConfig.location = self.rowWrapper;
+            self.subs.addConfig('row', self.rowConfig);
+            if (self.setupOnInit) {
+                self.setupRows();
             }
         },
         /**
@@ -654,10 +676,10 @@
         '<% if (obj.label) { %><label class="control-label" ' +
             '<% if (obj.inputId) { %> for="<%= obj.inputId %>" <% } %> >' +
             '<%= obj.label %></label><% } %>' +
-            '<div class="controls" data-input="">' +
+            '<div class="<%= obj.inputWrapperClass || \'controls\' %>" data-input="">' +
             '</div>' +
             '<div class="controls">' +
-            '<div class="text-error" data-error=""></div>' +
+            '<div class="<%= obj.errorClass || \'text-error\' %>" data-error=""></div>' +
             '<% if (obj.help) { %><span class="help-block"><%= obj.help %></span><% } %>' +
             '</div>';
 
@@ -773,7 +795,7 @@
          */
         getAttrs: function () {
             var attrs = {};
-            attrs[this.fieldName] = this.getValue();
+            attrs[this.fieldName] = this.getValueForSet();
             return attrs;
         },
         /**
@@ -800,12 +822,36 @@
             return Backbone.$.trim(this.getInputEl().val());
         },
         /**
+         * Override this function if additional
+         * logic needs to be perfomred to convert
+         * the value of the input into what is
+         * set on the model.
+         * @memberOf Backbone.fields.FieldView#
+         * @return {String|Boolean|Array|Number|Object}
+         */
+        getValueForSet: function () {
+            return this.getValue();
+        },
+        /**
          * Gets the value of the field as it appears in the model
          * @memberOf Backbone.fields.FieldView#
          * @return {String|Boolean|Array|Number|Object}
          */
         getModelVal: function () {
             return this.model.get(this.fieldName);
+        },
+        /**
+         * Gets the value from the model as it should be
+         * set on the input. By default it's the same
+         * as produced by getModelValue. Override this
+         * function if you want to convert the model 
+         * value to something that should be set on the 
+         * input.
+         * @memberOf Backbone.fields.FieldView#
+         * @return {String|Boolean|Array|Number|Object}
+         */
+        getValueForInput: function () {
+            return this.getModelVal();
         },
         /**
          * Renders the basic shell template for the form field and then
@@ -825,6 +871,7 @@
          * @return {Backbone.fields.FieldView}
          */
         renderWrapper: function (vars) {
+            this.isDisabled = null;
             this.$el.html(this.template(vars || this._getTemplateVars()));
             return this;
         },
@@ -838,14 +885,14 @@
             var $input,
                 id = this.inputId,
                 attrs =  this.addId ? { id : id, name: id } : {},
-                modelVal = this.getModelVal();
+                valForInput = this.getValueForInput();
             $input = Backbone.$('<' + this.elementType + '>');
             if (this.elementType === 'input') { attrs.type = 'text'; }
             if (this.placeholder) { attrs.placeholder = this.placeholder; }
             $input.attr(extend(attrs, this.inputAttrs));
             if (this.inputClass) { $input.attr('class', this.inputClass); }
             this.getInputWrapper().html($input);
-            if (modelVal) { $input.val(modelVal); }
+            if (valForInput) { $input.val(valForInput); }
             return this;
         },
         /**
@@ -973,7 +1020,7 @@
         tagName: 'div',
         events : function () {
             var events = {};
-            events['click ' + this.elementType] = 'setModelAttrs';
+            events['click ' + this.elementType] = 'onUserUpdate';
             return events;
         },
         type: 'radio-list',
@@ -998,7 +1045,7 @@
          * @return {boolean}
          */
         isSelected: function (key) {
-            return (this.getModelVal() + '' === '' + key);
+            return (toStr(this.getValueForInput()) === toStr(key));
         },
         /**
          * Renders the radio inputs and appends them to the input wrapper.
@@ -1096,7 +1143,7 @@
         elementType: 'select',
         events : function () {
             var events = {};
-            events['change ' + this.elementType] = 'setModelAttrs';
+            events['change ' + this.elementType] = 'onUserUpdate';
             return events;
         },
         initialize: function (options) {
@@ -1116,7 +1163,7 @@
         isSelected: function (key) {
             var modelVal = this.getModelVal();
             modelVal = this.multiple ? modelVal : [modelVal];
-            return (_.indexOf(_.map(modelVal, String), key + '') !== -1);
+            return (_.indexOf(_.map(modelVal, toStr), toStr(key)) > -1);
         },
         /**
          * Renders the select element and the options
@@ -1233,6 +1280,12 @@
             });
             return attrs;
         },
+        /**
+         * Return the model value for a particular
+         * possibleVals key.
+         * @param  {string} key
+         * @return {*}
+         */
         getModelVal: function (key) {
             return this.model.get(key);
         },
@@ -1321,7 +1374,7 @@
         unCheckedVal: false,
         events: function () {
             var events = {};
-            events['click ' + this.elementType] = 'setModelAttrs';
+            events['click ' + this.elementType] = 'onUserUpdate';
             return events;
         },
         initialize: function (options) {
@@ -1333,7 +1386,10 @@
             CheckBoxView.__super__.initialize.call(this, options);
         },
         getValue: function () {
-            if (this.getInputEl().prop('checked')) {
+            return this.getInputEl().prop('checked');
+        },
+        getValueForSet: function () {
+            if (this.getValue()) {
                 return this.checkedVal;
             }
             return this.unCheckedVal;
