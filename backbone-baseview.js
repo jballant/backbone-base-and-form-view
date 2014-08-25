@@ -35,7 +35,6 @@
         each = _.each,
         isFunction = _.isFunction,
         isObject = _.isObject,
-        isString = _.isString,
         View = Backbone.View,
         BaseView,
         /**
@@ -275,7 +274,10 @@
          * 
          * @memberOf SubViewManager#
          * @param {Object} map
-         * @return {SubViewManager}
+         * @return {Backbone.View[]}
+         *         An array of the created subviews
+         *         in the same position as the keys
+         *         param
          */
         createFromKeys: function (keys, options) {
             var keysIsArr = _.isArray(keys),
@@ -287,6 +289,24 @@
                     views.push(this._init(key, options));
                 }
             }, this);
+            return views;
+        },
+        /**
+         * Instantiate all singletons defined in the
+         * config.
+         * @param  {object} options Additional options
+         * @return {Backbone.View[]}
+         *         An array of the created subviews
+         *         in the same position as the keys
+         *         param
+         */
+        createSingletons: function (options) {
+            var views = [], key;
+            for (key in this.config) {
+                if (this.config.hasOwnProperty(key) && this.config[key].singleton) {
+                    views.push(this._init(key, options));
+                }
+            }
             return views;
         },
         /**
@@ -730,7 +750,7 @@
 
             if (!self.config[key] && subViews[0].constructor) {
                 self.config[key] = {
-                    options : subViews[0].options || {},
+                    options : {},
                     construct : subViews[0].constructor,
                     singleton : singleton
                 };
