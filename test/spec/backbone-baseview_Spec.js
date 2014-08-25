@@ -23,6 +23,12 @@
 
             toString = Object.prototype.toString,
 
+            ViewWithOpts = Backbone.BaseView.extend({
+                initialize: function (options) {
+                    this.options = options;
+                }
+            }),
+
             TableView = Backbone.BaseView.extend({
                 tagName: 'table',
                 template: _.template('<thead></thead><tbody></tbody>'),
@@ -341,6 +347,41 @@
                         expect(testView.subs.get('singletonType')).toBe(view);
                         testView.subs.overrideSingleton('singletonType', view2);
                         expect(testView.subs.get('singletonType')).toBe(view2);
+                    });
+                });
+
+                describe('with "createSingletons" method', function () {
+                    var view;
+                    beforeEach(function () {
+                        view = new Backbone.BaseView();
+                        view.subs.addConfig({
+                            singA: {
+                                construct: ViewWithOpts,
+                                singleton: true,
+                                options: { foo: 1 }
+                            },
+                            notThisOne: { construct: Backbone.BaseView },
+                            singB: {
+                                construct: ViewWithOpts,
+                                options: { bar: 2 },
+                                singleton: true
+                            }
+                        });
+                    });
+                    it('should instantiate all singletons', function () {
+                        view.subs.createSingletons();
+                        expect(view.subs.get('singA')).toBeDefined();
+                        expect(view.subs.get('singA').options.foo).toBe(1);
+                        expect(view.subs.get('singB')).toBeDefined();
+                        expect(view.subs.get('notThisOne')).not.toBeDefined();
+                    });
+                    it('should pass additional options from the first param if they are provided', function () {
+                        view.subs.createSingletons({ bar: 'boop', baz: 'testing' });
+                        expect(view.subs.get('singA').options.foo).toBe(1);
+                        expect(view.subs.get('singA').options.baz).toBe('testing');
+                        expect(view.subs.get('singA').options.bar).toBe('boop');
+                        expect(view.subs.get('singB').options.bar).toBe('boop');
+                        expect(view.subs.get('singB').options.baz).toBe('testing');
                     });
                 });
 
