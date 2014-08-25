@@ -514,8 +514,8 @@
                         expect(testField.$(testField.elementType).attr('maxlength')).toBe(String(attrs.maxlength));
                         expect(testField.$(testField.elementType).attr('data-test-attr')).toBe(attrs['data-test-attr']);
                     });
-                    it('should set the value of the input to be the return value of the getModelVal method', function () {
-                        spyOn(testField, 'getModelVal').and.callFake(function () {
+                    it('should set the value of the input to be the return value of the "getValueForInput" method', function () {
+                        spyOn(testField, 'getValueForInput').and.callFake(function () {
                             return 'test input val';
                         });
                         testField.renderInput();
@@ -567,7 +567,21 @@
                     });
                 });
             });
-            describe("Setting model attribues from the input value", function () {
+            describe('"getValueForInput" method', function () {
+                beforeEach(function () {
+                    testField.render();
+                });
+                it('should call "getModelVal" and pass on the result by default', function () {
+                    var modelVal = testModel.get(testField.fieldName),
+                        valForInput;
+                    expect(testField.getModelVal()).toBe(modelVal);
+                    spyOn(testField, 'getModelVal').and.callThrough();
+                    valForInput = testField.getValueForInput();
+                    expect(testField.getModelVal).toHaveBeenCalled();
+                    expect(valForInput).toBe(modelVal);
+                });
+            })
+            describe("Setting model attributes from the input value", function () {
                 var testVal = 'Test Value';
                 beforeEach(function () {
                     testField.render();
@@ -580,6 +594,14 @@
                     it('should trim whitespace from the beginning and end of the input value', function () {
                         testField.$(testField.elementType).val(' foo bar ');
                         expect(testField.getValue()).toBe('foo bar');
+                    });
+                });
+                describe('"getValueForSet" method', function () {
+                    it('should invoke getValue and pass on it\'s result by default', function () {
+                        spyOn(testField, 'getValue').and.callThrough();
+                        var val = testField.getValueForSet();
+                        expect(testField.getValue).toHaveBeenCalled();
+                        expect(val).toBe(testField.getValue());
                     });
                 });
                 describe('"getAttrs" method', function () {
@@ -929,7 +951,7 @@
                     expect(testField.$(testField.elementType).prop('checked')).toBe(false);
                 });
             });
-            describe('"getValue" method', function () {
+            describe('"getValueForSet" method', function () {
                 beforeEach(function () {
                     testField.render();
                 });
@@ -937,18 +959,18 @@
                     testField.checkedVal = 'Yes';
                     testField.unCheckedVal = 'No';
                     testField.render();
-                    expect(testField.getValue()).toBe(testField.unCheckedVal);
+                    expect(testField.getValueForSet()).toBe(testField.unCheckedVal);
                     testField.$('input').prop('checked', true);
-                    expect(testField.getValue()).toBe(testField.checkedVal);
+                    expect(testField.getValueForSet()).toBe(testField.checkedVal);
                     testField.$('input').prop('checked', false);
-                    expect(testField.getValue()).toBe(testField.unCheckedVal);
+                    expect(testField.getValueForSet()).toBe(testField.unCheckedVal);
                 });
                 it('should be invoked when click event occurs on the input', function () {
                     $('body').append('<div id="page" style="display: none;"></div>');
                     $('#page').append(testField.render().$el);
-                    spyOn(testField, 'getValue').and.callThrough();
+                    spyOn(testField, 'getValueForSet').and.callThrough();
                     testField.$('input').trigger('click');
-                    expect(testField.getValue).toHaveBeenCalled();
+                    expect(testField.getValueForSet).toHaveBeenCalled();
                     expect(testField.model.get(testField.fieldName)).toBe(testField.checkedVal);
                     $('#page').remove();
                 });
