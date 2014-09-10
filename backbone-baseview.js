@@ -1013,14 +1013,16 @@
          */
         triggerBubble: function (event) {
             var args = slice.call(arguments, 1),
+                stopPropogation,
                 anscestor;
             args.unshift(event);
             args.push(this);
             anscestor = this;
             while (anscestor) {
                 anscestor.trigger.apply(anscestor, args);
-                if (anscestor._stopPropogation[event]) {
-                    anscestor._stopPropogation[event] = false;
+                stopPropogation = anscestor._stopPropogation;
+                if (stopPropogation && stopPropogation[event]) {
+                    stopPropogation[event] = false;
                     return this;
                 }
                 anscestor = anscestor.parentView;
@@ -1045,12 +1047,14 @@
                     var i = -1,
                         len = subViews.length,
                         subSubs,
+                        stopPropogation,
                         descend;
                     while (++i < len) {
                         descend = true;
                         subViews[i].trigger.apply(subViews[i], args);
-                        if (subViews[i]._stopPropogation[event]) {
-                            subViews[i]._stopPropogation[event] = false;
+                        stopPropogation = subViews[i]._stopPropogation;
+                        if (stopPropogation && stopPropogation[event]) {
+                            stopPropogation[event] = false;
                             descend = false;
                         }
                         subSubs = subViews[i].subViews;
