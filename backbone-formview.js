@@ -814,7 +814,7 @@
             return this;
         },
         /**
-         * Get the value of the form field.
+         * Get the value of the form field input.
          * @memberOf Backbone.fields.FieldView#
          * @return {String|Boolean|Array|Number|Object}
          */
