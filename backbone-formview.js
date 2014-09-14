@@ -559,26 +559,21 @@
          * property constructor. The model(s) will then be tied
          * to the new row(s).
          * @memberOf Backbone.CollectionFormView#
-         * @param {Backbone.Model|Backbone.Model[]} [models]
-         *      A model or array of models to add rows for.
+         * @param  {Backbone.Model} 
+         *         model A model to add a row for
          * @return {Backbone.CollectionFormView}
          */
-        addRow: function (models) {
+        addRow: function (model) {
             var added;
-            models = models || new this.collection.model();
-            if (!isArray(models)) {
-                models = [models];
-            }
-            added = this.collection.add(models);
+            model = model || new this.collection.model();
+            added = this.collection.add(model);
             // Backbone 1.0.0 does not return the added models,
             // so we will not set the models var to the return val
             if (!(added instanceof Backbone.Collection)) {
-                models = added;
+                model = added;
             }
-            each(models, function (model) {
-                this._addRow(model).subs.last().render().$el
-                    .appendTo(this.getRowWrapper());
-            }, this);
+            this._addRow(model).subs.newest.render().$el
+                .appendTo(this.getRowWrapper());
             return this;
         },
         /**
@@ -641,8 +636,7 @@
         _addRow: function (model) {
             var opts = this._getRowOptions(model),
                 row = this.subs
-                    .add('row', opts)
-                    .last();
+                    .create('row', opts);
             row.setSchema(this.rowSchema).setupFields();
             return this;
         },

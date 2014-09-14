@@ -296,6 +296,30 @@
                     });
                 });
 
+                describe('with the "addInstances" method', function () {
+                    it('should allow you to add existing instances as an array and associate them with a key', function () {
+                        var view = new Backbone.BaseView(),
+                            view2 = new Backbone.BaseView();
+                        testView.subs.addInstances('testType', [view, view2]);
+                        expect(testView.subs.get('testType')[0]).toBe(view);
+                        expect(testView.subs.get('testType')[1]).toBe(view2);
+                    });
+                    it('should only add one instance if the key is configured as a singleton', function () {
+                        var view = new HeadingRowView(),
+                            view2 = new HeadingRowView();
+                        testView.subs.addInstances('headingRow', [view, view2]);
+                        expect(testView.subs.get('headingRow').cid).toBe(view.cid);
+                    });
+                    it('should allow you to add existing instances as subviews without a key', function () {
+                        var view = new Backbone.BaseView(),
+                            view2 = new Backbone.BaseView();
+                        testView.subs.addInstances([view, view2]);
+                        expect(testView.subs.subViews.length).toBe(2);
+                        expect(testView.subs.subViews[0].cid).toBe(view.cid);
+                        expect(testView.subs.subViews[1].cid).toBe(view2.cid);
+                    });
+                });
+
                 describe('with "createFromKeys"', function () {
                     var init = function (options) {
                             this.options = options;
