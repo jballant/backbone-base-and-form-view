@@ -232,7 +232,7 @@
             options = this.options = defaults(options || {}, this.options);
             var schema = options.schema || this.schema,
                 setUpOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
-            this.subs.autoInitSingletons = true;
+            // this.subs.autoInitSingletons = true;
             extend(this, {
                 templateVars : options.templateVars || this.templateVars || {},
                 setupOnInit : options.setupOnInit || this.setupOnInit,
@@ -277,6 +277,15 @@
             return this;
         },
         /**
+         * Should return true if fields have been
+         * set up at least once.
+         * @memberOf Backbone.FormView#
+         * @return {Boolean}
+         */
+        hasSetupFields: function () {
+            return this._hasSetupFields;
+        },
+        /**
          * Creates the subViewConfig property, derived from the
          * form's schema. The subViewConfig is like the schema
          * but fleshed out for the baseView's subView manager.
@@ -286,7 +295,8 @@
         setupFields: function () {
             var config = this._setupSubViewConfig(result(this, 'schema'));
             this.setSubViewConfig(config);
-            this._hasSetupFields = true;
+            this.subs.createSingletons(); // Instantiate the fields from the config
+            this._setHasSetupFields(true);
             return this;
         },
         /**
@@ -329,7 +339,7 @@
             var order = this.options.fieldOrder || this.fieldOrder;
 
             this.subs.detachElems();
-            if (!this._hasSetupFields) {
+            if (!this.hasSetupFields()) {
                 this.setupFields();
             }
             this.$el.html(this.template(this._getTemplateVars()));
@@ -343,6 +353,10 @@
                 this.subs.renderAppend();
             }
 
+            return this;
+        },
+        _setHasSetupFields: function (hasSetupFields) {
+            this._hasSetupFields = hasSetupFields;
             return this;
         },
         _setupSubViewConfig: function (baseSchema, model, collection) {
@@ -635,8 +649,7 @@
         },
         _addRow: function (model) {
             var opts = this._getRowOptions(model),
-                row = this.subs
-                    .create('row', opts);
+                row = this.subs.create('row', opts);
             row.setSchema(this.rowSchema).setupFields();
             return this;
         },
@@ -982,7 +995,7 @@
     });
 
     // ====================================================
-    // FormRadioListView
+    // RadioListView
 
     /**
      * Like Backbone.fields.FieldView, except it creates a list of radio buttons. Designed to

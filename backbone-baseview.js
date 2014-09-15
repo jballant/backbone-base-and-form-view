@@ -777,11 +777,12 @@
 
             len = subViews.length;
 
-            if (!self.config[key] && subViews[0].constructor) {
-                self.config[key] = {
-                    construct : subViews[0].constructor,
-                    singleton : singleton
-                };
+            if (!self.config[key]) {
+                self.config[key] = { singleton: singleton };
+            }
+
+            if (!self.config[key].construct && subViews[0].constructor) {
+                self.config[key].construct = subViews[0].constructor;
             }
 
             singleton = (singleton === undefined) ? self.config[key].singleton : singleton;
@@ -792,7 +793,10 @@
             return self;
         },
         _addConfig : function (config, name) {
-            this.config[name] = config;
+            if (!config || !name) {
+                return this;
+            }
+            this.config[name] = _.extend(this.config[name] || {}, config);
             if (this.autoInitSingletons && config.singleton) {
                 return this._init(name);
             }

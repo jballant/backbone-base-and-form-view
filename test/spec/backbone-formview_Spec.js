@@ -363,6 +363,19 @@
                     expect(testForm.subs.get('row')[3].model.get('foo')).toBe(testVal);
                 });
             });
+
+            describe('"getRows" method', function () {
+                it('should return an array of all of the "row" subviews', function () {
+                    testForm.setupRows();
+                    expect(testForm.getRows().length).toBe(3);
+                    testForm.addRow({
+                        foo: 'bar'
+                    });
+                    expect(testForm.getRows().length).toBe(4);
+                    expect(testForm.getRows()[3].model.get('foo')).toBe('bar');
+                });
+            });
+
             describe('"deleteRow" method', function () {
                 beforeEach(function () {
                     testForm.setupRows();

@@ -24,9 +24,13 @@ This allows you to focus only on the functionality of the ColView and it's UI in
 
 This means you can write some nice semantic code like this:
 
- ```tableView.subs.add('row', { model: new RowModel(); });```
+ ```javascript
+ tableView.subs.create('row', { model: new RowModel() });
+ ```
 
-```tableView.subs.triggerDescend('collapseDetails'); // Triggers an event on all subviews and their subviews```
+```javascript
+tableView.subs.triggerDescend('collapseDetails'); // Triggers an event on all subviews and their subviews
+```
 
 This allows you to write views that can be used in many contexts. In a table scenario, you can have a table cell trigger an event that bubbles up to notify the row when an event should affect the entire row, and then the row view can handle this accordingly, without having to write unique logic to 
 
@@ -75,7 +79,7 @@ A subview should get rendered when the parent BaseView is rendered, but the subv
 
 ### Adding a Subview
 
-To add a subview is through using the SubViewManager's ('.subs') ```add``` method. There are several ways you can use this method.
+You can add an existing instance as a subview using the SubViewManager's ('.subs') ```addInstance``` method:
 
 * **Adding an instance directly**
 
@@ -83,16 +87,16 @@ To add a subview is through using the SubViewManager's ('.subs') ```add``` metho
 var MySubView = Backbone.BaseView.extend();
 var MyView = Backbone.BaseView.extend({
        initialize: function () {
-          this.subs.add(new MySubView());
+          this.subs.addInstance(new MySubView());
        }
     });
 var testView = new MyView();
 console.log(testView.subViews); // Logs an array with one MySubview instance
 ```
 
-This is probably fine if you never need to refer to this subview by a type. If you provide a string as the first parameter, this serves as a key to refer to the subview by. This would look like ``this.subs.add('mySubView', new MySubView())``. You can continue adding subviews on the same type string (they would be grouped in an array).
+This is probably fine if you never need to refer to this subview by a type. If you provide a string as the first parameter, this serves as a key to refer to the subview by. This would look like ``this.subs.addInstance('mySubView', new MySubView())``. You can continue adding subviews on the same type string (they would be grouped in an array).
 
-* **Adding a config first**, and then instantiating from that config. A config tells the SubViewManager some standard information about the subview type.
+* **Adding a config first**, and then instantiating from that config with the 'create' method. The create method will also add the subview instance for you. A config tells the SubViewManager some standard information about the subview type.
 
 ```javascript
 var MySubView = Backbone.BaseView.extend();
@@ -100,14 +104,14 @@ var MyView = Backbone.BaseView.extend({
      initialize: function () {
         var myModel = new Backbone.Model();
         this.subs.addConfig('mySubView', {
-             construct: 'MySubView',
+             construct: MySubView,
              singleton: true,
              location: '.mysub-wrapper'
              options: {
                   // 'default' options to pass to the subview on init
              }
         });
-        this.subs.add('mySubView', {
+        this.subs.create('mySubView', {
              model: myModel // Extra options to add on top of the default options
         });
     }
@@ -121,7 +125,7 @@ The config above has several properties that are important to know:
    * location : When you render the subviews, the SubViewManager makes it easier to place them by allowing you to specify in a config where a subview of this type should be appended to. This can be a jQuery selector, a 
    jQuery object, or a function that will be invoked after rendering the subview that returns an instance
    of jQuery.
-   * options : A default set of options to pass to the constructor. When you instantiate this object later with 'add' you can add additional options.
+   * options : A default set of options to pass to the constructor. When you instantiate this object later with 'create' you can add additional options.
 
 With the example above, you could have also added a ```subViewConfig``` property to the MyView definition at the top, which in this example would be an object with one key value pair, with the key being 'mySubView' (the name of the subview type you want to define) and the value being the config object for that type.
 
@@ -131,7 +135,7 @@ Now that you have created a subview, you might want to actually use it some poin
 
     testView.subs.get('mySubView'); // Returns array of MySubView instances
 
-This would return an array, because Backbone.BaseView allows you to add multiple views on a single key. If you want to add a view and ensure that only one of this kind of subview can exist on that key, that's referred to as a *singleton*. To specify that a view is a singleton when you add it, pass true as the second param like this ``this.subs.add('mySubView', new MySubView(), true);``. If most or all of your subviews will be singletons, set ```singletonSubviews``` to ```true``` in your view constructor's definition.
+This would return an array, because Backbone.BaseView allows you to add multiple views on a single key. If you want to add a view and ensure that only one of this kind of subview can exist on that key, that's referred to as a *singleton*. To specify that a view is a singleton when you add it, pass true as the second param like this ``this.subs.create('mySubView', new MySubView(), true);``. If most or all of your subviews will be singletons, set ```singletonSubviews``` to ```true``` in your view constructor's definition.
 
 Now that you have a singleton view, you can always get it easily by calling:
 
@@ -142,7 +146,7 @@ The ```.get``` method, will try to find a single instance first using the 'key' 
 **Getting a subview via a model** - If you pass a model to a subview when it's instantiated as an option, the subview manager makes it possible to retrieve the view using the model. This could be done as follows:
 
     var testModel = new Backbone.Model();
-    testView.subs.add('anotherSubView', new MySubView({ 
+    testView.subs.addInstance('anotherSubView', new MySubView({ 
         model: testModel
     }));
 
@@ -169,18 +173,17 @@ The ```.get``` method, will try to find a single instance first using the 'key' 
              construct: 'TypeBView',
              location: '.type-b-wrapper'
          });
-         testView.subs
-             .add('typeB', {
-                 model: model1
-             })
-             .add('typeB', {
-                 model: model2
-             })
-             .renderAppend(); 
+         testView.subs.create('typeB', {
+             model: model1
+         });
+         testView.subs.create('typeB', {
+             model: model2
+         });
+         testView.subs.renderAppend(); 
          // the SubViewManager looks in the testView.el element for an element that maches
          // the selector '.type-b-wrapper' and appends the typeB instances to that wrapper
 
-**NOTE:** Because ```renderAppend``` appends subviews to the locations you provide, you may need to clear out the base view's html first. If the parent view renders first using ```.$el.html``` to set the contents, you don't have to worry. Otherwise, you can pass the 'clearLocations' option to the render methods to clear all locations specified in configurations first: ```testView.subs.renderAppend({ clearLocations: true });```. Or, you can remove and recreate the subview using ```remove``` and ```add``` if you need a pristine view.
+**NOTE:** Because ```renderAppend``` appends subviews to the locations you provide, you may need to clear out the base view's html first. If the parent view renders first using ```.$el.html``` to set the contents, you don't have to worry. Otherwise, you can pass the 'clearLocations' option to the render methods to clear all locations specified in configurations first: ```testView.subs.renderAppend({ clearLocations: true });```. Or, you can remove and recreate the subview using ```remove``` and ```create``` if you need a pristine view.
 
 ### Features
 
