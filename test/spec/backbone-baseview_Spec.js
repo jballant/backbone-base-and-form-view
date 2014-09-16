@@ -77,7 +77,8 @@
                         singleton: true,
                         construct: 'Backbone.BaseView'
                     }
-                }
+                },
+                initialize: function (opts) { this.options = opts; }
             }),
 
             HeadingRowView = Backbone.BaseView.extend({
@@ -320,6 +321,22 @@
                     });
                 });
 
+                describe('with the "addInstancesWithMap" method', function () {
+                    it('should allow you to add existing instances for different keys using an object map', function () {
+                        var view = new Backbone.BaseView(),
+                            view2 = new Backbone.BaseView(),
+                            headingRow = new HeadingRowView();
+                        testView.subs.addInstancesWithMap({
+                            foo: view,
+                            bar: view2,
+                            headingRow: headingRow
+                        });
+                        expect(testView.subs.get('foo')[0].cid).toBe(view.cid);
+                        expect(testView.subs.get('bar')[0].cid).toBe(view2.cid);
+                        expect(testView.subs.get('headingRow').cid).toBe(headingRow.cid);
+                    });
+                });
+
                 describe('with "createFromKeys"', function () {
                     var init = function (options) {
                             this.options = options;
@@ -350,6 +367,17 @@
                         expect(testView.subs.get('a')[0].options.bar).toBe('test');
                         expect(testView.subs.get('b').options.foo).toBe(2);
                         expect(testView.subs.get('b').options.bar).toBe('test-again');
+                    });
+                });
+
+                describe('with "createWithMap"', function () {
+                    it('should create subviews from configured types with a map of key->options', function () {
+                        testView.subs.createWithMap({
+                            row: { foo: 1 },
+                            headingRow: { bar: 2 }
+                        });
+                        expect(testView.subs.get('row')[0].options.foo).toBe(1);
+                        expect(testView.subs.get('headingRow').options.bar).toBe(2);
                     });
                 });
 

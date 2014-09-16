@@ -270,6 +270,21 @@
             return this;
         },
         /**
+         * Add instances using an object that
+         * maps subview keys to the instances
+         * @param {object} map
+         * @return {SubViewManager}
+         */
+        addInstancesWithMap: function (map) {
+            var key;
+            for (key in map) {
+                if (map.hasOwnProperty(key)) {
+                    this.addInstance(key, map[key]);
+                }
+            }
+            return this;
+        },
+        /**
          * Instanciates a view from it's config
          * and adds additional options.
          * @memberOf SubViewManager#
@@ -325,19 +340,31 @@
          * Instantiate all singletons defined in the
          * config.
          * @param  {object} options Additional options
-         * @return {Backbone.View[]}
-         *         An array of the created subviews
-         *         in the same position as the keys
-         *         param
+         * @return {SubViewManager}
          */
         createSingletons: function (options) {
-            var views = [], key;
+            var key;
             for (key in this.config) {
                 if (this.config.hasOwnProperty(key) && this.config[key].singleton) {
-                    views.push(this._init(key, options));
+                    this._init(key, options);
                 }
             }
-            return views;
+            return this;
+        },
+        /**
+         * Create subviews with a map of configured 
+         * subview keys to additional options.
+         * @param  {object} map
+         * @return {SubViewManager}
+         */
+        createWithMap: function (map) {
+            var key;
+            for (key in map) {
+                if (map.hasOwnProperty(key)) {
+                    this.create(key, map[key]);
+                }
+            }
+            return this;
         },
         /**
          * Set a singleton instance if a singleton
