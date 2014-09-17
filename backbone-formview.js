@@ -495,7 +495,6 @@
     Backbone.CollectionFormView = Backbone.BaseView.extend({
         tagName: 'form',
         className: 'form',
-        rowTemplate: '',
         rowWrapper : '[data-rows]:first',
         template: _.template('<div data-rows=""></div>'),
         initialize: function (options) {
