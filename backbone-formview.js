@@ -568,7 +568,7 @@
             return $wrapper.first();
         },
         /**
-         * Add a row or row to the CollectionFormView. If you do not
+         * Add a row to the CollectionFormView. If you do not
          * pass a model, one will be created from the collection.model
          * property constructor. The model(s) will then be tied
          * to the new row(s).
@@ -900,6 +900,7 @@
             if (this.inputClass) { $input.attr('class', this.inputClass); }
             this.getInputWrapper().html($input);
             if (valForInput) { $input.val(valForInput); }
+            this.isDisabled = null;
             return this;
         },
         /**
