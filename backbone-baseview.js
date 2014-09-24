@@ -309,12 +309,16 @@
          * @param {Object} options
          *        Additional options to pass
          *        to each view on init
+         * @return {Backbone.View[]}
+         *        Array of newly created subviews
          */
         createFromKeys: function (keys, options) {
-            var views = [];
-            each(keys, function (key) {
-                views.push(this._init(key, options));
-            }, this);
+            var views = [],
+                len = keys.length,
+                i = -1;
+            while (++i < len) {
+                views.push(this._init(keys[i], options));
+            }
             return views;
         },
         /**
