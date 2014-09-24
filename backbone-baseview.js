@@ -310,29 +310,10 @@
          *        Additional options to pass
          *        to each view on init
          */
-        /**
-         * Given an object with the format
-         * { key: options }, instantiates your 
-         * subviews based on their configurations.
-         * The options in the object are passed
-         * as additional options on init.
-         * 
-         * @memberOf SubViewManager#
-         * @param {Object} map
-         * @return {Backbone.View[]}
-         *         An array of the created subviews
-         *         in the same position as the keys
-         *         param
-         */
         createFromKeys: function (keys, options) {
-            var keysIsArr = isArray(keys),
-                views = [];
-            each(keys, function (key, index) {
-                if (!keysIsArr && isObject(key) && !(key instanceof View)) {
-                    views.push(this._init(index, key));
-                } else {
-                    views.push(this._init(key, options));
-                }
+            var views = [];
+            each(keys, function (key) {
+                views.push(this._init(key, options));
             }, this);
             return views;
         },
@@ -361,7 +342,7 @@
             var key;
             for (key in map) {
                 if (map.hasOwnProperty(key)) {
-                    this.create(key, map[key]);
+                    this._init(key, map[key]);
                 }
             }
             return this;

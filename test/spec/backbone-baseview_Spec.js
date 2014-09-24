@@ -359,15 +359,20 @@
                         expect(testView.subs.get('a')[0] instanceof ConstructA).toBe(true);
                         expect(testView.subs.get('b') instanceof ConstructB).toBe(true);
                     });
-                    it('should allow you to pass a map of key-options to instantiate view with additional keys', function () {
-                        testView.subs.createFromKeys({ a : { bar: 'test' }, b : { bar: 'test-again' } });
-                        expect(testView.subs.get('a')[0] instanceof ConstructA).toBe(true);
-                        expect(testView.subs.get('b') instanceof ConstructB).toBe(true);
-                        expect(testView.subs.get('a')[0].options.foo).toBe(1);
-                        expect(testView.subs.get('a')[0].options.bar).toBe('test');
-                        expect(testView.subs.get('b').options.foo).toBe(2);
-                        expect(testView.subs.get('b').options.bar).toBe('test-again');
+                    it('should pass the second param as option to each created subview', function () {
+                        testView.subs.createFromKeys(['a', 'b'], { baz: 4 });
+                        expect(testView.subs.get('a')[0].options.baz).toBe(4);
+                        expect(testView.subs.get('b').options.baz).toBe(4);
                     });
+                    // it('should allow you to pass a map of key-options to instantiate view with additional keys', function () {
+                    //     testView.subs.createFromKeys({ a : { bar: 'test' }, b : { bar: 'test-again' } });
+                    //     expect(testView.subs.get('a')[0] instanceof ConstructA).toBe(true);
+                    //     expect(testView.subs.get('b') instanceof ConstructB).toBe(true);
+                    //     expect(testView.subs.get('a')[0].options.foo).toBe(1);
+                    //     expect(testView.subs.get('a')[0].options.bar).toBe('test');
+                    //     expect(testView.subs.get('b').options.foo).toBe(2);
+                    //     expect(testView.subs.get('b').options.bar).toBe('test-again');
+                    // });
                 });
 
                 describe('with "createWithMap"', function () {
