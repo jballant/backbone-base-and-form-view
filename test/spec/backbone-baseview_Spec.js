@@ -721,6 +721,54 @@
 
             });
 
+            describe('"setLocationForType" method', function () {
+                it('should set the location property of a subview config', function () {
+                    var view = new Backbone.BaseView(),
+                        Foo = Backbone.BaseView.extend(),
+                        Bar = Backbone.BaseView.extend();
+                    view.subs.addConfig('foo', {
+                        construct: Foo,
+                        singleton: true
+                    });
+                    view.subs.addConfig('bar', {
+                        construct: Bar
+                    });
+                    view.subs.setLocationForType('foo', '.foo-wr');
+                    view.subs.setLocationForType('bar', '.bar-wr');
+                    view.subs.setLocationForType('baz', '.baz-wr');
+                    expect(view.subs.config.foo.location).toBe('.foo-wr');
+                    expect(view.subs.config.foo.singleton).toBe(true);
+                    expect(view.subs.config.foo.construct).toBe(Foo);
+                    expect(view.subs.config.bar.location).toBe('.bar-wr');
+                    expect(view.subs.config.bar.singleton).toBeFalsy();
+                    expect(view.subs.config.bar.construct).toBe(Bar);
+                    expect(view.subs.config.baz.location).toBe('.baz-wr');
+                    expect(view.subs.config.baz.construct).toBeUndefined();
+                    expect(view.subs.config.baz.singleton).toBeFalsy();
+                });
+            });
+
+            describe('"useDefaultLocationSelectors" method', function () {
+                it('should set the location config for each subview type to a string based on the type', function () {
+                    var view = new Backbone.BaseView(),
+                        Foo = Backbone.BaseView.extend(),
+                        Bar = Backbone.BaseView.extend();
+                    view.subs.addConfig('foo', {
+                        construct: Foo,
+                        singleton: true
+                    });
+                    view.subs.addConfig('bar', {
+                        construct: Bar
+                    });
+                    view.subs.useDefaultLocationSelectors();
+                    expect(view.subs.config.foo.location).toBe('.foo-container');
+                    expect(view.subs.config.bar.location).toBe('.bar-container');
+                    view.subs.useDefaultLocationSelectors('Wrapper');
+                    expect(view.subs.config.foo.location).not.toBe('.fooWrapper');
+                    expect(view.subs.config.bar.location).not.toBe('.barWrapper');
+                });
+            });
+
         });
 
         describe('"bindViewEvents" method', function () {

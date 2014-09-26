@@ -285,7 +285,7 @@
             return this;
         },
         /**
-         * Instanciates a view from it's config
+         * Instantiates a view from it's config
          * and adds additional options.
          * @memberOf SubViewManager#
          * @param  {String} key
@@ -743,6 +743,43 @@
             each(confs, function (config) {
                 this.parent.$(config.location).html('');
             }, this);
+            return this;
+        },
+        /**
+         * Set a location for a subview type
+         * @memberOf SubViewManager#
+         * @param {string} type The subview type
+         * @param {$|HTMLElement|String} location
+         *        A location within the parent view
+         *        to place the subview in
+         * @return {SubViewManager}
+         */
+        setLocationForType: function (type, location) {
+            this._addConfig({ location: location }, type);
+            return this;
+        },
+        /**
+         * Generate a location selector for each 
+         * configured subview. Each subview type
+         * will have a location set based on the
+         * subview type. For example, the subview
+         * type 'header' would get the type
+         * '.header-container' (using the default
+         * suffix). 
+         * @memberOf SubViewManager#
+         * @param  {string} [suffix=-container]
+         *         The suffix to use for each location
+         *         selector.
+         * @return {SubViewManager}
+         */
+        useDefaultLocationSelectors: function (suffix) {
+            var type;
+            suffix = _.isString(suffix) ? suffix : '-container';
+            for (type in this.config) {
+                if (this.config.hasOwnProperty(type) && !this.config[type].location) {
+                    this.setLocationForType(type, '.' + type + suffix);
+                }
+            }
             return this;
         },
         _render : function (subViews, place, clearLocations) {
