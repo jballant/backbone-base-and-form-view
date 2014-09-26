@@ -255,6 +255,38 @@
                         expect(testView.subs.get('testTypeB') instanceof Backbone.View).toBeTruthy();
                     });
 
+                    it('should use the "defaultToSingletons" property if singleton is left blank in the config', function () {
+                        var MyView = Backbone.BaseView.extend({
+                                singletonSubViews: true,
+                                subViewConfig: {
+                                    foo: {
+                                        construct: Backbone.BaseView
+                                    },
+                                    bar: {
+                                        construct: Backbone.BaseView,
+                                        singleton: false
+                                    }
+                                }
+                            }),
+                            view = new MyView();
+                        expect(view.subs.defaultToSingletons).toBe(true);
+                        view.subs.create('foo');
+                        view.subs.create('bar');
+                        expect(view.subs.get('foo') instanceof Backbone.BaseView).toBe(true);
+                        expect(_.isArray(view.subs.get('bar'))).toBe(true);
+                        view.subs.addConfig('baz', {
+                            construct: Backbone.BaseView
+                        });
+                        view.subs.create('baz');
+                        expect(view.subs.get('baz') instanceof Backbone.BaseView).toBe(true);
+                        view.subs.defaultToSingletons = false;
+                        view.subs.addConfig('fooBar', {
+                            construct: Backbone.BaseView
+                        });
+                        view.subs.create('fooBar');
+                        expect(_.isArray(view.subs.get('fooBar'))).toBe(true);
+                    });
+
                 });
 
                 describe('with the "create" method', function () {

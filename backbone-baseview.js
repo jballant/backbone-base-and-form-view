@@ -759,12 +759,11 @@
             return this;
         },
         /**
-         * Generate a location selector for each 
-         * configured subview. Each subview type
-         * will have a location set based on the
-         * subview type. For example, the subview
-         * type 'header' would get the type
-         * '.header-container' (using the default
+         * Generate a location selector for each configured
+         * subview type. Each subview type will have a
+         * location set based on the subview type. For 
+         * example,the subview type 'header' would get the
+         * type '.header-container' (using the default
          * suffix). 
          * @memberOf SubViewManager#
          * @param  {string} [suffix=-container]
@@ -846,6 +845,9 @@
                 return this;
             }
             this.config[name] = _.extend(this.config[name] || {}, config);
+            if (typeof this.config[name].singleton !== "boolean") {
+                this.config[name].singleton = this.defaultToSingletons;
+            }
             if (this.autoInitSingletons && config.singleton) {
                 return this._init(name);
             }
