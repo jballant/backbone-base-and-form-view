@@ -1039,7 +1039,7 @@
          */
         render: function () {
             var html = '',
-                template = result(this, 'template');
+                template = this.template;
             if (isFunction(template)) {
                 html = template(result(this, 'templateVars')) || '';
             }
