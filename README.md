@@ -32,7 +32,7 @@ This means you can write some nice semantic code like this:
 tableView.subs.triggerDescend('collapseDetails'); // Triggers an event on all subviews and their subviews
 ```
 
-This allows you to write views that can be used in many contexts. In a table scenario, you can have a table cell trigger an event that bubbles up to notify the row when an event should affect the entire row, and then the row view can handle this accordingly, without having to write unique logic to 
+This allows you to write views that can be used in many contexts. In a table scenario, you can have a table cell trigger an event that bubbles up to notify the row when an event should affect the entire row, and then the row view can handle this accordingly, without having to write unique logic to do this in a large flat view, or manually managing subviews with inconsistent custom code.
 
 ### Backbone.FormView
 Adds functionality on top of *Backbone.BaseView* to create a framework for generating forms very quickly and standardizing some aspects of this to make augmenting a form is easier for other coders. This is somewhat inspired by [backbone-forms](https://github.com/powmedia/backbone-forms) but has a different style and approach to how you can build forms and extend the functionality. The FormView and each of the fields are highly extendable, as they should be, and makes it very easy to add the functionality that you need.
