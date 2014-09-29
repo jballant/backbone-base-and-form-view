@@ -1092,6 +1092,7 @@
          * @return {Backbone.BaseView}
          */
         stopEvent: function (event) {
+            console.assert(!!event, "event parameter is required");
             this._stopPropogation[event] = true;
             return this;
         },
