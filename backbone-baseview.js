@@ -1,4 +1,4 @@
-//     Backbone.BaseView 0.7.2
+//     Backbone.BaseView 0.8.0
 
 //     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.BaseView may be freely distributed under the MIT license.
@@ -31,6 +31,11 @@
             return obj;
         },
         slice = Array.prototype.slice,
+        result = _.result,
+        each = _.each,
+        isFunction = _.isFunction,
+        isObject = _.isObject,
+        isArray = _.isArray,
         View = Backbone.View,
         BaseView,
         /**
@@ -156,8 +161,8 @@
          * @return {SubViewManager}
          */
         add: function (name, instance, singleton) {
-            var arr = (_.isArray(name)) ? name : (_.isArray(instance)) ? instance : undefined, // If its a simple array of subviews or configs
-                map = (!arr && _.isObject(name) && name instanceof View === false) ? name : undefined, // If its a mapping of subviews
+            var arr = (isArray(name)) ? name : (isArray(instance)) ? instance : undefined, // If its a simple array of subviews or configs
+                map = (!arr && isObject(name) && name instanceof View === false) ? name : undefined, // If its a mapping of subviews
                 viewOptions = (!arr && instance instanceof View === false) ? instance : undefined,
                 key,
                 i,
@@ -167,7 +172,7 @@
                 singleton = (typeof instance === 'boolean') ? instance : undefined;
                 for (key in map) {
                     if (map.hasOwnProperty(key)) {
-                        map[key] = (_.isArray(map[key])) ? map[key] : [map[key]];
+                        map[key] = (isArray(map[key])) ? map[key] : [map[key]];
                         len = map[key].length;
                         if (len && map[key][0] instanceof View) {
                             this._addInstance(key, map[key], singleton);
@@ -211,6 +216,164 @@
                 this._init(name, singleton);
             }
             return this;
+        },
+        /**
+         * Add a subview instance. If is has a config,
+         * the instance will be associated with that
+         * config. If the config specifies that the
+         * view is a singleton an a view for that
+         * key already exists, it will not be added.
+         * @param {string|number} key
+         * @param {Backbone.View} instance
+         */
+        /**
+         * Add a subview instance, without a key.
+         * Since it doesn't have a key, it will
+         * simply be added to the subViews array.
+         * @param {Backbone.View} instance
+         */
+        addInstance: function (key, instance) {
+            if (key instanceof View) {
+                instance = key;
+                key = undefined;
+            }
+            this._addInstance(key, instance);
+            return this;
+        },
+        /**
+         * Add a subview for each view instance in
+         * an array for a particular key
+         * @memberOf SubViewManager#
+         * @param {string} key
+         * @param {Backbone.View[]} instances
+         * @return {SubViewManager}
+         */
+        /**
+         * Add a subview for each view instance in
+         * an array. They will not be associated 
+         * with a key and will be only accessible
+         * through the subViews array.
+         * @memberOf SubViewManager#
+         * @param {Backbone.View[]} instances
+         * @return {SubViewManager}
+         */
+        addInstances: function (key, instances) {
+            if (isArray(key)) {
+                instances = key;
+                key = undefined;
+            }
+            var i = -1,
+                len = instances.length;
+            while (++i < len) {
+                this._addInstance(key, instances[i]);
+            }
+            return this;
+        },
+        /**
+         * Add instances using an object that
+         * maps subview keys to the instances
+         * @param {object} map
+         * @return {SubViewManager}
+         */
+        addInstancesWithMap: function (map) {
+            var key;
+            for (key in map) {
+                if (map.hasOwnProperty(key)) {
+                    this.addInstance(key, map[key]);
+                }
+            }
+            return this;
+        },
+        /**
+         * Instantiates a view from it's config
+         * and adds additional options.
+         * @memberOf SubViewManager#
+         * @param  {String} key
+         * @param  {object} options
+         * @return {Backbone.View}
+         *         The new view instance
+         */
+        create: function (key, options) {
+            return this._init(key, options);
+        },
+        /**
+         * Given an array of keys, a subview
+         * will be instantiated for each key
+         * based on the configuration for that
+         * key. The options param will be 
+         * passed to each view on instantiation
+         * as additional options.
+         * 
+         * @memberOf SubViewManager#
+         * @param {String[]} keys
+         * @param {Object} options
+         *        Additional options to pass
+         *        to each view on init
+         * @return {Backbone.View[]}
+         *        Array of newly created subviews
+         */
+        createFromKeys: function (keys, options) {
+            var views = [],
+                len = keys.length,
+                i = -1;
+            while (++i < len) {
+                views.push(this._init(keys[i], options));
+            }
+            return views;
+        },
+        /**
+         * Instantiate all singletons defined in the
+         * config.
+         * @param  {object} options Additional options
+         * @return {SubViewManager}
+         */
+        createSingletons: function (options) {
+            var key;
+            for (key in this.config) {
+                if (this.config.hasOwnProperty(key) && this.config[key].singleton) {
+                    this._init(key, options);
+                }
+            }
+            return this;
+        },
+        /**
+         * Create subviews with a map of configured 
+         * subview keys to additional options.
+         * @param  {object} map
+         * @return {SubViewManager}
+         */
+        createWithMap: function (map) {
+            var key;
+            for (key in map) {
+                if (map.hasOwnProperty(key)) {
+                    this._init(key, map[key]);
+                }
+            }
+            return this;
+        },
+        /**
+         * Set a singleton instance if a singleton
+         * for that instance has not already been
+         * set. Remove the singleton first if you
+         * want to set a new instance.
+         * @param {String} key
+         * @param {Backbone.View} instance
+         * @return {SubViewManager}
+         */
+        setSingleton: function (key, instance) {
+            this._addInstance(key, instance, true);
+            return this;
+        },
+        /**
+         * Remove a singleton if it exists and then
+         * set a new instnce in it's place.
+         * @param  {String} key
+         * @param  {Backbone.View} instance 
+         * @return {SubViewManager}
+         */
+        overrideSingleton: function (key, instance) {
+            this.remove(key);
+            return this.setSingleton(key, instance);
         },
         /**
          * Add an configuration for a subview to the SubViewManager.
@@ -272,9 +435,9 @@
          * @return {SubViewManager}
          */
         addConfig : function (name, config) {
-            var map = (_.isObject(name) && !_.isArray(name)) ? name : false;
+            var map = (isObject(name) && !isArray(name)) ? name : false;
             if (map) {
-                _.each(map, this._addConfig, this);
+                each(map, this._addConfig, this);
                 return this;
             }
 
@@ -286,13 +449,11 @@
          * @type {SubViewManager}
          * @param {object} [options]
          *      [options.appendTo] A selector, HTMLElement, or $ instance to append the subViews to
-         *      [options.useLocation] 
+         *      [options.useLocation=false]
          *          True if you want to append the subviews to the locations in their config if they 
          *          have one.
-         *      [options.clearLocations]
+         *      [options.clearLocations=false]
          *          True if you want to use empty on the configured locations
-         * @param {Boolean} [clearLocations]
-         *      True if you want to remove all subView elements from the DOM before rendering
          *
          * @return {SubViewManager}
          */
@@ -309,12 +470,13 @@
          * @type {SubViewManager}
          * @param {string|HTMLElement|$} [appendTo]
          *        Location to append the rendered subiews to
-         * @param {object} [options] Other options (clearLocations)
+         * @param {object} [options]
+         * @param {boolean} [options.clearLocations=false] Clear configured locations of subviews before rendering
          * @return {SubViewManager}
          */
         renderAppend: function (appendTo, options) {
             options = options || {};
-            if (_.isObject(appendTo) && appendTo instanceof Backbone.$ === false && !_.isElement(appendTo)) {
+            if (isObject(appendTo) && appendTo instanceof Backbone.$ === false && !_.isElement(appendTo)) {
                 options = appendTo;
                 appendTo = options.appendTo;
             }
@@ -333,16 +495,16 @@
          *      or subViews. For example, passing the view cid 'view4' will render only
          *      the view with that cid, and passing the type 'creatorNames' will render
          *      views matching the type 'creatorNames'.
-         * @param {Boolean|String|HTMLElement} [useLocation]
-         *      True if you want to use the subView's configuration 'location' to place the
-         *      element the subView elems automatically. You can also pass a selector or
-         *      DOM element that all subviews matched by the 'key' will be appended to
+         * @param {object} [options]
+         * @param {string|$|HTMLElement} [options.appendTo] Element or selector to append subview(s) to
+         * @param {boolean} [options.useLocation=false] Append subviews to locations specified in config
+         * @param {boolean} [options.clearLocations=false] Clear configured locations of subviews before rendering
          *
          * @return {SubViewManager}
          */
         renderByKey: function (key, options) {
             var subViews = this.getByType(key) || this.get(key);
-            if (!_.isArray(subViews)) { subViews = [subViews]; }
+            if (!isArray(subViews)) { subViews = [subViews]; }
             options = options || {};
             return this._render(subViews, options.appendTo || options.useLocation, options.clearLocations);
         },
@@ -361,7 +523,7 @@
             var i = -1, len, subViews,
                 subMgr = new SubViewManager(null, this.parent, this.options);
             subMgr.config = this.config;
-            subViews = (_.isArray(key)) ? key : (_.isFunction(key)) ? this.filter(key) : this.getByType(key);
+            subViews = (isArray(key)) ? key : (isFunction(key)) ? this.filter(key) : this.getByType(key);
             len = subViews.length;
             while (++i < len) {
                 subMgr.add(subViews[i]._subviewtype, subViews[i]);
@@ -382,7 +544,7 @@
          * @return {SubViewManager}
          */
         descend: function (func, args) {
-            var isFunc = _.isFunction(func),
+            var isFunc = isFunction(func),
                 desc = function (subViews) {
                     var i = -1, len = subViews.length, subView, _func;
                     while (++i < len) {
@@ -390,7 +552,7 @@
                         _func = isFunc ? func : subView[func];
                         if (_func) {
                             if (args) { _func.apply(subView, args);
-                                } else { _func.call(subViews[i]); }
+                            } else { _func.call(subViews[i]); }
                         }
                         if (subView.subViews && subView.subViews.length) {
                             desc(subView.subViews);
@@ -437,7 +599,7 @@
             var subViews = (key && (typeof key === "string" || key.cid)) ? this.get(key) : key,
                 len;
             if (!subViews) { return this; }
-            if (!_.isArray(subViews)) {
+            if (!isArray(subViews)) {
                 subViews = [subViews];
             }
             len = subViews ? subViews.length : 0;
@@ -449,6 +611,23 @@
             }
             while (subViews && subViews.length) {
                 this._remove(subViews.shift());
+            }
+            return this;
+        },
+        /**
+         * Remove's all subviews matching any
+         * key in a list of keys
+         * @memberOf SubViewManager#
+         * @param  {String[]} keys
+         * @param {Boolean} [preserveElems=false] 
+         *        If true, the views' elements will not
+         *        be removed from the DOM
+         * @return {SubViewManager}
+         */
+        removeByKeys: function (keys, preserveElems) {
+            var i = 0, len = keys ? keys.length : 0;
+            for (i; i < len; i++) {
+                this.remove(keys[i], preserveElems);
             }
             return this;
         },
@@ -561,15 +740,50 @@
          */
         clearLocations : function (type) {
             var confs = type ? _.pick(this.config, type) : this.config;
-            _.each(confs, function (config) {
+            each(confs, function (config) {
                 this.parent.$(config.location).html('');
             }, this);
+            return this;
+        },
+        /**
+         * Set a location for a subview type
+         * @memberOf SubViewManager#
+         * @param {string} type The subview type
+         * @param {$|HTMLElement|String} location
+         *        A location within the parent view
+         *        to place the subview in
+         * @return {SubViewManager}
+         */
+        setLocationForType: function (type, location) {
+            this._addConfig({ location: location }, type);
+            return this;
+        },
+        /**
+         * Generate a location selector for each configured
+         * subview type. Each subview type will have a
+         * location set based on the subview type. For 
+         * example,the subview type 'header' would get the
+         * type '.header-container' (using the default
+         * suffix). 
+         * @memberOf SubViewManager#
+         * @param  {string} [suffix=-container]
+         *         The suffix to use for each location
+         *         selector.
+         * @return {SubViewManager}
+         */
+        useDefaultLocationSelectors: function (suffix) {
+            var type;
+            suffix = _.isString(suffix) ? suffix : '-container';
+            for (type in this.config) {
+                if (this.config.hasOwnProperty(type) && !this.config[type].location) {
+                    this.setLocationForType(type, '.' + type + suffix);
+                }
+            }
             return this;
         },
         _render : function (subViews, place, clearLocations) {
             var $appendTo,
                 i = -1,
-                len = subViews.length,
                 location,
                 $locations = {};
             if (place !== true) {
@@ -579,7 +793,7 @@
                 this.clearLocations();
             }
 
-            while (++i < len) {
+            while (++i < subViews.length) {
                 subViews[i].render();
                 if ($appendTo) {
                     subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo).first() : $appendTo);
@@ -605,18 +819,18 @@
 
             if (self._subViewSingletons[key]) { return self; }
 
-            if (!_.isArray(subViews)) {
+            if (!isArray(subViews)) {
                 subViews = [subViews];
             }
 
             len = subViews.length;
 
-            if (!self.config[key] && subViews[0].constructor) {
-                self.config[key] = {
-                    options : subViews[0].options || {},
-                    construct : subViews[0].constructor,
-                    singleton : singleton
-                };
+            if (!self.config[key]) {
+                self.config[key] = { singleton: singleton };
+            }
+
+            if (!self.config[key].construct && subViews[0].constructor) {
+                self.config[key].construct = subViews[0].constructor;
             }
 
             singleton = (singleton === undefined) ? self.config[key].singleton : singleton;
@@ -627,7 +841,13 @@
             return self;
         },
         _addConfig : function (config, name) {
-            this.config[name] = config;
+            if (!config || !name) {
+                return this;
+            }
+            this.config[name] = _.extend(this.config[name] || {}, config);
+            if (typeof this.config[name].singleton !== "boolean") {
+                this.config[name].singleton = this.defaultToSingletons;
+            }
             if (this.autoInitSingletons && config.singleton) {
                 return this._init(name);
             }
@@ -664,7 +884,7 @@
                 delete this._subViewSingletons[key];
             }
             if (!silent) {
-                return this.trigger('remove:' + key, subView);
+                this.trigger('remove:' + key, subView);
             }
         },
         _setInst: function (key, instance, singleton, silent) {
@@ -677,7 +897,7 @@
             instance._subviewtype = key;
             if (modCid) {
                 if (viewsByModel[modCid]) {
-                    if (!_.isArray(viewsByModel[modCid])) { viewsByModel[modCid] = [viewsByModel[modCid]]; }
+                    if (!isArray(viewsByModel[modCid])) { viewsByModel[modCid] = [viewsByModel[modCid]]; }
                     viewsByModel[modCid].push(instance);
                 } else {
                     this._subViewsByModelCid[modCid] = instance;
@@ -702,24 +922,25 @@
                 config = this.config[key],
                 Construct = (config && config.construct) ? config.construct : null;
 
-            options = _.extend({}, config.options || {}, options || {});
-
             if (this._subViewSingletons[key]) {
-                return this;
+                return undefined;
             }
+
+            options = _.extend({}, config.options || {}, options || {});
 
             Construct = (typeof Construct === 'string') ? _stringToObj(Construct) : Construct;
             if (!Construct) {
                 console.error('Construct for key "' + key + '" was not found:', config ? config.construct : '');
+                return undefined;
             }
             instance = new Construct(options, this.parent);
             this._setInst(key, instance, (singleton !== undefined) ? singleton : config.singleton);
-            return this;
+            return instance;
         }
     };
 
     // Add underscore methods to SubViewManager (e.g. myView.subs.each(function (subView) { console.log(subView.cid); });)
-    _.each(['each', 'map', 'initial', 'rest', 'last', 'first', 'find', 'filter', 'sortBy',
+    each(['each', 'map', 'initial', 'rest', 'last', 'first', 'find', 'filter', 'sortBy',
         'groupBy', 'where', 'findWhere', 'some', 'every', 'invoke', 'contains', 'max', 'min',
         'size', 'without', 'indexOf', 'lastIndexOf', 'isEmpty', 'reject'], function (funcName) {
         /**
@@ -782,11 +1003,9 @@
         singletonSubViews: false,
         // If this is a subView of another Backbone.BaseView, this will be a ref to that view instance
         parentView: null,
-        // Add events that will not bubble events up app the view's ancestor tree
-        _stopPropogation: false,
         constructor: function (options, parentView) {
-            var subViewCfg = (options && options.subViewConfig) ?
-                    _.result(options, 'subViewConfig') : _.result(this, 'subViewConfig');
+            var subViewCfg = (options && options.subViewConfig) ? options.subViewConfig : this.subViewConfig;
+            subViewCfg = (isFunction(subViewCfg)) ? subViewCfg.call(this) : subViewCfg;
             // Assign a parentView if second param is a Backbone View
             this.parentView = (parentView instanceof View) ? parentView : null;
             this.subs = new SubViewManager(null, this, {
@@ -797,6 +1016,8 @@
                 this.subs.addConfig(subViewCfg);
             }
             this.subViews = this.subs.subViews;
+            // Add events that will not bubble events up app the view's ancestor tree
+            this._stopPropogation = {};
             BaseView.__super__.constructor.call(this, options);
             // To maintain parity with how Backbone handles the 'events'
             // property on a view, we will overwrite the 'viewEvents'
@@ -806,6 +1027,25 @@
             if (this.viewEvents) {
                 this.bindViewEvents();
             }
+        },
+        /**
+         * A basic render function that looks for a template
+         * function, calls the template with the result of 
+         * the 'templateVars' property, and then set the html
+         * to the result. Then, subviews are rendered and then
+         * appended to their locations.
+         * @memberOf Backbone.BaseView#
+         * @return {Backbone.BaseView}
+         */
+        render: function () {
+            var html = '',
+                template = this.template;
+            if (isFunction(template)) {
+                html = template(result(this, 'templateVars')) || '';
+            }
+            this.$el.html(html);
+            this.subs.renderAppend();
+            return this;
         },
         /**
          * Place the view DOM element ('.el') in a specified location. By
@@ -831,15 +1071,29 @@
             return this;
         },
         /**
+         * Overrides Backbone.View#remove in order
+         * to remove SubViews as well, in order to
+         * prevent memory leaks.
+         * @memberOf Backbone.BaseView#
+         * @return {Backbone.BaseView}
+         */
+        remove: function () {
+            BaseView.__super__.remove.call(this);
+            this.subs.removeElems();
+            return this;
+        },
+        /**
          * Stops the current event from propagating up or down the 
          * ancestor tree of BaseView instances. Resets immediately
          * after stopping the event, and has to be callled every 
          * time you want an event to be stopped.
          * @memberOf Backbone.BaseView#
+         * @param {String} event The name of the event
          * @return {Backbone.BaseView}
          */
-        stopEvent: function () {
-            this._stopPropogation = true;
+        stopEvent: function (event) {
+            console.assert(!!event, "event parameter is required");
+            this._stopPropogation[event] = true;
             return this;
         },
         /**
@@ -857,14 +1111,16 @@
          */
         triggerBubble: function (event) {
             var args = slice.call(arguments, 1),
+                stopPropogation,
                 anscestor;
             args.unshift(event);
             args.push(this);
             anscestor = this;
             while (anscestor) {
                 anscestor.trigger.apply(anscestor, args);
-                if (anscestor._stopPropogation) {
-                    anscestor._stopPropogation = false;
+                stopPropogation = anscestor._stopPropogation;
+                if (stopPropogation && stopPropogation[event]) {
+                    stopPropogation[event] = false;
                     return this;
                 }
                 anscestor = anscestor.parentView;
@@ -889,12 +1145,14 @@
                     var i = -1,
                         len = subViews.length,
                         subSubs,
+                        stopPropogation,
                         descend;
                     while (++i < len) {
                         descend = true;
                         subViews[i].trigger.apply(subViews[i], args);
-                        if (subViews[i]._stopPropogation) {
-                            subViews[i]._stopPropogation = false;
+                        stopPropogation = subViews[i]._stopPropogation;
+                        if (stopPropogation && stopPropogation[event]) {
+                            stopPropogation[event] = false;
                             descend = false;
                         }
                         subSubs = subViews[i].subViews;
@@ -920,7 +1178,7 @@
         ascend: function (fnName, args) {
             var func,
                 ancestor = this,
-                isFunc = _.isFunction(fnName);
+                isFunc = isFunction(fnName);
             while (ancestor.parentView) {
                 ancestor = ancestor.parentView;
                 if (ancestor) {
@@ -1020,11 +1278,11 @@
          * return {Backbone.BaseView}
          */
         bindViewEvents: function (events) {
-            events = events || _.result(this, 'viewEvents');
-            _.each(events, function (func, event) {
+            events = events || result(this, 'viewEvents');
+            each(events, function (func, event) {
                 var segs = event.split(' '),
                     listenTo = (segs.length > 1) ? this[segs[1]] : this;
-                func = _.isFunction(func) ? func : this[func];
+                func = isFunction(func) ? func : this[func];
                 if (listenTo) {
                     this.stopListening(listenTo, segs[0], func);
                     this.listenTo(listenTo, segs[0], func);
