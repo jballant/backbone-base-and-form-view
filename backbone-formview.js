@@ -388,10 +388,7 @@
             }, this);
             return subViewConfig;
         },
-        /**
-         * A reference to the template vars function
-         * @type {[type]}
-         */
+        // A reference to the template vars function
         _getTemplateVars: getTemplateVars
     }, {
         /**
@@ -630,7 +627,8 @@
             return this;
         },
         /**
-         * @return {Backbone.View[]} An array of the row subviews 
+         * @memberOf Backbone.CollectionFormView#
+         * @return {Backbone.View[]} An array of the row subviews
          */
         getRows: function () {
             return this.subs.get('row');
@@ -1048,6 +1046,7 @@
         },
         /**
          * Returns true or false if the input should be selected.
+         * @memberOf Backbone.fields.RadioListView#
          * @param {string} key The key of the possibleVal that is being tested
          * @return {boolean}
          */
@@ -1290,6 +1289,7 @@
         /**
          * Return the model value for a particular
          * possibleVals key.
+         * @memberOf Backbone.fields.CheckListView#
          * @param  {string} key
          * @return {*}
          */

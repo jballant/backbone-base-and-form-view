@@ -763,7 +763,7 @@
          * subview type. Each subview type will have a
          * location set based on the subview type. For 
          * example,the subview type 'header' would get the
-         * type '.header-container' (using the default
+         * location '.header-container' (using the default
          * suffix). 
          * @memberOf SubViewManager#
          * @param  {string} [suffix=-container]
@@ -1170,7 +1170,7 @@
          * Invoke a function or method on ancestors
          * @memberOf Backbone.BaseView#
          * @param {Function|String} fnName
-         * @param {*[]} [args]
+         * @param {mixed[]} [args]
          *        An array of arguments to pass to
          *        the invocation
          * @return {Backbone.BaseView}
@@ -1191,6 +1191,7 @@
         /**
          * Ascends up the ancestor line until an
          * a test function returns true
+         * @memberOf Backbone.BaseView#
          * @param  {Function} testFn
          *         A function that returns a truthy
          *         value if the current ancestor should be 
@@ -1210,6 +1211,7 @@
         /**
          * Returns the first ancestor to be an instance
          * of the Construct argument
+         * @memberOf Backbone.BaseView#
          * @param  {Function} Construct 
          *         A Backbone.BaseView constructor function
          * @return {Backbone.BaseView|null}
