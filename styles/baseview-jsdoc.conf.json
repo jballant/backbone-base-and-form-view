@@ -1,0 +1,25 @@
+{
+    "opts": {
+        "template": "../docstrap-baseview/template",
+        "destination": "./"
+    },
+    "templates": {
+        "theme": "dibs-bootstrap",
+        "systemName": "Backbone.BaseView and Backbone.FormView",
+        "copyright": "1sdibs.com, Inc. © 2014",
+        "outputSourceFiles": true,
+        "outputSourcePath": true,
+        "linenums": false,
+        "jsRootDirectories": ["./"],
+        "navUseDeepStructure": true
+    },
+    "plugins": [
+        "./plugins/BackboneUnderscoreClassLends.js"
+    ],
+    "source": {
+        "include": [
+            "./backbone-baseview.js",
+            "./backbone-formview.js"
+        ]
+    }
+}

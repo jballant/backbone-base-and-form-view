@@ -3,146 +3,94 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Backbone BaseView and FormView Source: backbone-formview.js</title>
+	<title>Backbone.BaseView and Backbone.FormView Source: backbone-formview.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
-    <link href='//fonts.googleapis.com/css?family=Tenor+Sans' rel='stylesheet' type='text/css'>
 
-	
-	<link type="text/css" rel="stylesheet" href="styles/site.dibsy-bootstrap.css">
-	
-    <link href='http://fonts.googleapis.com/css?family=Tenor+Sans' rel='stylesheet' type='text/css'>
-    <style type="text/css">
-		  .page-wrapper {
-		    margin-top: 60px;
-		  }
-	      .row-fluid .nav-tabs [class*="span"] {
-		    width: 97.87%;
-		  }
-		  .method {
-		  	padding-top: 45px;
-		  	margin-top: -30px;
-		  }
-		  h4 {
-		  	border-bottom: 1px solid #ddd;
-		  	padding-bottom: 5px
-		  }
-    </style>
+	<link type="text/css" rel="stylesheet" href="styles/site.dibs-bootstrap.css">
 
 </head>
 
 <body>
-<div class="container-fluid">
-	<div class="navbar navbar-fixed-top navbar-inverse">
-		<div class="navbar-inner">
-			<a class="brand" href="index.html">Backbone BaseView and FormView</a>
-			<ul class="nav">
-				
-				<li class="dropdown">
-					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
-						class="caret"></b></a>
 
-					<ul class="dropdown-menu ">
-						
-						<li>
-							<a href="Backbone.BaseView.html">BaseView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.CollectionFieldSetView.html">CollectionFieldSetView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.CollectionFormView.html">CollectionFormView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.CheckBoxView.html">CheckBoxView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.CheckListView.html">CheckListView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.FieldView.html">FieldView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.RadioListView.html">RadioListView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.SelectListView.html">SelectListView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.FieldSetView.html">FieldSetView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.FormView.html">FormView</a>
-						</li>
-						
-						<li>
-							<a href="SubViewManager.html">SubViewManager</a>
-						</li>
-						
+<div id="docstrap-nav">
+	<nav class="navbar navbar-fixed-top navbar-inverse">
 
-					</ul>
-				</li>
-				
-				<li class="dropdown">
-					<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b
-						class="caret"></b></a>
+		<span class="navbar-heading">
+			<a class="navbar-brand" href="index.html">Backbone.BaseView and Backbone.FormView</a>
+		</span>
+		<ul class="nav navbar-collapse navbar-nav navbar-left collapse">
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">
+					Classes<b class="caret"></b>
+				</a>
 
-					<ul class="dropdown-menu ">
-						
-						<li>
-							<a href="global.html#_getInputId">_getInputId</a>
-						</li>
-						
-						<li>
-							<a href="global.html#_getTemplateVars">_getTemplateVars</a>
-						</li>
-						
-						<li>
-							<a href="global.html#findAncestor">findAncestor</a>
-						</li>
-						
-						<li>
-							<a href="global.html#findAncestorByConstruct">findAncestorByConstruct</a>
-						</li>
-						
-						<li>
-							<a href="global.html#isSelected">isSelected</a>
-						</li>
-						
+				<ul class="dropdown-menu ">
 
-					</ul>
-				</li>
-				
-			</ul>
-		</div>
-	</div>
+        			<li class="dropdown">
+                <a href="Backbone.BaseView.html">Backbone.BaseView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.CollectionFieldSetView.html">Backbone.CollectionFieldSetView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.CollectionFormView.html">Backbone.CollectionFormView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.CheckBoxView.html">Backbone.fields.CheckBoxView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.CheckListView.html">Backbone.fields.CheckListView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.RadioListView.html">Backbone.fields.RadioListView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.SelectListView.html">Backbone.fields.SelectListView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.FieldSetView.html">Backbone.FieldSetView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.FormView.html">Backbone.FormView</a>
+                
+            </li><li class="dropdown">
+                <a href="SubViewManager.html">SubViewManager</a>
+                
+            </li>
 
-	<div class="row-fluid page-wrapper">
+				</ul>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
 
-		
-			<div class="span12">
-				
-				<div id="main">
+<div id="page">
+
+	<div id="main-wrapper" class="col-md-8">
+
+		<div class="clearfix">
+
+			
 					
+					<div id="main">
+						
 
 
 		<h1 class="page-title">Source: backbone-formview.js</h1>
     
-    <section>
-        <article>
-            <pre class="sunlight-highlight-javascript linenums">//     Backbone.FormView 0.7.2
+<section>
+	<article>
+		<pre
+			class="sunlight-highlight-javascript ">//     Backbone.FormView 0.8.0
 
 //     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.FormView may be freely distributed under the MIT license.
@@ -173,6 +121,7 @@
         CheckListView,
         CheckBoxView,
         FieldSetView,
+        CollectionFormRowView,
         CollectionFieldSetView,
         // Local copies
         Model = Backbone.Model,
@@ -186,6 +135,7 @@
         isArray = _.isArray,
         isString = _.isString,
         result = _.result,
+        toStr = String,
 
         // Form Disable Mixin -- added to FormView prototype's
         // in order to allow disabling and enabling fields.
@@ -194,8 +144,8 @@
              * Disables the form by invoking the disable method
              * on all fields that implement it. If a field doesn't
              * implement this method, it will not be disabled.
-             * @memberOf dibsLibs.FormView#
-             * @return {dibsLibs.FormView}
+             * @memberOf Backbone.FormView#
+             * @return {Backbone.FormView}
              */
             disable: function () {
                 this.subs.each(function (field) {
@@ -206,8 +156,8 @@
             /**
              * The reverse of disable, naturally. Invokes enable method
              * on all fields and field sets.
-             * @memberOf dibsLibs.FormView#
-             * @return {dibsLibs.FormView}
+             * @memberOf Backbone.FormView#
+             * @return {Backbone.FormView}
              */
             enable: function () {
                 this.subs.each(function (field) {
@@ -222,7 +172,7 @@
          * @return {string} A prefix for a field name/id
          */
         getFieldPrefix = function () {
-            var prefPref = (this.parentView && this.parentView.getFieldPrefix) ? this.parentView.getFieldPrefix() : '';
+            var prefPref = (this.parentView &amp;&amp; this.parentView.getFieldPrefix) ? this.parentView.getFieldPrefix() : '';
             return prefPref + this.fieldSetName + '-';
         },
 
@@ -244,7 +194,7 @@
             if (string instanceof instOf) {
                 return string;
             }
-            if (string === true && obj instanceof instOf) {
+            if (string === true &amp;&amp; obj instanceof instOf) {
                 return obj;
             }
             if (!obj) { return null; }
@@ -374,7 +324,7 @@
             options = this.options = defaults(options || {}, this.options);
             var schema = options.schema || this.schema,
                 setUpOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
-            this.subs.autoInitSingletons = true;
+            // this.subs.autoInitSingletons = true;
             extend(this, {
                 templateVars : options.templateVars || this.templateVars || {},
                 setupOnInit : options.setupOnInit || this.setupOnInit,
@@ -402,6 +352,32 @@
             return this;
         },
         /**
+         * The subViewConfig is the schema fleshed by the 
+         * _setupSubViewConfig method. Set the subViewConfig
+         * property and register the config with the subview
+         * manager. The property autoInitSingletons on the
+         * SubViewManager is true by default with a FormView
+         * and that will instantiate the SubViews when the
+         * config is added.
+         * @memberOf Backbone.FormView#
+         * @param {object} config
+         * @return {Backbone.FormView}
+         */
+        setSubViewConfig: function (config) {
+            this.subViewConfig = config;
+            this.subs.addConfig(config);
+            return this;
+        },
+        /**
+         * Should return true if fields have been
+         * set up at least once.
+         * @memberOf Backbone.FormView#
+         * @return {Boolean}
+         */
+        hasSetupFields: function () {
+            return this._hasSetupFields;
+        },
+        /**
          * Creates the subViewConfig property, derived from the
          * form's schema. The subViewConfig is like the schema
          * but fleshed out for the baseView's subView manager.
@@ -409,9 +385,10 @@
          * @return {Backbone.FormView}
          */
         setupFields: function () {
-            this.subViewConfig = this._setupSubViewConfig(result(this, 'schema'));
-            this.subs.addConfig(this.subViewConfig);
-            this._hasSetupFields = true;
+            var config = this._setupSubViewConfig(result(this, 'schema'));
+            this.setSubViewConfig(config);
+            this.subs.createSingletons(); // Instantiate the fields from the config
+            this._setHasSetupFields(true);
             return this;
         },
         /**
@@ -454,12 +431,12 @@
             var order = this.options.fieldOrder || this.fieldOrder;
 
             this.subs.detachElems();
-            if (!this._hasSetupFields) {
+            if (!this.hasSetupFields()) {
                 this.setupFields();
             }
             this.$el.html(this.template(this._getTemplateVars()));
 
-            if (order && order.length) {
+            if (order &amp;&amp; order.length) {
                 order = order.slice(0);
                 while (order.length) {
                     this.subs.renderByKey(order.shift(), { useLocation: true });
@@ -468,6 +445,10 @@
                 this.subs.renderAppend();
             }
 
+            return this;
+        },
+        _setHasSetupFields: function (hasSetupFields) {
+            this._hasSetupFields = hasSetupFields;
             return this;
         },
         _setupSubViewConfig: function (baseSchema, model, collection) {
@@ -499,10 +480,7 @@
             }, this);
             return subViewConfig;
         },
-        /**
-         * A reference to the template vars function
-         * @type {object}
-         */
+        // A reference to the template vars function
         _getTemplateVars: getTemplateVars
     }, {
         /**
@@ -530,15 +508,16 @@
     // CollectionFormView
 
     // CollectionFormRowView - used by CollectionFormView for each row
-    Backbone.CollectionFormRowView = Backbone.FormView.extend({
+    CollectionFormRowView = Backbone.CollectionFormRowView = Backbone.FormView.extend({
         className: 'form-field-row controls-row',
         tagName: 'div',
         getFieldPrefix: function () {
-            var parentPref = '';
-            if (this.parentView && this.parentView.getFieldPrefix) {
+            var parentPref = '',
+                index = this.rowIndex();
+            if (this.parentView &amp;&amp; this.parentView.getFieldPrefix) {
                 parentPref = this.parentView.getFieldPrefix(this) || '';
             }
-            return parentPref + this.options.index  + '-';
+            return parentPref + ((_.isNumber(index) &amp;&amp; index > -1) ? index + '-' : '');
         },
         /**
          * Asks the parent collection form view to delete this row
@@ -548,6 +527,20 @@
         deleteSelf: function () {
             this.parentView.deleteRow(this);
             return this;
+        },
+        /**
+         * @memberOf Backbone.CollectionFormRowView#
+         * @return {number}
+         *         The index of the row
+         */
+        rowIndex: function () {
+            if (this.parentView &amp;&amp; this.parentView.subs) {
+                var rows = this.parentView.subs.get('row');
+                if (rows) {
+                    return rows.indexOf(this);
+                }
+            }
+            return null;
         }
     });
 
@@ -591,34 +584,35 @@
     Backbone.CollectionFormView = Backbone.BaseView.extend({
         tagName: 'form',
         className: 'form',
-        rowTemplate: '',
         rowWrapper : '[data-rows]:first',
         template: _.template('&lt;div data-rows="">&lt;/div>'),
         initialize: function (options) {
-            options = this.options = defaults(options || {}, this.options);
-            this.template = options.template || (isString(this.template) ? _.template(this.template) : this.template);
-            this.setupOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
-            this.rowOptions = options.rowOptions || this.rowOptions;
-            this.templateVars = options.templateVars || this.templateVars || {};
-            this._defaultTemplateVars = { label: options.label };
-            this.rowWrapper = options.rowWrapper || this.rowWrapper;
+            var self = this,
+                rowOpts;
+            options = self.options = defaults(options || {}, self.options);
+            self.template = options.template || (isString(self.template) ? _.template(self.template) : self.template);
+            self.setupOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : self.setupOnInit;
+            self.rowOptions = options.rowOptions || self.rowOptions;
+            self.templateVars = options.templateVars || self.templateVars || {};
+            self._defaultTemplateVars = { label: options.label };
+            self.rowWrapper = options.rowWrapper || self.rowWrapper;
             if (options.rowConfig) {
-                this.rowConfig = options.rowConfig;
-                this.rowConfig = clone(result(this, 'rowConfig')) || {};
-                this.rowConfig.options = this.rowConfig.options ? clone(this.rowConfig.options) : {};
+                self.rowConfig = options.rowConfig;
+                self.rowConfig = clone(result(self, 'rowConfig')) || {};
+                self.rowConfig.options = self.rowConfig.options ? clone(self.rowConfig.options) : {};
             } else {
-                this.rowConfig = clone(result(this, 'rowConfig')) || {
+                self.rowConfig = clone(result(self, 'rowConfig')) || {
                     singleton: false,
                     construct: Backbone.CollectionFormRowView
                 };
-                var rowOpts = clone(result(this, 'rowOptions'));
-                this.rowConfig.options = rowOpts || {};
-                this.setRowSchema(options.rowSchema || this.rowSchema || this.rowConfig.options.schema);
+                rowOpts = clone(result(self, 'rowOptions'));
+                self.rowConfig.options = rowOpts || self.rowConfig.options || {};
+                self.setRowSchema(options.rowSchema || self.rowSchema || self.rowConfig.options.schema);
             }
-            this.rowConfig.location = this.rowWrapper;
-            this.subs.addConfig('row', this.rowConfig);
-            if (this.setupOnInit) {
-                this.setupRows();
+            self.rowConfig.location = self.rowWrapper;
+            self.subs.addConfig('row', self.rowConfig);
+            if (self.setupOnInit) {
+                self.setupRows();
             }
         },
         /**
@@ -643,7 +637,7 @@
         render: function () {
             this.subs.detachElems();
             this.$el.html(this.template(this._getTemplateVars()));
-            if (!this.subs.get('row') || !this.subs.get('row').length) {
+            if (!this.getRows() || !this.getRows().length) {
                 this.setupRows();
             }
             this.subs.renderByKey('row', { appendTo: this.getRowWrapper() });
@@ -662,31 +656,26 @@
             return $wrapper.first();
         },
         /**
-         * Add a row or row to the CollectionFormView. If you do not
+         * Add a row to the CollectionFormView. If you do not
          * pass a model, one will be created from the collection.model
          * property constructor. The model(s) will then be tied
          * to the new row(s).
          * @memberOf Backbone.CollectionFormView#
-         * @param  {Backbone.Model|Backbone.Model[]} 
-         *         [models] A model or array of models to add rows for.
+         * @param  {Backbone.Model} 
+         *         model A model to add a row for
          * @return {Backbone.CollectionFormView}
          */
-        addRow: function (models) {
+        addRow: function (model) {
             var added;
-            models = models || new this.collection.model();
-            if (!isArray(models)) {
-                models = [models];
-            }
-            added = this.collection.add(models);
+            model = model || new this.collection.model();
+            added = this.collection.add(model);
             // Backbone 1.0.0 does not return the added models,
             // so we will not set the models var to the return val
             if (!(added instanceof Backbone.Collection)) {
-                models = added;
+                model = added;
             }
-            each(models, function (model) {
-                this._addRow(model).subs.last().render().$el
-                    .appendTo(this.getRowWrapper());
-            }, this);
+            this._addRow(model).subs.newest.render().$el
+                .appendTo(this.getRowWrapper());
             return this;
         },
         /**
@@ -700,8 +689,8 @@
          */
         deleteRow : function (obj) {
             var model = (obj instanceof Model) ? obj : null,
-                view = (!model && obj instanceof Backbone.View) ? obj : null,
-                arr = (!model && !view && isArray(obj)) ? obj : null;
+                view = (!model &amp;&amp; obj instanceof Backbone.View) ? obj : null,
+                arr = (!model &amp;&amp; !view &amp;&amp; isArray(obj)) ? obj : null;
 
             if (arr) {
                 each(arr, this.deleteRow, this);
@@ -730,6 +719,13 @@
             return this;
         },
         /**
+         * @memberOf Backbone.CollectionFormView#
+         * @return {Backbone.View[]} An array of the row subviews
+         */
+        getRows: function () {
+            return this.subs.get('row');
+        },
+        /**
          * When you are ready to set up your rows (ie initialize
          * each Row view instance based on the collection
          * @memberOf Backbone.CollectionFormView#
@@ -742,10 +738,7 @@
         },
         _addRow: function (model) {
             var opts = this._getRowOptions(model),
-                row = this.subs
-                    .add('row', opts)
-                    .last();
-            row.rowIndex = opts.index;
+                row = this.subs.create('row', opts);
             row.setSchema(this.rowSchema).setupFields();
             return this;
         },
@@ -779,10 +772,10 @@
         '&lt;% if (obj.label) { %>&lt;label class="control-label" ' +
             '&lt;% if (obj.inputId) { %> for="&lt;%= obj.inputId %>" &lt;% } %> >' +
             '&lt;%= obj.label %>&lt;/label>&lt;% } %>' +
-            '&lt;div class="controls" data-input="">' +
+            '&lt;div class="&lt;%= obj.inputWrapperClass || \'controls\' %>" data-input="">' +
             '&lt;/div>' +
             '&lt;div class="controls">' +
-            '&lt;div class="text-error" data-error="">&lt;/div>' +
+            '&lt;div class="&lt;%= obj.errorClass || \'text-error\' %>" data-error="">&lt;/div>' +
             '&lt;% if (obj.help) { %>&lt;span class="help-block">&lt;%= obj.help %>&lt;/span>&lt;% } %>' +
             '&lt;/div>';
 
@@ -837,14 +830,14 @@
         disabledDataKey: 'formViewDisabled',
         events: function () {
             var events = {};
-            events['blur ' + this.elementType] = 'setModelAttrs';
+            events['blur ' + this.elementType] = 'onUserUpdate';
             return events;
         },
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             extend(this, {
                 templateVars : options.templateVars || this.templateVars || {},
-                fieldName : options.fieldName || options.schemaKey,
+                fieldName : options.fieldName || this.fieldName || options.schemaKey,
                 elementType : options.elementType || this.elementType,
                 template : options.template || this.template,
                 setOpts : defaults(options.setOpts || {}, this.setOpts),
@@ -876,7 +869,7 @@
             this.$el.attr('data-field', '');
 
             // If the twoWay option is true, then setup the events to make the field/model-attribute changes twoWay
-            if (this.twoWay && this.setupTwoWay) {  this.setupTwoWay(); }
+            if (this.twoWay &amp;&amp; this.setupTwoWay) {  this.setupTwoWay(); }
         },
         /**
          * Sets up two way updating. The view updates the model by default, and this
@@ -898,7 +891,7 @@
          */
         getAttrs: function () {
             var attrs = {};
-            attrs[this.fieldName] = this.getValue();
+            attrs[this.fieldName] = this.getValueForSet();
             return attrs;
         },
         /**
@@ -917,12 +910,23 @@
             return this;
         },
         /**
-         * Get the value of the form field.
+         * Get the value of the form field input.
          * @memberOf Backbone.fields.FieldView#
          * @return {String|Boolean|Array|Number|Object}
          */
         getValue: function () {
-            return Backbone.$.trim(this.$(this.elementType).val());
+            return Backbone.$.trim(this.getInputEl().val());
+        },
+        /**
+         * Override this function if additional
+         * logic needs to be perfomred to convert
+         * the value of the input into what is
+         * set on the model.
+         * @memberOf Backbone.fields.FieldView#
+         * @return {String|Boolean|Array|Number|Object}
+         */
+        getValueForSet: function () {
+            return this.getValue();
         },
         /**
          * Gets the value of the field as it appears in the model
@@ -931,6 +935,19 @@
          */
         getModelVal: function () {
             return this.model.get(this.fieldName);
+        },
+        /**
+         * Gets the value from the model as it should be
+         * set on the input. By default it's the same
+         * as produced by getModelValue. Override this
+         * function if you want to convert the model 
+         * value to something that should be set on the 
+         * input.
+         * @memberOf Backbone.fields.FieldView#
+         * @return {String|Boolean|Array|Number|Object}
+         */
+        getValueForInput: function () {
+            return this.getModelVal();
         },
         /**
          * Renders the basic shell template for the form field and then
@@ -950,6 +967,7 @@
          * @return {Backbone.fields.FieldView}
          */
         renderWrapper: function (vars) {
+            this.isDisabled = null;
             this.$el.html(this.template(vars || this._getTemplateVars()));
             return this;
         },
@@ -963,14 +981,15 @@
             var $input,
                 id = this.inputId,
                 attrs =  this.addId ? { id : id, name: id } : {},
-                modelVal = this.getModelVal();
+                valForInput = this.getValueForInput();
             $input = Backbone.$('&lt;' + this.elementType + '>');
             if (this.elementType === 'input') { attrs.type = 'text'; }
             if (this.placeholder) { attrs.placeholder = this.placeholder; }
             $input.attr(extend(attrs, this.inputAttrs));
             if (this.inputClass) { $input.attr('class', this.inputClass); }
             this.getInputWrapper().html($input);
-            if (modelVal) { $input.val(modelVal); }
+            if (valForInput) { $input.val(valForInput); }
+            this.isDisabled = null;
             return this;
         },
         /**
@@ -987,12 +1006,20 @@
             return $wrapper.first();
         },
         /**
+         * Get the element that takes user input.
+         * @memberOf Backbone.fields.FieldView#
+         * @return {$} 
+         */
+        getInputEl: function () {
+            return this.$(this.elementType);
+        },
+        /**
          * Disable the input if not already disabled
          * @memberOf dibsLibs.FormFieldView#
          * @return {dibsLibs.FormFieldView}
          */
         disable: function () {
-            this.$(this.elementType).prop('disabled', true);
+            this.getInputEl().prop('disabled', true);
             this.isDisabled = true;
             return this;
         },
@@ -1002,13 +1029,23 @@
          * @return {dibsLibs.FormFieldView}
          */
         enable: function () {
-            this.$(this.elementType).prop('disabled', false);
+            this.getInputEl().prop('disabled', false);
             this.isDisabled = false;
             return this;
         },
         /**
+         * Handle updates from a user interaction
+         * @memberOf Backbone.fields.FieldView#
+         * @protected
+         */
+        onUserUpdate: function () {
+            this.setModelAttrs();
+        },
+        /**
          * Generate the string to use for the id attribute of 
          * the input element.
+         * @memberOf Backbone.fields.FieldView#
+         * @protected
          * @return {string}
          */
         _getInputId: function () {
@@ -1017,6 +1054,7 @@
         },
         /**
          * Get the template vars used for the wrapper template
+         * @memberOf Backbone.fields.FieldView#
          * @return {object}
          */
         _getTemplateVars: getTemplateVars,
@@ -1024,11 +1062,12 @@
          * If the parent FormView/FieldSetView defines a 'getFieldPrefix'
          * function, it can be used to construct the input id, name
          * attribute, and class attributes
+         * @memberOf Backbone.fields.FieldView#
          * @return {string}
          * @private
          */
         _getParentPrefix: function () {
-            if (this.parentView && this.parentView.getFieldPrefix) {
+            if (this.parentView &amp;&amp; this.parentView.getFieldPrefix) {
                 return this.parentView.getFieldPrefix(this) || '';
             }
             return '';
@@ -1046,7 +1085,7 @@
     });
 
     // ====================================================
-    // FormRadioListView
+    // RadioListView
 
     /**
      * Like Backbone.fields.FieldView, except it creates a list of radio buttons. Designed to
@@ -1078,7 +1117,7 @@
         tagName: 'div',
         events : function () {
             var events = {};
-            events['click ' + this.elementType] = 'setModelAttrs';
+            events['click ' + this.elementType] = 'onUserUpdate';
             return events;
         },
         type: 'radio-list',
@@ -1099,11 +1138,12 @@
         },
         /**
          * Returns true or false if the input should be selected.
+         * @memberOf Backbone.fields.RadioListView#
          * @param {string} key The key of the possibleVal that is being tested
          * @return {boolean}
          */
         isSelected: function (key) {
-            return (this.getModelVal() + '' === '' + key);
+            return (toStr(this.getValueForInput()) === toStr(key));
         },
         /**
          * Renders the radio inputs and appends them to the input wrapper.
@@ -1146,13 +1186,13 @@
         },
         _parsePossibleVal: function (possibleVals, key) {
             var val = possibleVals[key];
-            if (val && val.value && val.display) {
+            if (val &amp;&amp; val.value &amp;&amp; val.display) {
                 return val;
             }
-            if (possibleVals.slice && isArray(possibleVals)) {
+            if (possibleVals.slice &amp;&amp; isArray(possibleVals)) {
                 return { value: val, display: val };
             }
-            if (key && !isNaN(Number(key))) {
+            if (key &amp;&amp; !isNaN(Number(key))) {
                 key = Number(key);
             }
             return { value: key, display: val };
@@ -1201,7 +1241,7 @@
         elementType: 'select',
         events : function () {
             var events = {};
-            events['change ' + this.elementType] = 'setModelAttrs';
+            events['change ' + this.elementType] = 'onUserUpdate';
             return events;
         },
         initialize: function (options) {
@@ -1210,7 +1250,7 @@
             SelectListView.__super__.initialize.call(this, options);
         },
         getValue: function () {
-            return this.$(this.elementType).val();
+            return this.getInputEl().val();
         },
         /**
          * Returns true or false if the option should be selected
@@ -1221,7 +1261,7 @@
         isSelected: function (key) {
             var modelVal = this.getModelVal();
             modelVal = this.multiple ? modelVal : [modelVal];
-            return (_.indexOf(_.map(modelVal, String), key + '') !== -1);
+            return (_.indexOf(_.map(modelVal, toStr), toStr(key)) > -1);
         },
         /**
          * Renders the select element and the options
@@ -1263,10 +1303,10 @@
         },
         _parsePossibleVal: function (possibleVals, key) {
             var val = possibleVals[key];
-            if (val && val.group && val.display) {
+            if (val &amp;&amp; val.group &amp;&amp; val.display) {
                 return val;
             }
-            if (_.isObject(val) && !isArray(possibleVals)) {
+            if (_.isObject(val) &amp;&amp; !isArray(possibleVals)) {
                 return { group: val, display: key };
             }
             return SelectListView.__super__._parsePossibleVal.call(this, possibleVals, key);
@@ -1328,7 +1368,7 @@
         },
         getAttrs: function () {
             var attrs = {}, self = this;
-            this.$(this.elementType).each(function (index, input) {
+            this.getInputEl().each(function (index, input) {
                 var $input = Backbone.$(input),
                     key = $input.val(),
                     val = ($input.prop('checked')) ? self.checkedVal : self.unCheckedVal;
@@ -1338,6 +1378,13 @@
             });
             return attrs;
         },
+        /**
+         * Return the model value for a particular
+         * possibleVals key.
+         * @memberOf Backbone.fields.CheckListView#
+         * @param  {string} key
+         * @return {*}
+         */
         getModelVal: function (key) {
             return this.model.get(key);
         },
@@ -1426,7 +1473,7 @@
         unCheckedVal: false,
         events: function () {
             var events = {};
-            events['click ' + this.elementType] = 'setModelAttrs';
+            events['click ' + this.elementType] = 'onUserUpdate';
             return events;
         },
         initialize: function (options) {
@@ -1438,7 +1485,10 @@
             CheckBoxView.__super__.initialize.call(this, options);
         },
         getValue: function () {
-            if (this.$(this.elementType).prop('checked')) {
+            return this.getInputEl().prop('checked');
+        },
+        getValueForSet: function () {
+            if (this.getValue()) {
                 return this.checkedVal;
             }
             return this.unCheckedVal;
@@ -1514,7 +1564,7 @@
          * @return {string}
          */
         getFieldPrefix: getFieldPrefix,
-        template: _.template('&lt;% if(obj && obj.label) { %>&lt;label class="fieldset-label">' +
+        template: _.template('&lt;% if(obj &amp;&amp; obj.label) { %>&lt;label class="fieldset-label">' +
             '&lt;strong>&lt;%= obj.label %>&lt;/strong>&lt;/label>&lt;% } %>&lt;fieldset data-fields="">&lt;/fieldset>')
     });
 
@@ -1527,7 +1577,7 @@
      */
     CollectionFieldSetView = Backbone.CollectionFieldSetView = Backbone.CollectionFormView.extend({
         tagName: 'div',
-        template: _.template('&lt;% if(obj && obj.label) { %>&lt;p>&lt;strong>&lt;%= obj.label %>&lt;/strong>&lt;/p>&lt;% } %>' +
+        template: _.template('&lt;% if(obj &amp;&amp; obj.label) { %>&lt;p>&lt;strong>&lt;%= obj.label %>&lt;/strong>&lt;/p>&lt;% } %>' +
             '&lt;fieldset class="fieldset" data-rows="">&lt;/fieldset>'),
         setupOnInit: true,
         className: '',
@@ -1548,62 +1598,116 @@
     });
 
 }(this));</pre>
-        </article>
-    </section>
+	</article>
+</section>
 
 
 
 
 
-				</div>
+					</div>
 
-				<div class="clearfix"></div>
-				<footer>
-					
-					
-		<span class="copyright">
-		Backbone.BaseView and Backbone.FormView Copyright © 2013 The contributors to the JSDoc3 and DocStrap projects.
-		</span>
-					<br />
-					
-		<span class="jsdoc-message">
-		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a>
-		using a custom fork of the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
-		</span>
-				</footer>
-			</div>
 
-			
-			<br clear="both">
+				
+				<br clear="both">
 		</div>
 
 	</div>
-	<script src="scripts/sunlight.js"></script>
-	<script src="scripts/sunlight.javascript.js"></script>
-	<script src="scripts/sunlight-plugin.doclinks.js"></script>
-	<!-- // <script src="scripts/sunlight-plugin.linenumbers.js"></script> -->
-	<script src="scripts/sunlight-plugin.menu.js"></script>
-	<script src="scripts/jquery.min.js"></script>
-	<script src="scripts/jquery.scrollTo.js"></script>
-	<script src="scripts/jquery.localScroll.js"></script>
+
+</div>
+
+<footer class="clear">
+	
+	
+	<span class="copyright">
+	1sdibs.com, Inc. © 2014
+	</span>
+				<br />
+				
+	<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a>
+	on 2014-10-06T19:13:45-04:00 using the <a
+		href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+	</span>
+</footer>
+
+	<!--<script src="scripts/sunlight.js"></script>-->
+	<script src="scripts/docstrap.lib.js"></script>
 	<script src="scripts/bootstrap-dropdown.js"></script>
 	<script src="scripts/toc.js"></script>
 
-
-	<script>  Sunlight.highlightAll({lineNumbers:true,  showMenu: true, enableDoclinks :true}); </script>
-
 	<script>
 		$( function () {
-			$( "#toc" ).toc({
-				selectors   : "h1,h3,h4:not(.class) .name",
-				showAndHide : false,
-				scrollTo    : 60
-			}).children().css({ overflowY:'auto', height: '80%', width: '31%' });
-			$( "#toc>ul" ).addClass( "nav nav-tabs affix nav-stacked" );
-			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
-		} );
-	</script>
+			$( "[id*='$']" ).each( function () {
+				var $this = $( this );
 
+				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+			} );
+
+			$( "#toc" ).toc( {
+				anchorName  : function ( i, heading, prefix ) {
+					return $( heading ).attr( "id" ) || ( prefix + i );
+				},
+				selectors   : "h1,h3,h4,.method-basic-name:not(.class-name > .method-basic-name)",
+				showAndHide : false,
+				scrollTo    : "100px"
+			} );
+
+			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+			$( '.dropdown-toggle' ).dropdown();
+//			$( ".tutorial-section pre, .readme-section pre" ).addClass( "sunlight-highlight-javascript" ).addClass( "linenums" );
+
+			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+				var $this = $( this );
+
+				var example = $this.find( "code" );
+				exampleText = example.html();
+				var lang = /{@lang (.*?)}/.exec( exampleText );
+				if ( lang && lang[1] ) {
+					exampleText = exampleText.replace( lang[0], "" );
+					example.html( exampleText );
+					lang = lang[1];
+				} else {
+					lang = "javascript";
+				}
+
+				if ( lang ) {
+
+					$this
+						.addClass( "sunlight-highlight-" + lang )
+						.addClass( "linenums" )
+						.html( example.html() );
+
+				}
+			} );
+
+			Sunlight.highlightAll( {
+				lineNumbers : false,
+				showMenu : true,
+				enableDoclinks : true
+			} );
+
+			// Offset the scroll position if there is a hash to
+			// account for the navbar
+		    var hash = window.location.hash;
+		    setTimeout(function () {
+		        var scrollPosition = $(window).scrollTop();
+		        if (hash) {
+		            $(window).scrollTop(scrollPosition - 70);
+		        }
+		    }, 300);
+
+		} );
+	 </script>
+
+
+
+	<!--Navigation and Symbol Display-->
+	
+
+
+	<!--Google Analytics-->
 	
 
 </body>

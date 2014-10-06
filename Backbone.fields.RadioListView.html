@@ -3,166 +3,112 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Backbone BaseView and FormView Class: RadioListView</title>
+	<title>Backbone.BaseView and Backbone.FormView Class: RadioListView</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
-    <link href='//fonts.googleapis.com/css?family=Tenor+Sans' rel='stylesheet' type='text/css'>
 
-	
-	<link type="text/css" rel="stylesheet" href="styles/site.dibsy-bootstrap.css">
-	
-    <link href='http://fonts.googleapis.com/css?family=Tenor+Sans' rel='stylesheet' type='text/css'>
-    <style type="text/css">
-		  .page-wrapper {
-		    margin-top: 60px;
-		  }
-	      .row-fluid .nav-tabs [class*="span"] {
-		    width: 97.87%;
-		  }
-		  .method {
-		  	padding-top: 45px;
-		  	margin-top: -30px;
-		  }
-		  h4 {
-		  	border-bottom: 1px solid #ddd;
-		  	padding-bottom: 5px
-		  }
-    </style>
+	<link type="text/css" rel="stylesheet" href="styles/site.dibs-bootstrap.css">
 
 </head>
 
 <body>
-<div class="container-fluid">
-	<div class="navbar navbar-fixed-top navbar-inverse">
-		<div class="navbar-inner">
-			<a class="brand" href="index.html">Backbone BaseView and FormView</a>
-			<ul class="nav">
-				
-				<li class="dropdown">
-					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
-						class="caret"></b></a>
 
-					<ul class="dropdown-menu ">
-						
-						<li>
-							<a href="Backbone.BaseView.html">BaseView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.CollectionFieldSetView.html">CollectionFieldSetView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.CollectionFormView.html">CollectionFormView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.CheckBoxView.html">CheckBoxView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.CheckListView.html">CheckListView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.FieldView.html">FieldView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.RadioListView.html">RadioListView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.fields.SelectListView.html">SelectListView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.FieldSetView.html">FieldSetView</a>
-						</li>
-						
-						<li>
-							<a href="Backbone.FormView.html">FormView</a>
-						</li>
-						
-						<li>
-							<a href="SubViewManager.html">SubViewManager</a>
-						</li>
-						
+<div id="docstrap-nav">
+	<nav class="navbar navbar-fixed-top navbar-inverse">
 
-					</ul>
-				</li>
-				
-				<li class="dropdown">
-					<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b
-						class="caret"></b></a>
-
-					<ul class="dropdown-menu ">
-						
-						<li>
-							<a href="global.html#_getInputId">_getInputId</a>
-						</li>
-						
-						<li>
-							<a href="global.html#_getTemplateVars">_getTemplateVars</a>
-						</li>
-						
-						<li>
-							<a href="global.html#findAncestor">findAncestor</a>
-						</li>
-						
-						<li>
-							<a href="global.html#findAncestorByConstruct">findAncestorByConstruct</a>
-						</li>
-						
-						<li>
-							<a href="global.html#isSelected">isSelected</a>
-						</li>
-						
-
-					</ul>
-				</li>
-				
-			</ul>
-		</div>
-	</div>
-
-	<div class="row-fluid page-wrapper">
-
-		
-		<div class="span8">
+		<span class="navbar-heading">
+			<a class="navbar-brand" href="index.html">Backbone.BaseView and Backbone.FormView</a>
+		</span>
+		<ul class="nav navbar-collapse navbar-nav navbar-left collapse">
 			
-				<div id="main">
-					
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">
+					Classes<b class="caret"></b>
+				</a>
+
+				<ul class="dropdown-menu ">
+
+        			<li class="dropdown">
+                <a href="Backbone.BaseView.html">Backbone.BaseView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.CollectionFieldSetView.html">Backbone.CollectionFieldSetView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.CollectionFormView.html">Backbone.CollectionFormView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.CheckBoxView.html">Backbone.fields.CheckBoxView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.CheckListView.html">Backbone.fields.CheckListView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.RadioListView.html">Backbone.fields.RadioListView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.fields.SelectListView.html">Backbone.fields.SelectListView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.FieldSetView.html">Backbone.FieldSetView</a>
+                
+            </li><li class="dropdown">
+                <a href="Backbone.FormView.html">Backbone.FormView</a>
+                
+            </li><li class="dropdown">
+                <a href="SubViewManager.html">SubViewManager</a>
+                
+            </li>
+
+				</ul>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+<div id="page">
+
+	<div id="main-wrapper" class="col-md-8">
+
+		<div class="clearfix">
+
+			
+
+				
+					<div id="main">
+						
 
 
-	<h1 class="page-title"><p>Backbone.fields.RadioListView</p></h1>
+	<h1 class="page-title">Class: RadioListView</h1>
 <section>
 
-<!--
 <header>
     <h2>
     RadioListView
     </h2>
-     
-        <div class="class-description"><p>Backbone.fields.RadioListView</p></div>
+    
+        <div class="class-description">Backbone.fields.RadioListView</div>
     
 </header>
--->
+
 <article>
     <div class="container-overview">
-    
-
-    
+        <dl>
         
-<dt class="method" id="RadioListView">
-    <h4 class="class">
-        <span class="name">
-            <span class="type-signature"></span>new RadioListView
-        </span><span class="signature">()</span><span class="type-signature"></span>
-    </h4>
+
+        
+            
+<dt>
+    <code class="method-name name class-name" id="RadioListView">
+        <span class="type-signature"></span>new <span class="method-basic-name">RadioListView</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"></span></span>
+    </code>
     
     
 </dt>
@@ -170,9 +116,9 @@
     
     
     <div class="description">
-        <p>Like Backbone.fields.FieldView, except it creates a list of radio buttons. Designed to
+        Like Backbone.fields.FieldView, except it creates a list of radio buttons. Designed to
 work with model fields that have only one value out of a fixed set of values. Use
-'RadioList' alias in form schema to create a field with this constructor.</p>
+'RadioList' alias in form schema to create a field with this constructor.
     </div>
     
 
@@ -184,11 +130,11 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
 <dl class="details">
-    
+	
 
-        <h5 class="subsection-title">Properties:</h5>
+	<h5 class="subsection-title">Properties:</h5>
 
-        <dl>
+	<dl>
 
 <table class="props table table-striped">
     <thead>
@@ -238,8 +184,8 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>Options that can either be set as properties on directly on the view or
-          passed in an object to the constructor.</p>
+            <td class="description last">Options that can either be set as properties on directly on the view or
+          passed in an object to the constructor.
                 <h6>Properties</h6>
 
 <table class="props table table-striped">
@@ -290,7 +236,7 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>inherited from Backbone.fields.FieldView</p></td>
+            <td class="description last">inherited from Backbone.fields.FieldView</td>
         </tr>
 
 	
@@ -321,7 +267,7 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>inherited from Backbone.fields.FieldView</p></td>
+            <td class="description last">inherited from Backbone.fields.FieldView</td>
         </tr>
 
 	
@@ -352,7 +298,7 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>inherited from Backbone.fields.FieldView</p></td>
+            <td class="description last">inherited from Backbone.fields.FieldView</td>
         </tr>
 
 	
@@ -383,7 +329,7 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>inherited from Backbone.fields.FieldView</p></td>
+            <td class="description last">inherited from Backbone.fields.FieldView</td>
         </tr>
 
 	
@@ -414,7 +360,7 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>inherited from Backbone.fields.FieldView</p></td>
+            <td class="description last">inherited from Backbone.fields.FieldView</td>
         </tr>
 
 	
@@ -445,7 +391,7 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>inherited from Backbone.fields.FieldView</p></td>
+            <td class="description last">inherited from Backbone.fields.FieldView</td>
         </tr>
 
 	
@@ -476,7 +422,7 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>inherited from Backbone.fields.FieldView</p></td>
+            <td class="description last">inherited from Backbone.fields.FieldView</td>
         </tr>
 
 	
@@ -507,7 +453,7 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>inherited from Backbone.fields.FieldView</p></td>
+            <td class="description last">inherited from Backbone.fields.FieldView</td>
         </tr>
 
 	
@@ -538,7 +484,7 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>Attributes for the label elements that wrap radio inputs</p></td>
+            <td class="description last">Attributes for the label elements that wrap radio inputs</td>
         </tr>
 
 	
@@ -572,9 +518,9 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>An object with the set of possible choices to display to the user. Each key will be
+            <td class="description last">An object with the set of possible choices to display to the user. Each key will be
      what is set in the model when the user selects the radio, and each value is what
-     will be used as the label text to display to the user.</p></td>
+     will be used as the label text to display to the user.</td>
         </tr>
 
 	
@@ -589,36 +535,42 @@ work with model fields that have only one value out of a fixed set of values. Us
 </table>
 </dl>
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-907">line 907</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -635,7 +587,8 @@ work with model fields that have only one value out of a fixed set of values. Us
     
 </dd>
 
-    
+        
+        </dl>
     </div>
 
     
@@ -655,18 +608,89 @@ work with model fields that have only one value out of a fixed set of values. Us
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<dt class="name" id="_getTemplateVars">
+    <h4><span class="type-signature"></span>_getTemplateVars<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Get the template vars used for the wrapper template
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#_getTemplateVars">Backbone.fields.FieldView#_getTemplateVars</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
 
     
         <h3 class="subsection-title">Methods</h3>
 
         <dl>
             
-<dt class="method" id="ascend">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>ascend
-        </span><span class="signature">(fnName, <span class="optional">args</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="getValue">
+        <span class="type-signature"></span><span class="method-basic-name">getValue</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></span>
+    </code>
     
     
 </dt>
@@ -674,7 +698,8 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
     <div class="description">
-        <p>Invoke a function or method on ancestors</p>
+        Get the value of the radio list. Looks for a checked radio input
+and gets the value attribue of that input.
     </div>
     
 
@@ -683,7 +708,470 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
     
-        <h5>Parameters:</h5>
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">string</span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="isSelected">
+        <span class="type-signature"></span><span class="method-basic-name">isSelected</span><span class="method-signature"><span class="signature">(key)</span><span class="type-signature"> &rarr; {boolean}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Returns true or false if the input should be selected.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The key of the possibleVal that is being tested</td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="renderInput">
+        <span class="type-signature"></span><span class="method-basic-name">renderInput</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.RadioListView.html">Backbone.fields.RadioListView</a>}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Renders the radio inputs and appends them to the input wrapper.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Backbone.fields.RadioListView.html">Backbone.fields.RadioListView</a></span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="_getInputId">
+        <span class="type-signature">&lt;protected> </span><span class="method-basic-name">_getInputId</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Generate the string to use for the id attribute of 
+the input element.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#_getInputId">Backbone.fields.FieldView#_getInputId</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">string</span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="ascend">
+        <span class="type-signature"></span><span class="method-basic-name">ascend</span><span class="method-signature"><span class="signature">(fnName, <span class="optional">args</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Invoke a function or method on ancestors
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
         
 
 <table class="params table table-striped">
@@ -716,7 +1204,7 @@ work with model fields that have only one value out of a fixed set of values. Us
             <td class="type">
             
                 
-<span class="param-type">Function</span>
+<span class="param-type">function</span>
 |
 
 <span class="param-type">String</span>
@@ -750,7 +1238,7 @@ work with model fields that have only one value out of a fixed set of values. Us
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">Array.&lt;mixed></span>
 
 
             
@@ -770,8 +1258,8 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>An array of arguments to pass to
-       the invocation</p></td>
+            <td class="description last">An array of arguments to pass to
+       the invocation</td>
         </tr>
 
 	
@@ -782,41 +1270,51 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#ascend">Backbone.BaseView#ascend</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#ascend">Backbone.BaseView#ascend</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-920">line 920</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -829,30 +1327,40 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="findAncestorByType">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>findAncestorByType
-        </span><span class="signature">(type)</span><span class="type-signature"> &rarr; {null|<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="findAncestor">
+        <span class="type-signature"></span><span class="method-basic-name">findAncestor</span><span class="method-signature"><span class="signature">(testFn)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>|null}</span></span>
+    </code>
     
     
 </dt>
@@ -860,7 +1368,8 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
     <div class="description">
-        <p>Get the first ancestor that matches a type.</p>
+        Ascends up the ancestor line until an
+a test function returns true
     </div>
     
 
@@ -869,7 +1378,334 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
     
-        <h5>Parameters:</h5>
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>testFn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A function that returns a truthy
+        value if the current ancestor should be 
+        returned</td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#findAncestor">Backbone.BaseView#findAncestor</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
+|
+
+<span class="param-type">null</span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="findAncestorByConstruct">
+        <span class="type-signature"></span><span class="method-basic-name">findAncestorByConstruct</span><span class="method-signature"><span class="signature">(Construct)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>|null}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Returns the first ancestor to be an instance
+of the Construct argument
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>Construct</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A Backbone.BaseView constructor function</td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#findAncestorByConstruct">Backbone.BaseView#findAncestorByConstruct</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
+|
+
+<span class="param-type">null</span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="findAncestorByType">
+        <span class="type-signature"></span><span class="method-basic-name">findAncestorByType</span><span class="method-signature"><span class="signature">(type)</span><span class="type-signature"> &rarr; {null|<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Get the first ancestor that matches a type.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
         
 
 <table class="params table table-striped">
@@ -910,8 +1746,8 @@ work with model fields that have only one value out of a fixed set of values. Us
 
             
 
-            <td class="description last"><p>The subView 'type' the ancestor should match. The
-       first ancestor with this type will be returned</p></td>
+            <td class="description last">The subView 'type' the ancestor should match. The
+       first ancestor with this type will be returned</td>
         </tr>
 
 	
@@ -922,41 +1758,51 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#findAncestorByType">Backbone.BaseView#findAncestorByType</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#findAncestorByType">Backbone.BaseView#findAncestorByType</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-972">line 972</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -969,33 +1815,43 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type">null</span>
 |
 
 <span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="getAttrs">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>getAttrs
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="getAttrs">
+        <span class="type-signature"></span><span class="method-basic-name">getAttrs</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></span>
+    </code>
     
     
 </dt>
@@ -1003,7 +1859,7 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
     <div class="description">
-        <p>Return an object of attributes as they should appear in the model</p>
+        Return an object of attributes as they should appear in the model
     </div>
     
 
@@ -1015,41 +1871,51 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.fields.FieldView.html#getAttrs">Backbone.fields.FieldView#getAttrs</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#getAttrs">Backbone.fields.FieldView#getAttrs</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-755">line 755</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -1062,30 +1928,40 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type">Object</span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="getInputWrapper">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>getInputWrapper
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {$}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="getInputEl">
+        <span class="type-signature"></span><span class="method-basic-name">getInputEl</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {$}</span></span>
+    </code>
     
     
 </dt>
@@ -1093,8 +1969,7 @@ work with model fields that have only one value out of a fixed set of values. Us
     
     
     <div class="description">
-        <p>Get the element that wraps the input. Looks for element
-with data-input attribute. If not found, it will return this.$el</p>
+        Get the element that takes user input.
     </div>
     
 
@@ -1106,41 +1981,51 @@ with data-input attribute. If not found, it will return this.$el</p>
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.fields.FieldView.html#getInputWrapper">Backbone.fields.FieldView#getInputWrapper</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#getInputEl">Backbone.fields.FieldView#getInputEl</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-838">line 838</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -1153,30 +2038,40 @@ with data-input attribute. If not found, it will return this.$el</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type">$</span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="getModelVal">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>getModelVal
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {String|Boolean|Array|Number|Object}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="getInputWrapper">
+        <span class="type-signature"></span><span class="method-basic-name">getInputWrapper</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {$}</span></span>
+    </code>
     
     
 </dt>
@@ -1184,7 +2079,8 @@ with data-input attribute. If not found, it will return this.$el</p>
     
     
     <div class="description">
-        <p>Gets the value of the field as it appears in the model</p>
+        Get the element that wraps the input. Looks for element
+with data-input attribute. If not found, it will return this.$el
     </div>
     
 
@@ -1196,41 +2092,51 @@ with data-input attribute. If not found, it will return this.$el</p>
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.fields.FieldView.html#getModelVal">Backbone.fields.FieldView#getModelVal</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#getInputWrapper">Backbone.fields.FieldView#getInputWrapper</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-788">line 788</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -1243,11 +2149,129 @@ with data-input attribute. If not found, it will return this.$el</p>
     
     
     
-    <h5>Returns:</h5>
-    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">$</span>
+
+
+	</dd>
+</dl>
+
+
             
-<ul class="inline">
-        <li>
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="getModelVal">
+        <span class="type-signature"></span><span class="method-basic-name">getModelVal</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {String|Boolean|Array|Number|Object}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Gets the value of the field as it appears in the model
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#getModelVal">Backbone.fields.FieldView#getModelVal</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type">String</span>
 |
 
@@ -1262,23 +2286,25 @@ with data-input attribute. If not found, it will return this.$el</p>
 
 <span class="param-type">Object</span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="getSubViewType">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>getSubViewType
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {string|number}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="getSubViewType">
+        <span class="type-signature"></span><span class="method-basic-name">getSubViewType</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {string|number}</span></span>
+    </code>
     
     
 </dt>
@@ -1286,8 +2312,8 @@ with data-input attribute. If not found, it will return this.$el</p>
     
     
     <div class="description">
-        <p>Return the subview type if this view a subview and was a assigned a
-type.</p>
+        Return the subview type if this view a subview and was a assigned a
+type.
     </div>
     
 
@@ -1299,41 +2325,51 @@ type.</p>
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#getSubViewType">Backbone.BaseView#getSubViewType</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#getSubViewType">Backbone.BaseView#getSubViewType</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-983">line 983</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -1346,35 +2382,47 @@ type.</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+<div class="param-desc">
+    The subview type
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type">string</span>
 |
 
 <span class="param-type">number</span>
 
-</li>
-    
-        <li class="param-desc"><p>The subview type</p></li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="getTopView">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>getTopView
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {Backbone.View}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="getTopView">
+        <span class="type-signature"></span><span class="method-basic-name">getTopView</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {Backbone.View}</span></span>
+    </code>
     
     
 </dt>
@@ -1382,7 +2430,7 @@ type.</p>
     
     
     <div class="description">
-        <p>Returns the top of the subView hierarchy.</p>
+        Returns the top of the subView hierarchy.
     </div>
     
 
@@ -1394,41 +2442,51 @@ type.</p>
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#getTopView">Backbone.BaseView#getTopView</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#getTopView">Backbone.BaseView#getTopView</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-991">line 991</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -1441,30 +2499,40 @@ type.</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type">Backbone.View</span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="getValue">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>getValue
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {string}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="getValueForInput">
+        <span class="type-signature"></span><span class="method-basic-name">getValueForInput</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {String|Boolean|Array|Number|Object}</span></span>
+    </code>
     
     
 </dt>
@@ -1472,8 +2540,12 @@ type.</p>
     
     
     <div class="description">
-        <p>Get the value of the radio list. Looks for a checked radio input
-and gets the value attribue of that input.</p>
+        Gets the value from the model as it should be
+set on the input. By default it's the same
+as produced by getModelValue. Override this
+function if you want to convert the model 
+value to something that should be set on the 
+input.
     </div>
     
 
@@ -1485,36 +2557,51 @@ and gets the value attribue of that input.</p>
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#getValueForInput">Backbone.fields.FieldView#getValueForInput</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-953">line 953</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -1527,30 +2614,52 @@ and gets the value attribue of that input.</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
-<span class="param-type">string</span>
-
-</li>
-    
-</ul>
-
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
         
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Boolean</span>
+|
+
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Number</span>
+|
+
+<span class="param-type">Object</span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="isTopView">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>isTopView
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="getValueForSet">
+        <span class="type-signature"></span><span class="method-basic-name">getValueForSet</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {String|Boolean|Array|Number|Object}</span></span>
+    </code>
     
     
 </dt>
@@ -1558,7 +2667,10 @@ and gets the value attribue of that input.</p>
     
     
     <div class="description">
-        <p>Returns true if this view has no ancestors</p>
+        Override this function if additional
+logic needs to be perfomred to convert
+the value of the input into what is
+set on the model.
     </div>
     
 
@@ -1570,41 +2682,51 @@ and gets the value attribue of that input.</p>
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#isTopView">Backbone.BaseView#isTopView</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#getValueForSet">Backbone.fields.FieldView#getValueForSet</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-1003">line 1003</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -1617,30 +2739,162 @@ and gets the value attribue of that input.</p>
     
     
     
-    <h5>Returns:</h5>
-    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Boolean</span>
+|
+
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Number</span>
+|
+
+<span class="param-type">Object</span>
+
+
+	</dd>
+</dl>
+
+
             
-<ul class="inline">
-        <li>
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="isTopView">
+        <span class="type-signature"></span><span class="method-basic-name">isTopView</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Returns true if this view has no ancestors
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#isTopView">Backbone.BaseView#isTopView</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type">boolean</span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="place">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>place
-        </span><span class="signature">($location, <span class="optional">replace</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="onUserUpdate">
+        <span class="type-signature">&lt;protected> </span><span class="method-basic-name">onUserUpdate</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"></span></span>
+    </code>
     
     
 </dt>
@@ -1648,8 +2902,7 @@ and gets the value attribue of that input.</p>
     
     
     <div class="description">
-        <p>Place the view DOM element ('.el') in a specified location. By
-default it is appended to the location.</p>
+        Handle updates from a user interaction
     </div>
     
 
@@ -1658,7 +2911,94 @@ default it is appended to the location.</p>
     
     
     
-        <h5>Parameters:</h5>
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#onUserUpdate">Backbone.fields.FieldView#onUserUpdate</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="place">
+        <span class="type-signature"></span><span class="method-basic-name">place</span><span class="method-signature"><span class="signature">($location, <span class="optional">replace</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Place the view DOM element ('.el') in a specified location. By
+default it is appended to the location.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
         
 
 <table class="params table table-striped">
@@ -1709,7 +3049,7 @@ default it is appended to the location.</p>
 
             
 
-            <td class="description last"><p>jQuery DOM element</p></td>
+            <td class="description last">jQuery DOM element</td>
         </tr>
 
 	
@@ -1742,8 +3082,8 @@ default it is appended to the location.</p>
 
             
 
-            <td class="description last"><p>True if you want to replace existing html
-       of the location with this view</p></td>
+            <td class="description last">True if you want to replace existing html
+       of the location with this view</td>
         </tr>
 
 	
@@ -1754,41 +3094,51 @@ default it is appended to the location.</p>
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#place">Backbone.BaseView#place</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#place">Backbone.BaseView#place</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-820">line 820</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -1801,30 +3151,40 @@ default it is appended to the location.</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="render">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>render
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="remove">
+        <span class="type-signature"></span><span class="method-basic-name">remove</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span></span>
+    </code>
     
     
 </dt>
@@ -1832,10 +3192,122 @@ default it is appended to the location.</p>
     
     
     <div class="description">
-        <p>Renders the basic shell template for the form field and then
+        Overrides Backbone.View#remove in order
+to remove SubViews as well, in order to
+prevent memory leaks.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#remove">Backbone.BaseView#remove</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="render">
+        <span class="type-signature"></span><span class="method-basic-name">render</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Renders the basic shell template for the form field and then
 creates the input or textarea element, which gets appended
 to the elem in the shell template found through the
-<a href="Backbone.fields.FieldView.html#getInputWrapper">Backbone.fields.FieldView#getInputWrapper</a> method</p>
+<a href="Backbone.fields.FieldView.html#getInputWrapper">Backbone.fields.FieldView#getInputWrapper</a> method
     </div>
     
 
@@ -1847,41 +3319,51 @@ to the elem in the shell template found through the
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.fields.FieldView.html#render">Backbone.fields.FieldView#render</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#render">Backbone.fields.FieldView#render</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-799">line 799</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -1894,115 +3376,40 @@ to the elem in the shell template found through the
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type"><a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a></span>
 
-</li>
-    
-</ul>
 
-        
-    
-    
-</dd>
-
-        
-            
-<dt class="method" id="renderInput">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>renderInput
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.RadioListView.html">Backbone.fields.RadioListView</a>}</span>
-    </h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Renders the radio inputs and appends them to the input wrapper.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-969">line 969</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
+	</dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
             
-<ul class="inline">
-        <li>
-<span class="param-type"><a href="Backbone.fields.RadioListView.html">Backbone.fields.RadioListView</a></span>
-
-</li>
+        </div>
+    </div> 
     
-</ul>
-
-        
     
     
 </dd>
 
         
             
-<dt class="method" id="renderWrapper">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>renderWrapper
-        </span><span class="signature">(<span class="optional">vars</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="renderWrapper">
+        <span class="type-signature"></span><span class="method-basic-name">renderWrapper</span><span class="method-signature"><span class="signature">(<span class="optional">vars</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>}</span></span>
+    </code>
     
     
 </dt>
@@ -2010,7 +3417,7 @@ to the elem in the shell template found through the
     
     
     <div class="description">
-        <p>Renders the wrapper that contains the field input</p>
+        Renders the wrapper that contains the field input
     </div>
     
 
@@ -2019,7 +3426,7 @@ to the elem in the shell template found through the
     
     
     
-        <h5>Parameters:</h5>
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
         
 
 <table class="params table table-striped">
@@ -2072,7 +3479,7 @@ to the elem in the shell template found through the
 
             
 
-            <td class="description last"><p>Variables to pass to wrapper template</p></td>
+            <td class="description last">Variables to pass to wrapper template</td>
         </tr>
 
 	
@@ -2083,41 +3490,51 @@ to the elem in the shell template found through the
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.fields.FieldView.html#renderWrapper">Backbone.fields.FieldView#renderWrapper</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#renderWrapper">Backbone.fields.FieldView#renderWrapper</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-808">line 808</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -2130,30 +3547,40 @@ to the elem in the shell template found through the
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type"><a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a></span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="setModelAttrs">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>setModelAttrs
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="setModelAttrs">
+        <span class="type-signature"></span><span class="method-basic-name">setModelAttrs</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>}</span></span>
+    </code>
     
     
 </dt>
@@ -2161,12 +3588,12 @@ to the elem in the shell template found through the
     
     
     <div class="description">
-        <p>This method should get the value or values of the form
+        This method should get the value or values of the form
 field and then set that value/values on the model
 in the corresponding attribute(s)/field name(s). If
 there is a setOpts object on the fieldView instance,
 then use that as the options passed to Backbone.Model's
-'set' method.</p>
+'set' method.
     </div>
     
 
@@ -2178,41 +3605,51 @@ then use that as the options passed to Backbone.Model's
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.fields.FieldView.html#setModelAttrs">Backbone.fields.FieldView#setModelAttrs</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#setModelAttrs">Backbone.fields.FieldView#setModelAttrs</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-770">line 770</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -2225,30 +3662,40 @@ then use that as the options passed to Backbone.Model's
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type"><a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a></span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="setupTwoWay">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>setupTwoWay
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="setupTwoWay">
+        <span class="type-signature"></span><span class="method-basic-name">setupTwoWay</span><span class="method-signature"><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a>}</span></span>
+    </code>
     
     
 </dt>
@@ -2256,8 +3703,8 @@ then use that as the options passed to Backbone.Model's
     
     
     <div class="description">
-        <p>Sets up two way updating. The view updates the model by default, and this
-function will update the view on a model change (unless it was done by the view)</p>
+        Sets up two way updating. The view updates the model by default, and this
+function will update the view on a model change (unless it was done by the view)
     </div>
     
 
@@ -2269,41 +3716,51 @@ function will update the view on a model change (unless it was done by the view)
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.fields.FieldView.html#setupTwoWay">Backbone.fields.FieldView#setupTwoWay</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.fields.FieldView.html#setupTwoWay">Backbone.fields.FieldView#setupTwoWay</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-formview.js.html">backbone-formview.js</a>, <a href="backbone-formview.js.html#sunlight-1-line-743">line 743</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-formview.js.html">backbone-formview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -2316,30 +3773,40 @@ function will update the view on a model change (unless it was done by the view)
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type"><a href="Backbone.fields.FieldView.html">Backbone.fields.FieldView</a></span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="stopEvent">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>stopEvent
-        </span><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="stopEvent">
+        <span class="type-signature"></span><span class="method-basic-name">stopEvent</span><span class="method-signature"><span class="signature">(event)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span></span>
+    </code>
     
     
 </dt>
@@ -2347,10 +3814,10 @@ function will update the view on a model change (unless it was done by the view)
     
     
     <div class="description">
-        <p>Stops the current event from propagating up or down the 
+        Stops the current event from propagating up or down the 
 ancestor tree of BaseView instances. Resets immediately
 after stopping the event, and has to be callled every 
-time you want an event to be stopped.</p>
+time you want an event to be stopped.
     </div>
     
 
@@ -2359,44 +3826,103 @@ time you want an event to be stopped.</p>
     
     
     
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the event</td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#stopEvent">Backbone.BaseView#stopEvent</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#stopEvent">Backbone.BaseView#stopEvent</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-841">line 841</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -2409,30 +3935,40 @@ time you want an event to be stopped.</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="triggerBubble">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>triggerBubble
-        </span><span class="signature">(event, <span class="optional">arg</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="triggerBubble">
+        <span class="type-signature"></span><span class="method-basic-name">triggerBubble</span><span class="method-signature"><span class="signature">(event, <span class="optional">arg</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span></span>
+    </code>
     
     
 </dt>
@@ -2440,13 +3976,13 @@ time you want an event to be stopped.</p>
     
     
     <div class="description">
-        <p>Like Backbone.trigger, except that this will not only use trigger
+        Like Backbone.trigger, except that this will not only use trigger
 on the instance this method is invoked on, but also the instance's
 'parentView', and the parentView's parentView, and so on.
 Additional arguments beyond the event name will be passed
 as arguments to the event handler functions. The view that
 originated the bubbling event will automatically be tacked
-on to the end of the arguments, so you can access it if needed.</p>
+on to the end of the arguments, so you can access it if needed.
     </div>
     
 
@@ -2455,7 +3991,7 @@ on to the end of the arguments, so you can access it if needed.</p>
     
     
     
-        <h5>Parameters:</h5>
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
         
 
 <table class="params table table-striped">
@@ -2506,7 +4042,7 @@ on to the end of the arguments, so you can access it if needed.</p>
 
             
 
-            <td class="description last"><p>The name of the event</p></td>
+            <td class="description last">The name of the event</td>
         </tr>
 
 	
@@ -2541,7 +4077,7 @@ on to the end of the arguments, so you can access it if needed.</p>
 
             
 
-            <td class="description last"><p>Argument be passed to event callbacks</p></td>
+            <td class="description last">Argument be passed to event callbacks</td>
         </tr>
 
 	
@@ -2552,41 +4088,51 @@ on to the end of the arguments, so you can access it if needed.</p>
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#triggerBubble">Backbone.BaseView#triggerBubble</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#triggerBubble">Backbone.BaseView#triggerBubble</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-858">line 858</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -2599,30 +4145,40 @@ on to the end of the arguments, so you can access it if needed.</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
 
         
             
-<dt class="method" id="triggerDescend">
-    <h4 class="function">
-        <span class="name">
-            <span class="type-signature"></span>triggerDescend
-        </span><span class="signature">(event, <span class="optional">arg</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span>
-    </h4>
+<dt>
+    <code class="method-name name function-name" id="triggerDescend">
+        <span class="type-signature"></span><span class="method-basic-name">triggerDescend</span><span class="method-signature"><span class="signature">(event, <span class="optional">arg</span>)</span><span class="type-signature"> &rarr; {<a href="Backbone.BaseView.html">Backbone.BaseView</a>}</span></span>
+    </code>
     
     
 </dt>
@@ -2630,12 +4186,12 @@ on to the end of the arguments, so you can access it if needed.</p>
     
     
     <div class="description">
-        <p>Triggers an event that will trigger on each of the instances
+        Triggers an event that will trigger on each of the instances
 subViews, and then if a subView has subViews, will trigger the
 event on that subViews' subViews, and so on. If a subView
 calls stopEvent and passes the event name, then the event
 will not trigger on that subViews' subViews. Arguments
-work in the same manner as they do with triggerBubble.</p>
+work in the same manner as they do with triggerBubble.
     </div>
     
 
@@ -2644,7 +4200,7 @@ work in the same manner as they do with triggerBubble.</p>
     
     
     
-        <h5>Parameters:</h5>
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
         
 
 <table class="params table table-striped">
@@ -2695,7 +4251,7 @@ work in the same manner as they do with triggerBubble.</p>
 
             
 
-            <td class="description last"><p>The event name</p></td>
+            <td class="description last">The event name</td>
         </tr>
 
 	
@@ -2730,7 +4286,7 @@ work in the same manner as they do with triggerBubble.</p>
 
             
 
-            <td class="description last"><p>Argument be passed to event callbacks</p></td>
+            <td class="description last">Argument be passed to event callbacks</td>
         </tr>
 
 	
@@ -2741,41 +4297,51 @@ work in the same manner as they do with triggerBubble.</p>
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Backbone.BaseView.html#triggerDescend">Backbone.BaseView#triggerDescend</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="Backbone.BaseView.html#triggerDescend">Backbone.BaseView#triggerDescend</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backbone-baseview.js.html">backbone-baseview.js</a>, <a href="backbone-baseview.js.html#sunlight-1-line-886">line 886</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -2788,18 +4354,30 @@ work in the same manner as they do with triggerBubble.</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<ul class="inline">
-        <li>
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
 <span class="param-type"><a href="Backbone.BaseView.html">Backbone.BaseView</a></span>
 
-</li>
-    
-</ul>
 
-        
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
     
     
 </dd>
@@ -2817,59 +4395,113 @@ work in the same manner as they do with triggerBubble.</p>
 
 
 
+					</div>
+
+
+				
+				<div class="col-md-3">
+					<div id="toc"></div>
 				</div>
-
-				<div class="clearfix"></div>
-				<footer>
-					
-					
-		<span class="copyright">
-		Backbone.BaseView and Backbone.FormView Copyright © 2013 The contributors to the JSDoc3 and DocStrap projects.
-		</span>
-					<br />
-					
-		<span class="jsdoc-message">
-		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a>
-		using a custom fork of the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
-		</span>
-				</footer>
-			</div>
-
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
-			
-			<br clear="both">
+				
+				<br clear="both">
 		</div>
 
 	</div>
-	<script src="scripts/sunlight.js"></script>
-	<script src="scripts/sunlight.javascript.js"></script>
-	<script src="scripts/sunlight-plugin.doclinks.js"></script>
-	<!-- // <script src="scripts/sunlight-plugin.linenumbers.js"></script> -->
-	<script src="scripts/sunlight-plugin.menu.js"></script>
-	<script src="scripts/jquery.min.js"></script>
-	<script src="scripts/jquery.scrollTo.js"></script>
-	<script src="scripts/jquery.localScroll.js"></script>
+
+</div>
+
+<footer class="clear">
+	
+	
+	<span class="copyright">
+	1sdibs.com, Inc. © 2014
+	</span>
+				<br />
+				
+	<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a>
+	on 2014-10-06T19:13:46-04:00 using the <a
+		href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+	</span>
+</footer>
+
+	<!--<script src="scripts/sunlight.js"></script>-->
+	<script src="scripts/docstrap.lib.js"></script>
 	<script src="scripts/bootstrap-dropdown.js"></script>
 	<script src="scripts/toc.js"></script>
 
-
-	<script>  Sunlight.highlightAll({lineNumbers:true,  showMenu: true, enableDoclinks :true}); </script>
-
 	<script>
 		$( function () {
-			$( "#toc" ).toc({
-				selectors   : "h1,h3,h4:not(.class) .name",
-				showAndHide : false,
-				scrollTo    : 60
-			}).children().css({ overflowY:'auto', height: '80%', width: '31%' });
-			$( "#toc>ul" ).addClass( "nav nav-tabs affix nav-stacked" );
-			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
-		} );
-	</script>
+			$( "[id*='$']" ).each( function () {
+				var $this = $( this );
 
+				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+			} );
+
+			$( "#toc" ).toc( {
+				anchorName  : function ( i, heading, prefix ) {
+					return $( heading ).attr( "id" ) || ( prefix + i );
+				},
+				selectors   : "h1,h3,h4,.method-basic-name:not(.class-name > .method-basic-name)",
+				showAndHide : false,
+				scrollTo    : "100px"
+			} );
+
+			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+			$( '.dropdown-toggle' ).dropdown();
+//			$( ".tutorial-section pre, .readme-section pre" ).addClass( "sunlight-highlight-javascript" ).addClass( "linenums" );
+
+			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+				var $this = $( this );
+
+				var example = $this.find( "code" );
+				exampleText = example.html();
+				var lang = /{@lang (.*?)}/.exec( exampleText );
+				if ( lang && lang[1] ) {
+					exampleText = exampleText.replace( lang[0], "" );
+					example.html( exampleText );
+					lang = lang[1];
+				} else {
+					lang = "javascript";
+				}
+
+				if ( lang ) {
+
+					$this
+						.addClass( "sunlight-highlight-" + lang )
+						.addClass( "linenums" )
+						.html( example.html() );
+
+				}
+			} );
+
+			Sunlight.highlightAll( {
+				lineNumbers : false,
+				showMenu : true,
+				enableDoclinks : true
+			} );
+
+			// Offset the scroll position if there is a hash to
+			// account for the navbar
+		    var hash = window.location.hash;
+		    setTimeout(function () {
+		        var scrollPosition = $(window).scrollTop();
+		        if (hash) {
+		            $(window).scrollTop(scrollPosition - 70);
+		        }
+		    }, 300);
+
+		} );
+	 </script>
+
+
+
+	<!--Navigation and Symbol Display-->
+	
+
+
+	<!--Google Analytics-->
 	
 
 </body>
