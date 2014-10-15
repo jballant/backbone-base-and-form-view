@@ -1095,7 +1095,7 @@
         },
         _parsePossibleVal: function (possibleVals, key) {
             var val = possibleVals[key];
-            if (val && val.value && val.display) {
+            if (val && !isUndefined(val.value) && val.display) {
                 return val;
             }
             if (possibleVals.slice && isArray(possibleVals)) {
