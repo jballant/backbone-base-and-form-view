@@ -1261,8 +1261,8 @@
         unCheckedVal: false,
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
-            this.checkedVal = options.checkedVal || this.checkedVal;
-            this.unCheckedVal = options.unCheckedVal || this.unCheckedVal;
+            this.checkedVal = !isUndefined(options.checkedVal) ? options.checkedVal : this.checkedVal;
+            this.unCheckedVal = !isUndefined(options.unCheckedVal) ? options.unCheckedVal : this.unCheckedVal;
             CheckListView.__super__.initialize.call(this, options);
         },
         setupTwoWay: function () {
@@ -1386,8 +1386,8 @@
         },
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
-            this.checkedVal = options.checkedVal || this.checkedVal;
-            this.unCheckedVal = options.unCheckedVal || this.unCheckedVal;
+            this.checkedVal = !isUndefined(options.checkedVal) ? options.checkedVal : this.checkedVal;
+            this.unCheckedVal = !isUndefined(options.unCheckedVal) ? options.unCheckedVal : this.unCheckedVal;
             this.displayText = options.displayText || this.displayText;
             this.labelAttrs = options.labelAttrs || this.labelAttrs;
             CheckBoxView.__super__.initialize.call(this, options);
