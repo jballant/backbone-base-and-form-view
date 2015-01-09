@@ -474,6 +474,13 @@
                         expect(testField.inputId).toBe(testField.inputPrefix + testField.options.schemaKey);
                     });
                 });
+                describe('className', function () {
+                    it('should generate a class for the field view element from the fieldName, or use one provided as an option', function () {
+                        expect(testField.$el.attr('class')).toBe('form-field-' + testField.options.schemaKey + ' control-group form-field');
+                        testField = new Backbone.fields.FieldView({ schemaKey: 'testField', model: testModel, fieldName: 'testFieldName', className: 'test-class' });
+                        expect(testField.$el.attr('class')).toBe('test-class');
+                    });
+                });
             });
             it('should return the first element that matches the input wrapper selector when "getInputWrapper" method is called', function () {
                 testField.$el.html('<div class="foo"></div><div data-input="" class="one"></div><div class="two"></div>');
@@ -516,6 +523,15 @@
                         expect(testField.$('input').attr('id')).toBe('test-id');
                         expect(testField.$('input').attr('class')).toBe('test-class');
                         expect(testField.$('input').attr('name')).toBe('test-id');
+                    });
+                    it('should set the input attribute "placeholder" based on the property of the same name', function () {
+                        var testPlaceholder = 'Test placeholder...';
+                        testField.placeholder = testPlaceholder;
+                        testField.renderInput();
+                        expect(testField.$('input').attr('placeholder')).toBe(testPlaceholder);
+                        testField.placeholder = null;
+                        testField.renderInput();
+                        expect(testField.$('input').attr('placeholder')).toBeUndefined();
                     });
                     it('should set keys and values of "inputAttrs" option/property as attributes on input element', function () {
                         var attrs = {
@@ -593,7 +609,7 @@
                     expect(testField.getModelVal).toHaveBeenCalled();
                     expect(valForInput).toBe(modelVal);
                 });
-            })
+            });
             describe("Setting model attributes from the input value", function () {
                 var testVal = 'Test Value';
                 beforeEach(function () {
@@ -734,6 +750,29 @@
                     expect(testField.$('input:checked').length).toBe(1);
                     expect(testField.$('input:checked').val()).toBe('bar');
                 });
+                it('should set inputClass on each radio if defined', function () {
+                    var testClass = 'test-class';
+                    testField.inputClass = testClass;
+                    testField.render();
+                    var radios = testField.$('input[type="radio"]');
+                    var i = 0;
+                    var radio;
+                    for (i; i < radios.length; i++) {
+                        expect(radios.eq(i).attr('class')).toBe(testClass);
+                    }
+                });
+                it('should set value of inputId on each radio\'s name and id attribute if defined', function () {
+                    var testId = 'test-id';
+                    testField.inputId = testId;
+                    testField.render();
+                    var radios = testField.$('input[type="radio"]');
+                    var i = 0;
+                    var radio;
+                    for (i; i < radios.length; i++) {
+                        expect(radios.eq(i).attr('id')).toBe(testId + '-' + i);
+                        expect(radios.eq(i).attr('name')).toBe(testId);
+                    }
+                });
             });
             it('should return the value of the checked input when calling the "getValue" method', function () {
                 testField.model.set(testField.fieldName, 'bar');
@@ -838,6 +877,16 @@
                     expect(testField.$('select').val()).toEqual(val);
                 });
 
+                it('should have the inputClass attribute and the inputId attributes on the element based on the properties of the same name', function () {
+                    testField.renderInput();
+                    expect(testField.$('select').attr('class')).toBeUndefined();
+                    expect(testField.$('select').attr('id')).toBe('field-input-testField');
+                    testField.inputClass = 'test-class';
+                    testField.inputId = 'test-id';
+                    testField.renderInput();
+                    expect(testField.$('select').attr('class')).toBe('test-class');
+                    expect(testField.$('select').attr('id')).toBe('test-id')
+                });
             });
 
             it('should set the value of the field on the model to be the value of the select on a "change" event', function () {
@@ -908,6 +957,26 @@
                     expect(testField.$('input').eq(0).prop('checked')).toBe(false);
                     expect(testField.$('input').eq(1).prop('checked')).toBe(true);
                     expect(testField.$('input').eq(2).prop('checked')).toBe(true);
+                });
+                it('should set the inputClass and an indexed input id on each of the input elements', function () {
+                    testField.renderInput();
+                    var i = 0;
+                    var $inputs = testField.$('input');
+                    var $input;
+                    for (i; i < $inputs.length; i++) {
+                        $input = $inputs.eq(i);
+                        expect($input.attr('id')).toBe('field-input-testField-' + i);
+                        expect($input.attr('class')).toBeUndefined();
+                    }
+                    testField.inputId = 'test-id';
+                    testField.inputClass = 'test-class';
+                    testField.renderInput();
+                    $inputs = testField.getInputEl();
+                    for (i = 0; i < $inputs.length; i++) {
+                        $input = $inputs.eq(i);
+                        expect($input.attr('id')).toBe('test-id-' + i);
+                        expect($input.attr('class')).toBe('test-class');
+                    }
                 });
             });
             describe('"isSelected" method', function () {
