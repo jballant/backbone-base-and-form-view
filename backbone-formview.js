@@ -823,7 +823,7 @@
         /**
          * Get the value of the form field input.
          * @memberOf Backbone.fields.FieldView
-         * *******w#
+         * @memberOf Backbone.fields.FieldView#
          * @return {String|Boolean|Array|Number|Object}
          */
         getValue: function () {
