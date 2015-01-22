@@ -390,7 +390,7 @@
         },
         /**
          * A reference to the template vars function
-         * @type {[type]}
+         * @type {function}
          */
         _getTemplateVars: getTemplateVars
     }, {

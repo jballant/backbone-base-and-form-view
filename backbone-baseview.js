@@ -1170,7 +1170,7 @@
          * Invoke a function or method on ancestors
          * @memberOf Backbone.BaseView#
          * @param {Function|String} fnName
-         * @param {*[]} [args]
+         * @param {mixed[]} [args]
          *        An array of arguments to pass to
          *        the invocation
          * @return {Backbone.BaseView}
