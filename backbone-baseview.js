@@ -1019,6 +1019,25 @@
             // Add events that will not bubble events up app the view's ancestor tree
             this._stopPropogation = {};
             BaseView.__super__.constructor.call(this, options);
+
+            render = this.render;
+            this.render = function () {
+                var readyPromise = this.getReadyPromise && this.getReadyPromise();
+                var self = this;
+                var returnVal;
+                var invokeRenderFn = function () {
+                    self.trigger('viewWillRender');
+                    returnVal = render.call(self);
+                    self.trigger('viewDidRender');
+                    return returnVal;
+                };
+                if (readyPromise) {
+                    self.trigger('viewWaitingToRender');
+                    readyPromise.done(invokeRenderFn);
+                    return self;
+                }
+                return invokeRenderFn();
+            };
             // To maintain parity with how Backbone handles the 'events'
             // property on a view, we will overwrite the 'viewEvents'
             // property on the prototype with options.viewEvents if it
