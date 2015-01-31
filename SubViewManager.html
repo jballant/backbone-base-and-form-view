@@ -94,8 +94,6 @@
     SubViewManager
     </h2>
     
-        <div class="class-description">SubViewManager</div>
-    
 </header>
 
 <article>
@@ -898,6 +896,240 @@ function must provide instances of views or configurations.
             
 <dt>
     <code class="method-name name function-name" id="add">
+        <span class="type-signature"></span><span class="method-basic-name">add</span><span class="method-signature"><span class="signature">(name, arr, <span class="optional">singleton</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Adds a subView or subViews to the View's list of subViews. Calling
+function must provide instances of views or configurations.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A string key to refer to the subViews with. Should match
+     a key in the subView configuration. If not, a configuration
+     will be set up with default values based on the instance
+     passed.</td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>arr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Backbone.View></span>
+|
+
+<span class="param-type">Array.&lt;object></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An array of View instances or options. Instances will be
+     appropriately associated with the key, options will be
+     used to instantiate a subView based on the configuration
+     matching the key</td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>singleton</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">True if the added views should be singletons</td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="add">
         <span class="type-signature"></span><span class="method-basic-name">add</span><span class="method-signature"><span class="signature">(map, <span class="optional">singleton</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span></span>
     </code>
     
@@ -1160,415 +1392,6 @@ function must provide instances of views or configurations.
             
 
             <td class="description last">A Backbone.View instance to add as the subview</td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <div class="method-returns-wrapper">
-        <h5 class="method-doc-label">Returns:</h5>
-        <div class="method-returns">
-        
-                
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
-
-
-	</dd>
-</dl>
-
-
-            
-        </div>
-    </div> 
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <code class="method-name name function-name" id="add">
-        <span class="type-signature"></span><span class="method-basic-name">add</span><span class="method-signature"><span class="signature">(name, arr, <span class="optional">singleton</span>)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span></span>
-    </code>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Adds a subView or subViews to the View's list of subViews. Calling
-function must provide instances of views or configurations.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5 class="method-doc-label method-params-label">Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-		<th>Argument</th>
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">A string key to refer to the subViews with. Should match
-     a key in the subView configuration. If not, a configuration
-     will be set up with default values based on the instance
-     passed.</td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>arr</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;Backbone.View></span>
-|
-
-<span class="param-type">Array.&lt;object></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">An array of View instances or options. Instances will be
-     appropriately associated with the key, options will be
-     used to instantiate a subView based on the configuration
-     matching the key</td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>singleton</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">True if the added views should be singletons</td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <div class="method-returns-wrapper">
-        <h5 class="method-doc-label">Returns:</h5>
-        <div class="method-returns">
-        
-                
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
-
-
-	</dd>
-</dl>
-
-
-            
-        </div>
-    </div> 
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <code class="method-name name function-name" id="addConfig">
-        <span class="type-signature"></span><span class="method-basic-name">addConfig</span><span class="method-signature"><span class="signature">(name, config)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span></span>
-    </code>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Add an configuration for a subview to the SubViewManager.
-It can be instantiated later with the add function.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5 class="method-doc-label method-params-label">Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The name or type that you would like use to refer to subViews
-     created with this config</td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>config</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The configuration object (uses the format described above)</td>
         </tr>
 
 	
@@ -2121,6 +1944,181 @@ It can be instantiated later with the add function.
      }</pre>
 
 
+    
+</dd>
+
+        
+            
+<dt>
+    <code class="method-name name function-name" id="addConfig">
+        <span class="type-signature"></span><span class="method-basic-name">addConfig</span><span class="method-signature"><span class="signature">(name, config)</span><span class="type-signature"> &rarr; {<a href="SubViewManager.html">SubViewManager</a>}</span></span>
+    </code>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Add an configuration for a subview to the SubViewManager.
+It can be instantiated later with the add function.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5 class="method-doc-label method-params-label">Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name or type that you would like use to refer to subViews
+     created with this config</td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The configuration object (uses the format described above)</td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="backbone-baseview.js.html">backbone-baseview.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <div class="method-returns-wrapper">
+        <h5 class="method-doc-label">Returns:</h5>
+        <div class="method-returns">
+        
+                
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="SubViewManager.html">SubViewManager</a></span>
+
+
+	</dd>
+</dl>
+
+
+            
+        </div>
+    </div> 
+    
+    
     
 </dd>
 
@@ -5914,8 +5912,8 @@ suffix).
 				<br />
 				
 	<span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a>
-	on 2014-10-06T19:13:46-04:00 using the <a
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha13</a>
+	on 2015-01-31T15:52:37-05:00 using the <a
 		href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 	</span>
 </footer>

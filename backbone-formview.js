@@ -390,6 +390,7 @@
         },
         /**
          * A reference to the template vars function
+         * @memberOf Backbone.fields.FormView#
          * @type {function}
          */
         _getTemplateVars: getTemplateVars
@@ -630,6 +631,7 @@
             return this;
         },
         /**
+         * @memberOf Backbone.CollectionFormView#
          * @return {Backbone.View[]} An array of the row subviews 
          */
         getRows: function () {
@@ -1061,6 +1063,7 @@
         },
         /**
          * Returns true or false if the input should be selected.
+         * @memberOf Backbone.fields.RadioListView#
          * @param {string} key The key of the possibleVal that is being tested
          * @return {boolean}
          */
@@ -1303,6 +1306,7 @@
         /**
          * Return the model value for a particular
          * possibleVals key.
+         * @memberOf Backbone.fields.CheckListView#
          * @param  {string} key
          * @return {*}
          */
