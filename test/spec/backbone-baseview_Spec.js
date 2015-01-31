@@ -279,6 +279,11 @@
                         });
                         view.subs.create('baz');
                         expect(view.subs.get('baz') instanceof Backbone.BaseView).toBe(true);
+                        view.subs.autoInitSingletons = true;
+                        view.subs.addConfig('shouldBeInitialized', {
+                            construct: Backbone.BaseView
+                        });
+                        expect(view.subs.get('shouldBeInitialized') instanceof Backbone.BaseView).toBe(true);
                         view.subs.defaultToSingletons = false;
                         view.subs.addConfig('fooBar', {
                             construct: Backbone.BaseView

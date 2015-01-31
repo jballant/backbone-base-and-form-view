@@ -1,4 +1,4 @@
-//     Backbone.BaseView 0.8.0
+//     Backbone.BaseView 0.8.3
 
 //     (c) 2014 James Ballantine, 1stdibs.com Inc.
 //     Backbone.BaseView may be freely distributed under the MIT license.
@@ -848,7 +848,7 @@
             if (typeof this.config[name].singleton !== "boolean") {
                 this.config[name].singleton = this.defaultToSingletons;
             }
-            if (this.autoInitSingletons && config.singleton) {
+            if (this.autoInitSingletons && this.config[name].singleton) {
                 return this._init(name);
             }
             return this;
