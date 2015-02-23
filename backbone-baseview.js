@@ -20,16 +20,8 @@
     }
 
     var
-        // Finds globally dot noted namespaced objects from a string
-        _stringToObj = function (str) {
-            var arr = str.split('.'),
-                obj = root[arr.shift()];
-
-            while (arr.length && obj) {
-                obj = obj[arr.shift()];
-            }
-            return obj;
-        },
+        _autoBubbleEvents = [],
+        eventSettings,
         slice = Array.prototype.slice,
         result = _.result,
         each = _.each,
@@ -37,6 +29,19 @@
         isObject = _.isObject,
         isArray = _.isArray,
         View = Backbone.View,
+        _trigger = Backbone.Events.trigger,
+        // Event Names
+        eventViewWillRender = 'viewWillRender',
+        eventViewDidRender = 'viewDidRender',
+        eventViewWaitingToRender = 'viewWaitingToRender',
+        eventViewAppendedToParent = 'viewAppendedToParent',
+        eventViewAppendedToDOM = 'viewAppendedToDOM',
+        eventViewRenderFailure = 'viewRenderFailure',
+        // Event bubbling options
+        shouldTriggerNoViewPath = 1,
+        shouldTriggerWithViewPath = 2,
+        shouldTriggerBoth = 3,
+        // BaseView local reference
         BaseView,
         /**
          * Local constructor intended for use by {@link Backbone.BaseView}. Creates an object specifically
@@ -250,7 +255,7 @@
          */
         /**
          * Add a subview for each view instance in
-         * an array. They will not be associated 
+         * an array. They will not be associated
          * with a key and will be only accessible
          * through the subViews array.
          * @memberOf SubViewManager#
@@ -272,6 +277,7 @@
         /**
          * Add instances using an object that
          * maps subview keys to the instances
+         * @memberOf SubViewManager#
          * @param {object} map
          * @return {SubViewManager}
          */
@@ -300,10 +306,10 @@
          * Given an array of keys, a subview
          * will be instantiated for each key
          * based on the configuration for that
-         * key. The options param will be 
+         * key. The options param will be
          * passed to each view on instantiation
          * as additional options.
-         * 
+         *
          * @memberOf SubViewManager#
          * @param {String[]} keys
          * @param {Object} options
@@ -324,6 +330,7 @@
         /**
          * Instantiate all singletons defined in the
          * config.
+         * @memberOf SubViewManager#
          * @param  {object} options Additional options
          * @return {SubViewManager}
          */
@@ -337,8 +344,9 @@
             return this;
         },
         /**
-         * Create subviews with a map of configured 
+         * Create subviews with a map of configured
          * subview keys to additional options.
+         * @memberOf SubViewManager#
          * @param  {object} map
          * @return {SubViewManager}
          */
@@ -356,6 +364,7 @@
          * for that instance has not already been
          * set. Remove the singleton first if you
          * want to set a new instance.
+         * @memberOf SubViewManager#
          * @param {String} key
          * @param {Backbone.View} instance
          * @return {SubViewManager}
@@ -366,9 +375,10 @@
         },
         /**
          * Remove a singleton if it exists and then
-         * set a new instnce in it's place.
+         * set a new instance in it's place.
+         * @memberOf SubViewManager#
          * @param  {String} key
-         * @param  {Backbone.View} instance 
+         * @param  {Backbone.View} instance
          * @return {SubViewManager}
          */
         overrideSingleton: function (key, instance) {
@@ -416,7 +426,7 @@
          *          options:    // Any options you want to pass to the initialize function
          *          singleton:  // if the object should be configured as a singleton or not
          *          location:   // A string or jQuery instance in the parent view element. Or
-         *                      // a function that returns one of these. The subview el will 
+         *                      // a function that returns one of these. The subview el will
          *                      // be appended to that location
          *      }
          * @return {SubViewManager}
@@ -450,7 +460,7 @@
          * @param {object} [options]
          *      [options.appendTo] A selector, HTMLElement, or $ instance to append the subViews to
          *      [options.useLocation=false]
-         *          True if you want to append the subviews to the locations in their config if they 
+         *          True if you want to append the subviews to the locations in their config if they
          *          have one.
          *      [options.clearLocations=false]
          *          True if you want to use empty on the configured locations
@@ -486,10 +496,10 @@
          * Render a subView specified by a key (from their configuration key). The key will
          * retrieve subViews by looking for a type and then looking for singletons or
          * specific instance using the Model/View cid
-         * 
+         *
          * @memberOf SubViewManager#
          * @type {SubViewManager}
-         * 
+         *
          * @param {String|Backbone.Model|Backbone.View} key
          *      A key, type, View/Model cid, Model, or View to refer to a specific subView
          *      or subViews. For example, passing the view cid 'view4' will render only
@@ -537,7 +547,7 @@
          * the function/method.
          * @memberOf SubViewManager#
          * @type {SubViewManager}
-         * @param {String|Function} func 
+         * @param {String|Function} func
          *        A string name of a method to call in the subviews or a function that
          *        will be called for each view
          * @param {Array} [args] An array of arguments to pass to the method/function
@@ -619,7 +629,7 @@
          * key in a list of keys
          * @memberOf SubViewManager#
          * @param  {String[]} keys
-         * @param {Boolean} [preserveElems=false] 
+         * @param {Boolean} [preserveElems=false]
          *        If true, the views' elements will not
          *        be removed from the DOM
          * @return {SubViewManager}
@@ -651,7 +661,7 @@
         },
         /**
          * Shortcut method to invoke jQuery's detach function
-         * on each of the '.$el' elements for each of the 
+         * on each of the '.$el' elements for each of the
          * subviews, or if an array of subViews is passed,
          * on each of those. Useful if you want to re-render
          * a parent view and want to prevent subviews from
@@ -659,7 +669,7 @@
          * when jQuery 'remove' is called on that element.
          * @memberOf SubViewManager#
          * @type {SubViewManager}
-         * @param {Backbone.View[]} subViews
+         * @param {Backbone.View[]} [subViews]
          * @return {SubViewManager}
          */
         detachElems: function (subViews) {
@@ -761,10 +771,10 @@
         /**
          * Generate a location selector for each configured
          * subview type. Each subview type will have a
-         * location set based on the subview type. For 
+         * location set based on the subview type. For
          * example,the subview type 'header' would get the
          * type '.header-container' (using the default
-         * suffix). 
+         * suffix).
          * @memberOf SubViewManager#
          * @param  {string} [suffix=-container]
          *         The suffix to use for each location
@@ -785,6 +795,7 @@
             var $appendTo,
                 i = -1,
                 location,
+                subView,
                 $locations = {};
             if (place !== true) {
                 $appendTo = place;
@@ -794,20 +805,22 @@
             }
 
             while (++i < subViews.length) {
-                subViews[i].render();
+                subView = subViews[i];
+                subView.render();
                 if ($appendTo) {
-                    subViews[i].$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo).first() : $appendTo);
-                } else if (place && (location = this.config[this.getSubViewType(subViews[i])].location)) {
+                    subView.$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo).first() : $appendTo);
+                } else if (place && (location = this.config[this.getSubViewType(subView)].location)) {
                     if (typeof location === 'string') {
                         if (!$locations[location]) {
                             $locations[location] = this.parent.$(location).first();
                         }
                         location = $locations[location];
                     } else if (typeof location === 'function') {
-                        location = location.call(subViews[i]);
+                        location = location.call(subView);
                         if (!(location instanceof Backbone.$)) { throw new Error('location function must return instance of jQuery'); }
                     }
-                    location.append(subViews[i].$el);
+                    location.append(subView.$el);
+                    subView.trigger('appendToParent')
                 }
             }
             return this;
@@ -884,6 +897,7 @@
                 delete this._subViewSingletons[key];
             }
             if (!silent) {
+                subView.trigger('removedAsSubView');
                 this.trigger('remove:' + key, subView);
             }
         },
@@ -913,6 +927,7 @@
             }
             this.newest = instance;
             if (!silent) {
+                instance.trigger('addedAsSubView');
                 return this.trigger('add', instance).trigger('add:' + key, instance);
             }
             return this;
@@ -928,7 +943,7 @@
 
             options = _.extend({}, config.options || {}, options || {});
 
-            Construct = (typeof Construct === 'string') ? _stringToObj(Construct) : Construct;
+            Construct = (typeof Construct === 'string') ? stringToObj(Construct) : Construct;
             if (!Construct) {
                 console.error('Construct for key "' + key + '" was not found:', config ? config.construct : '');
                 return undefined;
@@ -987,6 +1002,7 @@
      * @property parentView         - if this is a subView of another dibLibs.BaseView, this will be a ref to that view instance
      */
     BaseView = View.extend({
+        _subviewtype: null,
         subViews: null,
         subs: null,
         // SubView Configuration Object
@@ -1003,6 +1019,7 @@
         singletonSubViews: false,
         // If this is a subView of another Backbone.BaseView, this will be a ref to that view instance
         parentView: null,
+        wrapRenderFunction: true,
         constructor: function (options, parentView) {
             var subViewCfg = (options && options.subViewConfig) ? options.subViewConfig : this.subViewConfig;
             subViewCfg = (isFunction(subViewCfg)) ? subViewCfg.call(this) : subViewCfg;
@@ -1020,24 +1037,13 @@
             this._stopPropogation = {};
             BaseView.__super__.constructor.call(this, options);
 
-            render = this.render;
-            this.render = function () {
-                var readyPromise = this.getReadyPromise && this.getReadyPromise();
-                var self = this;
-                var returnVal;
-                var invokeRenderFn = function () {
-                    self.trigger('viewWillRender');
-                    returnVal = render.call(self);
-                    self.trigger('viewDidRender');
-                    return returnVal;
-                };
-                if (readyPromise) {
-                    self.trigger('viewWaitingToRender');
-                    readyPromise.done(invokeRenderFn);
-                    return self;
-                }
-                return invokeRenderFn();
-            };
+            // If wrapRenderFunction is true, the render function as defined
+            // on the View pseudoclass to trigger events and adds the ability
+            // to delay render if a `getReadyPromise` method is defined.
+            if (this.wrapRenderFunction) {
+                this._renderFn = this.render;
+                this.render = wrapRender;
+            }
             // To maintain parity with how Backbone handles the 'events'
             // property on a view, we will overwrite the 'viewEvents'
             // property on the prototype with options.viewEvents if it
@@ -1062,6 +1068,7 @@
             if (isFunction(template)) {
                 html = template(result(this, 'templateVars')) || '';
             }
+            this.subs.detachElems();
             this.$el.html(html);
             this.subs.renderAppend();
             return this;
@@ -1077,16 +1084,20 @@
          * @return {Backbone.BaseView}
          */
         place: function ($location, replace) {
+            var hasParentView = !!this.parentView;
             if (typeof $location === "string") {
-                var $parent = (this.parentView) ? this.parentView.$el : Backbone.$('body');
+                var $parent = (hasParentView) ? this.parentView.$el : Backbone.$('body');
                 $location = $parent.find($location);
             }
 
             if (replace) {
                 $location.html(this.el);
-                return this;
+            } else {
+                $location.append(this.el);
             }
-            $location.append(this.el);
+            if (hasParentView) {
+                this.trigger(eventViewAppendedToParent);
+            }
             return this;
         },
         /**
@@ -1104,7 +1115,7 @@
         /**
          * Stops the current event from propagating up or down the 
          * ancestor tree of BaseView instances. Resets immediately
-         * after stopping the event, and has to be callled every 
+         * after stopping the event, and has to be called every
          * time you want an event to be stopped.
          * @memberOf Backbone.BaseView#
          * @param {String} event The name of the event
@@ -1129,21 +1140,19 @@
          * @return {Backbone.BaseView}
          */
         triggerBubble: function (event) {
-            var args = slice.call(arguments, 1),
-                stopPropogation,
-                anscestor;
-            args.unshift(event);
-            args.push(this);
-            anscestor = this;
-            while (anscestor) {
-                anscestor.trigger.apply(anscestor, args);
-                stopPropogation = anscestor._stopPropogation;
-                if (stopPropogation && stopPropogation[event]) {
-                    stopPropogation[event] = false;
-                    return this;
-                }
-                anscestor = anscestor.parentView;
-            }
+            triggerBubble(this, event, slice.call(arguments, 1), shouldTriggerBoth);
+            return this;
+        },
+        /**
+         * Like triggerBubble, except instead of triggering the
+         * same event, triggers an event namespaced by the view
+         * path.
+         * @memberOf Backbone.BaseView#
+         * @param {string} event
+         * @returns {Backbone.BaseView}
+         */
+        triggerBubbleNamespaced: function (event) {
+            triggerBubble(this, event, slice.call(arguments, 1), shouldTriggerWithViewPath);
             return this;
         },
         /**
@@ -1159,30 +1168,7 @@
          * @return {Backbone.BaseView}
          */
         triggerDescend: function (event) {
-            var args = slice.call(arguments, 1),
-                _trigger = function (subViews) {
-                    var i = -1,
-                        len = subViews.length,
-                        subSubs,
-                        stopPropogation,
-                        descend;
-                    while (++i < len) {
-                        descend = true;
-                        subViews[i].trigger.apply(subViews[i], args);
-                        stopPropogation = subViews[i]._stopPropogation;
-                        if (stopPropogation && stopPropogation[event]) {
-                            stopPropogation[event] = false;
-                            descend = false;
-                        }
-                        subSubs = subViews[i].subViews;
-                        if (descend && subSubs && subSubs.length) {
-                            _trigger(subSubs);
-                        }
-                    }
-                };
-            args.unshift(event);
-            args.push(this);
-            _trigger([this]);
+            triggerDescend(this, event, slice.call(arguments, 1));
             return this;
         },
         /**
@@ -1281,6 +1267,54 @@
             return !this.parentView;
         },
         /**
+         * Returns the subview type pathway from the
+         * top view to this view.
+         * @memberOf Backbone.BaseView#
+         * @returns {string[]}
+         */
+        getViewPath : function () {
+            var viewPath = [];
+            var addType = function () {
+                var type = this.getSubViewType();
+                if (type) {
+                    viewPath.unshift(type)
+                }
+            };
+            addType.call(this);
+            this.ascend(addType);
+            return viewPath;
+        },
+
+        /**
+         * Overrides Backbone.View.trigger. Defers
+         * to the superclass functionality unless
+         * the event was added to the global settings
+         * as a cascading event, where it will
+         * trigger an ascending event that is
+         * namespaced with subview types.
+         * @param {string} event
+         * @param {..Mixed} args
+         * @returns {Backbone.BaseView}
+         */
+        trigger: function (event) {
+            if (eventSettings.isAutoBubbleEvent(event)) {
+                return triggerBubble(this, event, slice.call(arguments, 1), shouldTriggerWithViewPath);
+            }
+            var args = arguments, a1 = args[1], a2 = args[2], a3 = args[3],
+                len = args.length;
+            // Replicate weird optimization in Backbone.Events.trigger
+            // that uses call and specific arguments
+            switch (len) {
+                case 1: _trigger.call(this, event); break;
+                case 2: _trigger.call(this, event, a1); break;
+                case 3: _trigger.call(this, event, a1, a2); break;
+                case 4: _trigger.call(this, event, a1, a2, a3); break;
+                default: _trigger.apply(this, args)
+            }
+            return this;
+        },
+
+        /**
          * Like delegateEvents, except that instead of events being bound to el, the
          * events are backbone events bound to the view object itself. You can create
          * a 'viewEvents' object literal property on a View's prototype, and when it's
@@ -1298,20 +1332,173 @@
          */
         bindViewEvents: function (events) {
             events = events || result(this, 'viewEvents');
-            each(events, function (func, event) {
-                var segs = event.split(' '),
-                    listenTo = (segs.length > 1) ? this[segs[1]] : this;
-                func = isFunction(func) ? func : this[func];
-                if (listenTo) {
-                    this.stopListening(listenTo, segs[0], func);
-                    this.listenTo(listenTo, segs[0], func);
-                }
-            }, this);
+            each(events, bindViewEvent, this);
             return this;
         }
 
     });
 
+    // Helper function to listen to an event triggered
+    // on the view instance or a property of the view
+    // instance
+    function bindViewEvent(func, event) {
+        var segs = event.split(' '),
+            listenTo = (segs.length > 1) ? this[segs[1]] : this;
+        func = isFunction(func) ? func : this[func];
+        if (listenTo) {
+            this.stopListening(listenTo, segs[0], func);
+            this.listenTo(listenTo, segs[0], func);
+        }
+    }
+
+    // triggers events on a view and than each of it's ancestors in
+    // ascending order. If useViewPathNamespacing is true, instead
+    // of triggering the same exact event, uses the viewpath to
+    // namespace the event.
+    function triggerBubble(view, event, args, viewPathNameSpacing) {
+        var stopPropagation,
+            viewPath = viewPathNameSpacing > 1 ? view.getViewPath() : null,
+            triggerWithoutViewPath = viewPathNameSpacing % 2 === 1,
+            ancestor;
+        args.unshift(event);
+        args.push(view);
+        ancestor = view;
+        while (ancestor) {
+            if (viewPath) {
+                // if there view path argument, trigger the
+                // event with the view path for namespacing
+                triggerBubbledEventWithPath(ancestor, args, viewPath);
+            }
+            if (triggerWithoutViewPath) {
+                _trigger.apply(ancestor, args);
+            }
+            // If the current ancestor calls stopEvent with
+            // the current events name, the ascending for the
+            // event is stopped
+            stopPropagation = ancestor._stopPropogation;
+            if (stopPropagation && stopPropagation[event]) {
+                stopPropagation[event] = false;
+                return this;
+            }
+            ancestor = ancestor.parentView;
+        }
+    }
+
+    // Trigger an event on a view and then its subviews and then
+    // each of the subview's subviews, and so on.
+    function triggerDescend(view, event, args) {
+        args.unshift(event);
+        args.push(view);
+        triggerDescendHelper([view], event, args);
+    }
+
+    function triggerDescendHelper(subViews, event, args) {
+        var i = -1,
+            len = subViews.length,
+            subSubs,
+            stopPropagation,
+            descend;
+        while (++i < len) {
+            descend = true;
+            _trigger.apply(subViews[i], args);
+            stopPropagation = subViews[i]._stopPropogation;
+            if (stopPropagation && stopPropagation[event]) {
+                stopPropagation[event] = false;
+                descend = false;
+            }
+            subSubs = subViews[i].subViews;
+            if (descend && subSubs && subSubs.length) {
+                triggerDescendHelper(subSubs, event, args);
+            }
+        }
+    }
+
+    function triggerBubbledEventWithPath(currentView, args, viewPath) {
+        var curPath = _.rest(viewPath, currentView.getViewPath().length);
+        args = args.slice(0);
+        args[0] = args[0] + (curPath.length ? (':' + curPath.join('.')) : '');
+        _trigger.apply(currentView, args);
+    }
+
+    function invokeRenderFn() {
+        this.trigger(eventViewWillRender);
+        var returnVal = this._renderFn();
+        this.trigger(eventViewDidRender);
+        return returnVal;
+    }
+
+    function onReadyFailure() {
+        this.trigger(eventViewRenderFailure, slice.call(arguments));
+    }
+
+    /**
+     * Wraps render function of Backbone.BaseView instances
+     * and invokes some events and also handles async renders
+     * when you define a 'getReadyPromise'
+     * @memberOf Backbone.BaseView#
+     * @inner
+     */
+    function wrapRender() {
+        var self = this,
+            readyPromise = isFunction(self.getReadyPromise) ? self.getReadyPromise() : null;
+        if (readyPromise && isFunction(readyPromise.then)) {
+            self.trigger(eventViewWaitingToRender);
+            readyPromise.then(_.bind(invokeRenderFn, self), _.bind(onReadyFailure, self));
+            return self;
+        }
+        return invokeRenderFn.call(self);
+    }
+
+    function stringToObj(str) {
+        var arr = str.split('.'),
+            obj = root[arr.shift()];
+
+        while (arr.length && obj) {
+            obj = obj[arr.shift()];
+        }
+        return obj;
+    }
+
+    /**
+     * @memberOf Backbone.BaseView
+     */
+    eventSettings = BaseView.eventSettings = {
+        /**
+         * @memberOf Backbone.BaseView.eventSettings
+         * @param {string} eventName
+         * @returns {boolean}
+         */
+        isAutoBubbleEvent: function (eventName) {
+            return _.indexOf(_autoBubbleEvents, eventName) > -1;
+        },
+        /**
+         * @memberOf Backbone.BaseView.eventSettings
+         * @param {string} eventName
+         */
+        addAutoBubbleEvent: function (eventName) {
+            if (!eventSettings.isAutoBubbleEvent(eventName)) {
+                _autoBubbleEvents.push(eventName);
+            }
+        },
+        /**
+         * @memberOf Backbone.BaseView.eventSettings
+         * @param {string} eventName
+         * @returns {boolean}
+         */
+        removeAutoBubbleEvent: function (eventName) {
+            var i = _.indexOf(_autoBubbleEvents, eventName);
+            _autoBubbleEvents.splice(i, 1);
+        },
+        /**
+         * @memberOf Backbone.BaseView.eventSettings
+         * @param {string} eventNames
+         */
+        addAutoBubbleEvents: function (eventNames) {
+            each(eventNames, eventSettings.addAutoBubbleEvent);
+        }
+    };
+
+    // Add BaseView as property of Backbone
     Backbone.BaseView = BaseView;
 
 }(this));

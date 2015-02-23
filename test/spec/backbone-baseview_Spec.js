@@ -948,6 +948,102 @@
                 });
             });
 
+            describe('"triggerBubbleNamespaced" method', function () {
+                it('should trigger an event on the parent with the subview path string appended to it', function () {
+                    var triggeredOnC = false, triggeredOnB = false, triggeredOrigOnB = false, aArgs, triggeredOnA = false;
+                    cView.on('foo', function () {
+                        triggeredOnC = true;
+                    });
+                    bView.on('foo', function () {
+                        triggeredOrigOnB = true;
+                    });
+                    bView.on('foo:c', function () {
+                        triggeredOnB = true;
+                    });
+                    aView.on('foo:b.c', function () {
+                        triggeredOnA = true;
+                        aArgs = _.toArray(arguments);
+                    });
+                    cView.triggerBubbleNamespaced('foo', 'some-arg');
+                    expect(triggeredOnC).toBe(true);
+                    expect(triggeredOnB).toBe(true);
+                    expect(triggeredOrigOnB).toBe(false);
+                    expect(triggeredOnA).toBe(true);
+                    expect(aArgs[0]).toBe('some-arg');
+                    expect(aArgs[1]).toBe(cView);
+                });
+                it('should stop the event when "stopEvent" is called without the namespace', function () {
+                    var triggeredOnC = false, triggeredOnB = false, triggeredOnA = false;
+                    cView.on('foo', function () {
+                        triggeredOnC = true;
+                    });
+                    bView.on('foo:c', function () {
+                        bView.stopEvent('foo');
+                        triggeredOnB = true;
+                    });
+                    aView.on('foo:b.c', function () {
+                        triggeredOnA = true;
+                    });
+                    cView.triggerBubbleNamespaced('foo', 'some-arg');
+                    expect(triggeredOnC).toBe(true);
+                    expect(triggeredOnB).toBe(true);
+                    expect(triggeredOnA).toBe(false);
+                });
+            });
+
+            describe('eventSettings static object', function () {
+                var triggeredOnC = false, triggeredOnB = false, triggeredOrigOnB = false, aArgs, triggeredOnA = false,
+                    testBubbling = function (event, shouldBeTriggered) {
+                        expect(triggeredOnC).toBe(true);
+                        expect(triggeredOnB).toBe(shouldBeTriggered);
+                        expect(triggeredOrigOnB).toBe(false);
+                        expect(triggeredOnA).toBe(shouldBeTriggered);
+                        if (shouldBeTriggered) {
+                            expect(aArgs[0]).toBe('some-arg');
+                            expect(aArgs[1]).toBe(cView);
+                        }
+                    };
+                beforeEach(function () {
+                    cView.on('foo', function () {
+                        triggeredOnC = true;
+                    });
+                    bView.on('foo', function () {
+                        triggeredOrigOnB = true;
+                    });
+                    bView.on('foo:c', function () {
+                        triggeredOnB = true;
+                    });
+                    aView.on('foo:b.c', function () {
+                        triggeredOnA = true;
+                        aArgs = _.toArray(arguments);
+                    });
+                });
+                describe('"isAutoBubbleEvent"', function () {
+                    it('should return true when an event was added with "addAutoBubbleEvent" and false otherwise', function () {
+                        expect(Backbone.BaseView.eventSettings.isAutoBubbleEvent('foo')).toBe(false);
+                        Backbone.BaseView.eventSettings.addAutoBubbleEvent('foo');
+                        expect(Backbone.BaseView.eventSettings.isAutoBubbleEvent('foo')).toBe(true);
+                        Backbone.BaseView.eventSettings.removeAutoBubbleEvent('foo');
+                        expect(Backbone.BaseView.eventSettings.isAutoBubbleEvent('foo')).toBe(false);
+                        Backbone.BaseView.eventSettings.addAutoBubbleEvents(['foo', 'bar']);
+                        expect(Backbone.BaseView.eventSettings.isAutoBubbleEvent('foo')).toBe(true);
+                        expect(Backbone.BaseView.eventSettings.isAutoBubbleEvent('bar')).toBe(true);
+                        Backbone.BaseView.eventSettings.removeAutoBubbleEvent('foo');
+                        Backbone.BaseView.eventSettings.removeAutoBubbleEvent('bar');
+                    });
+                });
+                describe('"addAutoBubbleEvent" method', function () {
+                    it('should make an event automatically bubble with view path namespacing when an event is added', function () {
+                        cView.trigger('foo', 'some-arg');
+                        testBubbling('foo', false);
+                        Backbone.BaseView.eventSettings.addAutoBubbleEvent('foo');
+                        cView.trigger('foo', 'some-arg');
+                        testBubbling('foo', true);
+                        Backbone.BaseView.eventSettings.removeAutoBubbleEvent('foo');
+                    });
+                });
+            });
+
             describe('"triggerDescend" method', function () {
                 it('should trigger an event all a view\'s subviews, and their subviews, and so on', function () {
                     var firedOnTopView = false, firedOnA = false, firedOnB = false, firedOnCWith, origView;
