@@ -1244,9 +1244,9 @@
                     });
                     var Construct = Backbone.BaseView.extend({
                         getReadyPromise: function () {
-                            return new Promise(function (resolve, reject) {
-                                setTimeout(resolve, 1);
-                            });
+                            var dfd = $.Deferred();
+                            setTimeout(dfd.resolve, 1);
+                            return dfd.promise();
                         },
                         render: render
                     });
