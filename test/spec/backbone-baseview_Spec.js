@@ -1,4 +1,4 @@
-/*global Backbone, jQuery, _, describe, it, expect, spyOn, waitsFor, beforeEach */
+/*global Backbone, jQuery, _, jasmine, describe, it, expect, spyOn, waitsFor, beforeEach */
 (function (root, $, Backbone, _) {
     "use strict";
 
@@ -808,9 +808,55 @@
 
         });
 
+        describe('"render" method', function () {
+            it('should invoke "templateVars" method if it exists and the template function and finally place the html', function () {
+                var Construct = Backbone.BaseView.extend({
+                    templateVars: function () {
+                        return {foo: 'bar'};
+                    },
+                    template: function (vars) {
+                        return '<span class="foo-wrapper">' + vars.foo + '</span>';
+                    }
+                });
+                var view = new Construct();
+                spyOn(view, 'templateVars').and.callThrough();
+                spyOn(view, 'template').and.callThrough();
+                view.render();
+                expect(view.templateVars).toHaveBeenCalled();
+                expect(view.template).toHaveBeenCalled();
+                expect(view.template.calls.mostRecent().args[0].foo).toBe('bar');
+                expect(view.$('.foo-wrapper').length).toBe(1);
+            });
+            it('should append subviews to their locations and prevent subview events from being removed or duplicated', function () {
+                var view = new Backbone.BaseView();
+                var eventCb = jasmine.createSpy('event callback');
+                var fooView = new Backbone.BaseView({
+                    events: { 'test-event': eventCb }
+                });
+                view.template = function () {
+                    return '<div class="foo-container"></div>';
+                };
+                view.subs.addConfig('foo', {
+                    construct: Backbone.BaseView,
+                    location: '.foo-container'
+                });
+                view.subs.add('foo', fooView);
+                spyOn(fooView, 'render');
+                view.render();
+                expect(fooView.render).toHaveBeenCalled();
+                expect(view.$('.foo-container').children().first().is(fooView.$el)).toBe(true);
+                fooView.$el.trigger('test-event');
+                expect(eventCb).toHaveBeenCalled();
+                view.render();
+                expect(view.$('.foo-container').children().first().is(fooView.$el)).toBe(true);
+                fooView.$el.trigger('test-event');
+                expect(eventCb.calls.count()).toBe(2);
+            });
+        });
+
         describe('"bindViewEvents" method', function () {
 
-            it('should listens for events on backbone objects based on object literal key', function () {
+            it('should listen for events on backbone objects based on object literal key', function () {
                 var calledEventA = false,
                     calledEventB = false,
                     eventAArg;
@@ -860,6 +906,22 @@
                 expect(calledBaz).toBeFalsy();
             });
 
+            it('should unbind events before binding them so that the same callback is not called twice', function () {
+                var fn = jasmine.createSpy('foo event callback');
+                var bar = jasmine.createSpy('bar event callback');
+                var view = new Backbone.BaseView();
+                var events = {foo: fn};
+                view.bindViewEvents(events);
+                events.bar = bar;
+                view.bindViewEvents(events);
+                view.trigger('foo');
+                view.trigger('bar');
+                expect(fn).toHaveBeenCalled();
+                expect(bar).toHaveBeenCalled();
+                expect(fn.calls.count()).toBe(1);
+                expect(bar.calls.count()).toBe(1);
+            });
+
             it('should be called on instantiation and bind events if present in options', function () {
                 var calledEvent = false,
                     view = new Backbone.BaseView({
@@ -877,6 +939,31 @@
 
         });
 
+        describe('"unbindViewEvents" method', function () {
+            it('should stop listing to the event for the callback passed in as a hash object', function () {
+                var view = new Backbone.BaseView();
+                var model = view.model = new Backbone.Model();
+                var cb = jasmine.createSpy('foo model callback');
+                var barCb = jasmine.createSpy('bar model callback');
+                view.viewEvents = { 'foo model': cb, 'bar' : barCb };
+                view.bindViewEvents();
+                view.trigger('bar');
+                model.trigger('foo');
+                expect(cb.calls.count()).toBe(1);
+                expect(barCb.calls.count()).toBe(1);
+                view.unbindViewEvents({ 'foo model': cb });
+                view.trigger('bar');
+                model.trigger('foo');
+                expect(cb.calls.count()).toBe(1);
+                expect(barCb.calls.count()).toBe(2);
+                view.unbindViewEvents();
+                view.trigger('bar');
+                model.trigger('foo');
+                expect(cb.calls.count()).toBe(1);
+                expect(barCb.calls.count()).toBe(2);
+            });
+        });
+
         it('should have a parentView property that\'s a reference to the View instance that it is a subview of', function () {
             testView.setup();
             expect(testView.subs.get('headingRow').parentView.cid).toBe(testView.cid);
@@ -884,7 +971,7 @@
             expect(testView.parentView).toBeFalsy();
         });
 
-        describe('Backbone events view heirarchy cascading', function () {
+        describe('Backbone events view hierarchy cascading', function () {
             var topView, cView, bView, aView;
             beforeEach(function () {
                 topView = new Backbone.BaseView();
@@ -1123,6 +1210,59 @@
                 });
             });
 
+            describe('Built-in events', function () {
+                it('should trigger an event before and after a view is rendered', function () {
+                    var didCallRender = false;
+                    var invokedViewWillRenderCallback = false;
+                    var invokedViewDidRenderCallback = false;
+                    var Construct = Backbone.BaseView.extend({
+                        render: function () {
+                            didCallRender = true;
+                            this.$el.html('bloop');
+                        }
+                    });
+                    var view = new Construct();
+                    var viewDidRender = function () {
+                        invokedViewDidRenderCallback = true;
+                        expect(didCallRender).toBe(true);
+                    };
+                    var viewWillRender = function () {
+                        invokedViewWillRenderCallback = true;
+                        expect(didCallRender).toBe(false);
+                        expect(this).toBe(view);
+                    };
+                    view.on('viewWillRender', viewWillRender);
+                    view.on('viewDidRender', viewDidRender);
+                    view.render();
+                    expect(invokedViewWillRenderCallback).toBe(true);
+                    expect(invokedViewDidRenderCallback).toBe(true);
+                    expect(view.$el.html()).toBe('bloop');
+                });
+                it('should trigger viewWaitingToRender event when getReadyPromise is defined and returns a promise', function (done) {
+                    var render = jasmine.createSpy().and.callFake(function () {
+                        this.$el.html('doop');
+                    });
+                    var Construct = Backbone.BaseView.extend({
+                        getReadyPromise: function () {
+                            return new Promise(function (resolve, reject) {
+                                setTimeout(resolve, 1);
+                            });
+                        },
+                        render: render
+                    });
+                    var view = new Construct();
+                    var waiting = jasmine.createSpy();
+                    var didRender = jasmine.createSpy().and.callFake(function () {
+                        expect(this.$el.html()).toBe('doop');
+                        done();
+                    });
+                    view.on('viewWaitingToRender', waiting);
+                    view.on('viewDidRender', didRender);
+                    view.render();
+                    expect(didRender).not.toHaveBeenCalled();
+                    expect(waiting).toHaveBeenCalled();
+                });
+            });
         });
 
     });

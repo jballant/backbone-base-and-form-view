@@ -37,6 +37,7 @@
         eventViewAppendedToParent = 'viewAppendedToParent',
         eventViewAppendedToDOM = 'viewAppendedToDOM',
         eventViewRenderFailure = 'viewRenderFailure',
+        eventViewDidInitialize = 'viewDidInitialize',
         // Event bubbling options
         shouldTriggerNoViewPath = 1,
         shouldTriggerWithViewPath = 2,
@@ -78,9 +79,8 @@
          * Adds a subView or subViews to the View's list of subViews. Calling
          * function must provide instances of views or configurations.
          * @memberOf SubViewManager#
-         * @class SubViewManager
-         * @type {SubViewManager}
          * @method add
+         * @deprecated
          * @param {Object} map
          *      An object with key's to refer to subViews and values that
          *      are View instances, options to pass to the constructor, or
@@ -100,6 +100,7 @@
          * @memberOf SubViewManager#
          * @type {SubViewManager}
          * @method add
+         * @deprecated
          * @param {String} name
          *      A string key to refer to the subViews with. Should match
          *      a key in the subView configuration. If not, a configuration
@@ -120,6 +121,7 @@
          * @memberOf SubViewManager#
          * @type {SubViewManager}
          * @method add
+         * @deprecated
          * @param {Backbone.View[]} arr
          *      An array of View instances. These will not be accessible
          *      by a type or key
@@ -131,6 +133,7 @@
          * @memberOf SubViewManager#
          * @type {SubViewManager}
          * @method add
+         * @deprecated
          * @param {String} name
          *      A string key to refer to the subView with
          * @param {Backbone.View} instance
@@ -145,6 +148,7 @@
          * @memberOf SubViewManager#
          * @type {SubViewManager}
          * @method add
+         * @deprecated
          * @param {String} name
          *      A string key to refer to the subView with. Without an instance
          *      as the second param, this variant requires that a configuration
@@ -161,6 +165,7 @@
          * @memberOf SubViewManager#
          * @type {SubViewManager}
          * @method add
+         * @deprecated
          * @param {Backbone.View} instance
          *      A Backbone.View instance to add as the subview
          * @return {SubViewManager}
@@ -809,6 +814,7 @@
                 subView.render();
                 if ($appendTo) {
                     subView.$el.appendTo((typeof $appendTo === 'string') ? this.parent.$($appendTo).first() : $appendTo);
+                    subView.trigger(eventViewAppendedToParent);
                 } else if (place && (location = this.config[this.getSubViewType(subView)].location)) {
                     if (typeof location === 'string') {
                         if (!$locations[location]) {
@@ -820,7 +826,7 @@
                         if (!(location instanceof Backbone.$)) { throw new Error('location function must return instance of jQuery'); }
                     }
                     location.append(subView.$el);
-                    subView.trigger('appendToParent')
+                    subView.trigger(eventViewAppendedToParent);
                 }
             }
             return this;
@@ -1052,6 +1058,9 @@
             if (this.viewEvents) {
                 this.bindViewEvents();
             }
+
+            // Trigger view event notifying anything listening that the view
+            this.trigger(eventViewDidInitialize);
         },
         /**
          * A basic render function that looks for a template
@@ -1065,11 +1074,11 @@
         render: function () {
             var html = '',
                 template = this.template;
+            this.subs.detachElems();
             if (isFunction(template)) {
                 html = template(result(this, 'templateVars')) || '';
             }
-            this.subs.detachElems();
-            this.$el.html(html);
+            this._setElHtml(html);
             this.subs.renderAppend();
             return this;
         },
@@ -1136,7 +1145,7 @@
          * on to the end of the arguments, so you can access it if needed.
          * @memberOf Backbone.BaseView#
          * @param {String} event The name of the event
-         * @param {...Mixed} [arg] Argument be passed to event callbacks
+         * @param {...*} [arg] Argument be passed to event callbacks
          * @return {Backbone.BaseView}
          */
         triggerBubble: function (event) {
@@ -1164,7 +1173,7 @@
          * work in the same manner as they do with triggerBubble.
          * @memberOf Backbone.BaseView#
          * @param {String} event The event name
-         * @param {...Mixed} [arg] Argument be passed to event callbacks
+         * @param {...*} [arg] Argument be passed to event callbacks
          * @return {Backbone.BaseView}
          */
         triggerDescend: function (event) {
@@ -1175,7 +1184,7 @@
          * Invoke a function or method on ancestors
          * @memberOf Backbone.BaseView#
          * @param {Function|String} fnName
-         * @param {mixed[]} [args]
+         * @param {*[]} [args]
          *        An array of arguments to pass to
          *        the invocation
          * @return {Backbone.BaseView}
@@ -1277,7 +1286,7 @@
             var addType = function () {
                 var type = this.getSubViewType();
                 if (type) {
-                    viewPath.unshift(type)
+                    viewPath.unshift(type);
                 }
             };
             addType.call(this);
@@ -1293,7 +1302,7 @@
          * trigger an ascending event that is
          * namespaced with subview types.
          * @param {string} event
-         * @param {..Mixed} args
+         * @param {..*} args
          * @returns {Backbone.BaseView}
          */
         trigger: function (event) {
@@ -1309,7 +1318,7 @@
                 case 2: _trigger.call(this, event, a1); break;
                 case 3: _trigger.call(this, event, a1, a2); break;
                 case 4: _trigger.call(this, event, a1, a2, a3); break;
-                default: _trigger.apply(this, args)
+                default: _trigger.apply(this, args);
             }
             return this;
         },
@@ -1334,6 +1343,30 @@
             events = events || result(this, 'viewEvents');
             each(events, bindViewEvent, this);
             return this;
+        },
+
+        /**
+         * Takes an events hash like that passed to "bindViewEvents",
+         * but removes the event listeners instead. If no events has
+         * is passed, the 'viewEvents' property of the instance is
+         * used instead.
+         * @memberOf Backbone.BaseView#
+         * @param {object} events
+         * @returns {Backbone.BaseView}
+         */
+        unbindViewEvents: function (events) {
+            events = events || result(this, 'viewEvents');
+            each(events, unbindViewEvent, this);
+            return this;
+        },
+
+        /**
+         * Write html to the view element. Replaces existing
+         * elements.
+         * @param {string|$|HTMLElement} html
+         */
+        _setElHtml: function (html) {
+            this.$el.html(html);
         }
 
     });
@@ -1341,14 +1374,22 @@
     // Helper function to listen to an event triggered
     // on the view instance or a property of the view
     // instance
-    function bindViewEvent(func, event) {
+    function bindViewEvent(func, event, eventsObj, unbind) {
         var segs = event.split(' '),
             listenTo = (segs.length > 1) ? this[segs[1]] : this;
         func = isFunction(func) ? func : this[func];
         if (listenTo) {
             this.stopListening(listenTo, segs[0], func);
-            this.listenTo(listenTo, segs[0], func);
+            if (!unbind) {
+                this.listenTo(listenTo, segs[0], func);
+            }
         }
+    }
+
+    // Helper function to unbind a 'view event' for
+    // a particular function or context
+    function unbindViewEvent(func, event, eventsObject) {
+        bindViewEvent.call(this, func, event, eventsObject, true);
     }
 
     // triggers events on a view and than each of it's ancestors in
