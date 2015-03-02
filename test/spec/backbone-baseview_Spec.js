@@ -1210,60 +1210,59 @@
                 });
             });
 
-            describe('Built-in events', function () {
-                it('should trigger an event before and after a view is rendered', function () {
-                    var didCallRender = false;
-                    var invokedViewWillRenderCallback = false;
-                    var invokedViewDidRenderCallback = false;
-                    var Construct = Backbone.BaseView.extend({
-                        render: function () {
-                            didCallRender = true;
-                            this.$el.html('bloop');
-                        }
-                    });
-                    var view = new Construct();
-                    var viewDidRender = function () {
-                        invokedViewDidRenderCallback = true;
-                        expect(didCallRender).toBe(true);
-                    };
-                    var viewWillRender = function () {
-                        invokedViewWillRenderCallback = true;
-                        expect(didCallRender).toBe(false);
-                        expect(this).toBe(view);
-                    };
-                    view.on('viewWillRender', viewWillRender);
-                    view.on('viewDidRender', viewDidRender);
-                    view.render();
-                    expect(invokedViewWillRenderCallback).toBe(true);
-                    expect(invokedViewDidRenderCallback).toBe(true);
-                    expect(view.$el.html()).toBe('bloop');
+        });
+        describe('Built-in events', function () {
+            it('should trigger an event before and after a view is rendered', function () {
+                var didCallRender = false;
+                var invokedViewWillRenderCallback = false;
+                var invokedViewDidRenderCallback = false;
+                var Construct = Backbone.BaseView.extend({
+                    render: function () {
+                        didCallRender = true;
+                        this.$el.html('bloop');
+                    }
                 });
-                it('should trigger viewWaitingToRender event when getReadyPromise is defined and returns a promise', function (done) {
-                    var render = jasmine.createSpy().and.callFake(function () {
-                        this.$el.html('doop');
-                    });
-                    var Construct = Backbone.BaseView.extend({
-                        getReadyPromise: function () {
-                            var dfd = $.Deferred();
-                            setTimeout(dfd.resolve, 1);
-                            return dfd.promise();
-                        },
-                        render: render
-                    });
-                    var view = new Construct();
-                    var waiting = jasmine.createSpy();
-                    var didRender = jasmine.createSpy().and.callFake(function () {
-                        expect(this.$el.html()).toBe('doop');
-                        done();
-                    });
-                    view.on('viewWaitingToRender', waiting);
-                    view.on('viewDidRender', didRender);
-                    view.render();
-                    expect(didRender).not.toHaveBeenCalled();
-                    expect(waiting).toHaveBeenCalled();
+                var view = new Construct();
+                var viewDidRender = function () {
+                    invokedViewDidRenderCallback = true;
+                    expect(didCallRender).toBe(true);
+                };
+                var viewWillRender = function () {
+                    invokedViewWillRenderCallback = true;
+                    expect(didCallRender).toBe(false);
+                    expect(this).toBe(view);
+                };
+                view.on('viewWillRender', viewWillRender);
+                view.on('viewDidRender', viewDidRender);
+                view.render();
+                expect(invokedViewWillRenderCallback).toBe(true);
+                expect(invokedViewDidRenderCallback).toBe(true);
+                expect(view.$el.html()).toBe('bloop');
+            });
+            it('should trigger viewWaitingToRender event when getReadyPromise is defined and returns a promise', function (done) {
+                var render = jasmine.createSpy().and.callFake(function () {
+                    this.$el.html('doop');
                 });
+                var Construct = Backbone.BaseView.extend({
+                    getReadyPromise: function () {
+                        var dfd = $.Deferred();
+                        setTimeout(dfd.resolve, 1);
+                        return dfd.promise();
+                    },
+                    render: render
+                });
+                var view = new Construct();
+                var waiting = jasmine.createSpy();
+                var didRender = jasmine.createSpy().and.callFake(function () {
+                    expect(this.$el.html()).toBe('doop');
+                    done();
+                });
+                view.on('viewWaitingToRender', waiting);
+                view.on('viewDidRender', didRender);
+                view.render();
+                expect(didRender).not.toHaveBeenCalled();
+                expect(waiting).toHaveBeenCalled();
             });
         });
-
     });
 }(this, jQuery, Backbone, _));
