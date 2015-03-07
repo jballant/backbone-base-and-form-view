@@ -1031,7 +1031,7 @@
             subViewCfg = (isFunction(subViewCfg)) ? subViewCfg.call(this) : subViewCfg;
             // Assign a parentView if second param is a Backbone View
             this.parentView = (parentView instanceof View) ? parentView : null;
-            this.subs = new SubViewManager(null, this, {
+            this.subs = new BaseView.SubViewManager(null, this, {
                 autoInitSingletons: this.autoInitSubViews,
                 defaultToSingletons: this.singletonSubViews
             });
@@ -1086,8 +1086,11 @@
          * Place the view DOM element ('.el') in a specified location. By
          * default it is appended to the location.
          * @memberOf Backbone.BaseView#
-         * @param {jQuery} $location jQuery DOM element
-         * @param {boolean} [replace] 
+         * @param {jQuery|string|HTMLElement} $location
+         *        jQuery instance or an HTMLElement, or a selector
+         *        for a child of the parent view (or if there is no
+         *        parent view, the <body> element)
+         * @param {boolean} [replace]
          *        True if you want to replace existing html
          *        of the location with this view
          * @return {Backbone.BaseView}
@@ -1097,6 +1100,8 @@
             if (typeof $location === "string") {
                 var $parent = (hasParentView) ? this.parentView.$el : Backbone.$('body');
                 $location = $parent.find($location);
+            } else {
+                $location = Backbone.$($location);
             }
 
             if (replace) {
@@ -1540,7 +1545,7 @@
     };
 
     /**
-     * @memberOf BaseView
+     * @memberOf Backbone.BaseView
      * @type {function(new:SubViewManager)}
      */
     BaseView.SubViewManager = SubViewManager;

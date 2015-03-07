@@ -808,6 +808,31 @@
 
         });
 
+        describe('"place" method', function () {
+            var parent, child;
+            beforeEach(function () {
+                parent = new Backbone.BaseView({ className: 'parent' });
+                child = new Backbone.BaseView({ className: 'child' });
+                parent.subs.add('a', child);
+                parent.$el.html('<div class="container"><div class="foo"></div></div>');
+            });
+            it('should append the element matching a selector withing an existing location within the parentView', function () {
+                child.place('.container');
+                expect(parent.$('.container').children().length).toBe(2);
+                expect(parent.$('.child').length).toBe(1);
+                expect(parent.$('.foo').length).toBe(1);
+            });
+            it('should allow passing an html element or jQuery instance as the location', function () {
+                var $container = parent.$('.container');
+                var child2 = new Backbone.BaseView({className: 'child2'});
+                child.place($container);
+                expect(parent.$('.child').is(child.$el)).toBe(true);
+                expect($container.children('.child').is(child.$el)).toBe(true);
+                child2.place($container.get(0));
+                expect(parent.$('.container > .child2').is(child2.$el)).toBe(true);
+            });
+        });
+
         describe('"render" method', function () {
             it('should invoke "templateVars" method if it exists and the template function and finally place the html', function () {
                 var Construct = Backbone.BaseView.extend({
@@ -1262,6 +1287,38 @@
                 view.render();
                 expect(didRender).not.toHaveBeenCalled();
                 expect(waiting).toHaveBeenCalled();
+            });
+            it('should trigger a "viewAppendedToParent" event when a view is appended to its parentView by the place method or subs.render', function () {
+                var Construct = Backbone.BaseView.extend({
+                    subViewConfig: {
+                        b: {
+                            construct: Backbone.BaseView,
+                            location: 'a-container'
+                        }
+                    },
+                    render: function () {
+                        this.$el.html('<div class="b-container"></div><div class="c-container"></div><div class="d-container"></div>');
+                    }
+                });
+                var a = new Construct();
+                var appendedToParent = jasmine.createSpy();
+                var b = a.subs.create('b');
+                b.on('viewAppendedToParent', appendedToParent);
+                a.render();
+                a.subs.renderAppend();
+                expect(appendedToParent).toHaveBeenCalled();
+                var c = new Backbone.BaseView();
+                c.on('viewAppendedToParent', appendedToParent);
+                a.subs.addInstance('c', c);
+                expect(appendedToParent.calls.count()).toBe(1);
+                a.subs.renderByKey('c', {appendTo: '.c-container'});
+                expect(appendedToParent.calls.count()).toBe(2);
+                expect(a.$('.c-container').children().first().is(c.$el)).toBe(true);
+                var d = new Backbone.BaseView();
+                d.on('viewAppendedToParent', appendedToParent);
+                a.subs.addInstance('d', d);
+                d.place('.d-container');
+                expect(appendedToParent.calls.count()).toBe(3);
             });
         });
     });

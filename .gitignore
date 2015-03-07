@@ -2,6 +2,7 @@
 backbone-base-form-view.sublime-project
 backbone-base-form-view.sublime-workspace
 node_modules
+karma.conf.js
 .grunt
 .idea
 *.sh
