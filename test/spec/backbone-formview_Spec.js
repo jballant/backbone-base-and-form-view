@@ -302,7 +302,7 @@
             });
 
             describe('"setRowSchema" method', function () {
-                it('should allow user to set the schema property on the "rowConfig" property', function () {
+                it('should set the rowSchema property', function () {
                     var schema = {
                         a : {
                             type: 'Text',
@@ -310,7 +310,7 @@
                         }
                     };
                     testForm.setRowSchema(schema);
-                    expect(testForm.rowConfig.options.schema).toEqual(schema);
+                    expect(testForm.rowSchema).toEqual(schema);
                 });
             });
             describe('"setupRows" method', function () {

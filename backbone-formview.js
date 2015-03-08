@@ -233,7 +233,6 @@
             options = this.options = defaults(options || {}, this.options);
             var schema = options.schema || this.schema,
                 setUpOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : this.setupOnInit;
-            // this.subs.autoInitSingletons = true;
             extend(this, {
                 templateVars : options.templateVars || this.templateVars || {},
                 setupOnInit : options.setupOnInit || this.setupOnInit,
@@ -473,6 +472,9 @@
      *        empty element that matches the selector for 'rowWrapper' property. By
      *        default, this would mean just adding a 'data-rows' attribute to that 
      *        element.
+     * @property {function(new:Backbone.CollectionFormRowView)} [options.rowConstruct]
+     *        A constructor for an extension of the Backbone.CollectionFormRowView that
+     *        will be used for each row subview
      * @property {object} [options.rowOptions]
      *        Options to pass to each row when they are initialized
      * @property {object} [options.rowSchema]
@@ -497,32 +499,21 @@
         tagName: 'form',
         className: 'form',
         rowWrapper : '[data-rows]:first',
+        rowConstruct: CollectionFormRowView,
         template: _.template('<div data-rows=""></div>'),
         initialize: function (options) {
-            var self = this,
-                rowOpts;
+            var self = this;
             options = self.options = defaults(options || {}, self.options);
-            self.template = options.template || (isString(self.template) ? _.template(self.template) : self.template);
+            self.template = !isUndefined(options.template) ? options.template : self.template;
+            self.template = isString(self.template) ? _.template(self.template) : self.template;
             self.setupOnInit = !isUndefined(options.setupOnInit) ? options.setupOnInit : self.setupOnInit;
-            self.rowOptions = options.rowOptions || self.rowOptions;
-            self.templateVars = options.templateVars || self.templateVars || {};
+            self.rowOptions = !isUndefined(options.rowOptions) ? options.rowOptions : self.rowOptions;
+            self.rowConstruct = !isUndefined(options.rowConstruct) ? options.rowConstruct : self.rowConstruct;
+            self.templateVars = !isUndefined(options.templateVars) ? options.templateVars : self.templateVars;
+            self.rowWrapper = !isUndefined(options.rowWrapper) ? options.rowWrapper : self.rowWrapper;
+            self.rowSchema = !isUndefined(options.rowSchema) ? options.rowSchema : self.rowSchema;
             self._defaultTemplateVars = { label: options.label };
-            self.rowWrapper = options.rowWrapper || self.rowWrapper;
-            if (options.rowConfig) {
-                self.rowConfig = options.rowConfig;
-                self.rowConfig = clone(result(self, 'rowConfig')) || {};
-                self.rowConfig.options = self.rowConfig.options ? clone(self.rowConfig.options) : {};
-            } else {
-                self.rowConfig = clone(result(self, 'rowConfig')) || {
-                    singleton: false,
-                    construct: Backbone.CollectionFormRowView
-                };
-                rowOpts = clone(result(self, 'rowOptions'));
-                self.rowConfig.options = rowOpts || self.rowConfig.options || {};
-                self.setRowSchema(options.rowSchema || self.rowSchema || self.rowConfig.options.schema);
-            }
-            self.rowConfig.location = self.rowWrapper;
-            self.subs.addConfig('row', self.rowConfig);
+            self._setupRowConfig();
             if (self.setupOnInit) {
                 self.setupRows();
             }
@@ -534,8 +525,7 @@
          * @return {Backbone.CollectionFormView}
          */
         setRowSchema: function (schema) {
-            if (!this.rowConfig.options) { this.rowConfig.options = {}; }
-            this.rowConfig.options.schema = schema || this.options.rowSchema || this.rowSchema;
+            this.rowSchema = schema;
             return this;
         },
         /**
@@ -548,11 +538,11 @@
          */
         render: function () {
             this.subs.detachElems();
-            this.$el.html(this.template(this._getTemplateVars()));
+            this._setElHtml(this.template(this._getTemplateVars()));
             if (!this.getRows() || !this.getRows().length) {
                 this.setupRows();
             }
-            this.subs.renderByKey('row', { appendTo: this.getRowWrapper() });
+            this._renderRows();
             return this;
         },
         /**
@@ -586,8 +576,8 @@
             if (!(added instanceof Backbone.Collection)) {
                 model = added;
             }
-            this._addRow(model).subs.newest.render().$el
-                .appendTo(this.getRowWrapper());
+            this._addRow(model);
+            this._renderNewRow();
             return this;
         },
         /**
@@ -627,7 +617,8 @@
          * @return {Backbone.CollectionFormView}
          */
         reset: function () {
-            this.setupRows().subs.renderByKey('row', { appendTo: this.getRowWrapper() });
+            this.setupRows();
+            this._renderRows();
             return this;
         },
         /**
@@ -649,13 +640,44 @@
         },
         _addRow: function (model) {
             var opts = this._getRowOptions(model),
-                row = this.subs.create('row', opts);
-            row.setSchema(this.rowSchema).setupFields();
+                row = this._createRowSubView(opts);
+            this._setSchemaOnRowView(row, this.rowSchema);
+            row.setupFields();
             return this;
+        },
+        _renderNewRow: function () {
+            this.subs.newest.render().place(this.getRowWrapper());
+        },
+        _renderRows: function () {
+            return this.subs.renderByKey('row', { appendTo: this.getRowWrapper() });
+        },
+        _createRowSubView: function (opts) {
+            return this.subs.create('row', opts);
+        },
+        _setSchemaOnRowView: function (row, schema) {
+            row.setSchema(schema);
         },
         _getRowOptions: function (model) {
             var rows = this.subs.get('row') || [];
             return { model: model, index: rows.length };
+        },
+        _setupRowConfig: function () {
+            var self = this, rowOpts, rowConfig, rowSchema;
+            rowConfig = clone(result(self, 'rowConfig')) || {};
+            rowOpts = clone(result(self, 'rowOptions'));
+            if (!rowOpts) {
+                rowOpts = (isFunction(rowConfig.options)) ? rowConfig.options.call(self) : rowConfig.options;
+            }
+            rowConfig.construct = self.rowConstruct;
+            rowConfig.options = rowOpts || {};
+            rowConfig.location = self.rowWrapper;
+            rowConfig.singleton = false;
+            rowSchema = self.rowSchema || rowOpts.schema;
+            self.setRowSchema(rowSchema);
+            self._setRowConfig(rowConfig);
+        },
+        _setRowConfig: function (rowConfig) {
+            this.subs.addConfig('row', rowConfig);
         },
         _getTemplateVars: getTemplateVars
     });
@@ -883,7 +905,7 @@
          */
         renderWrapper: function (vars) {
             this.isDisabled = null;
-            this.$el.html(this.template(vars || this._getTemplateVars()));
+            this._setElHtml(this.template(vars || this._getTemplateVars()));
             return this;
         },
         /**
