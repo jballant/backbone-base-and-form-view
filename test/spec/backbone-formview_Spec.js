@@ -1,4 +1,4 @@
-/*global Backbone, jQuery, _, describe, it, expect, spyOn, waitsFor, beforeEach */
+/*global Backbone, jQuery, _, describe, it, expect, spyOn, waitsFor, jasmine, beforeEach */
 (function (root, $, Backbone, _) {
     "use strict";
 
@@ -237,7 +237,7 @@
                 });
 
                 it('should render fields in a specific order if fieldOrder form option is specified', function () {
-                    testForm.options.fieldOrder = ['baz', 'foo', 'bar'];
+                    testForm.fieldOrder = ['baz', 'foo', 'bar'];
                     testForm.render();
                     expect(testForm.subs.get('baz').$el.index()).toBe(0);
                     expect(testForm.subs.get('foo').$el.index()).toBe(1);
@@ -286,6 +286,32 @@
                 };
                 testForm = new Backbone.CollectionFormView(testOpts);
             });
+            describe('initialization', function () {
+                it('should define a subview config for a "row" type based on options/properties', function () {
+                    var rowOptions = jasmine.createSpy('CollectionFormView options').and.callFake(function () {
+                        return {foo: 123};
+                    });
+                    var FakeConstruct = Backbone.CollectionFormRowView.extend();
+                    var testLocation = '.test-location';
+                    expect(testForm.rowConstruct).toBe(Backbone.CollectionFormRowView);
+                    expect(testForm.rowSchema).toBe(testSchema);
+                    expect(testForm.rowOptions).toBeUndefined();
+                    expect(testForm.subs.config.row.construct).toBe(testForm.rowConstruct);
+                    expect(testForm.subs.config.row.location).toBe(testForm.rowWrapper);
+                    expect(testForm.subs.config.row.singleton).toBe(false);
+                    testForm = new Backbone.CollectionFormView(_.extend({}, testOpts, {
+                        rowOptions: rowOptions,
+                        rowConstruct: FakeConstruct,
+                        rowWrapper: testLocation
+                    }));
+                    expect(rowOptions).toHaveBeenCalled();
+                    expect(testForm.subs.config.row.construct).toBe(FakeConstruct);
+                    expect(testForm.rowConstruct).toBe(FakeConstruct);
+                    expect(testForm.rowWrapper).toBe(testLocation);
+                    expect(testForm.subs.config.row.location).toBe(testLocation);
+                    expect(testForm.subs.config.row.options.foo).toBe(123);
+                });
+            });
 
             describe('"setupOnInit" option', function () {
                 it('should invoke "setupRows" method in initialization', function () {
@@ -321,7 +347,7 @@
                     expect(testForm.subs.get('row')[1].model.get('foo')).toBe(testCollectionData[1].foo);
                     expect(testForm.subs.get('row')[2].model.get('foo')).toBe(testCollectionData[2].foo);
                 });
-                it('should remove any exising row subviews if they exists and recreate them from the collection', function () {
+                it('should remove any existing row subviews if they exists and recreate them from the collection', function () {
                     testForm.setupRows();
                     var cid1 = testForm.subs.get('row')[0].cid,
                         cid2 = testForm.subs.get('row')[1].cid;
@@ -343,6 +369,22 @@
                     testForm.render();
                     expect(testForm.getRowWrapper().children().length).toBe(3);
                     expect(rows[0].$el.parent().is(testForm.getRowWrapper())).toBe(true);
+                });
+                it('should invoke setupRows if it has not been called already', function () {
+                    spyOn(testForm, 'setupRows').and.callThrough();
+                    testForm.render();
+                    expect(testForm.setupRows).toHaveBeenCalled();
+                });
+                it('should preserve row DOM events on re-render', function () {
+                    var eventCallback = jasmine.createSpy();
+                    var firstRow = testForm.setupRows().getRows()[0];
+                    firstRow.$el.on('test-event', eventCallback);
+                    testForm.render();
+                    firstRow.$el.trigger('test-event');
+                    expect(eventCallback).toHaveBeenCalled();
+                    testForm.render();
+                    firstRow.$el.trigger('test-event');
+                    expect(eventCallback.calls.count()).toBe(2);
                 });
             });
             describe('"addRow" method', function () {

@@ -95,6 +95,15 @@
             return extend({}, this._defaultTemplateVars, result(this, 'templateVars'));
         },
 
+        /**
+         * Set to default template vars on an instance. Used by
+         * FormView, CollectionFormView, FieldSet, and FieldViews.
+         * @param defaultTemplateVars
+         */
+        setDefaultTemplateVars = function (defaultTemplateVars) {
+            this._defaultTemplateVars = defaultTemplateVars;
+        },
+
         // ------------------------
         // Local utility functions
 
@@ -239,9 +248,10 @@
                 validateOnSet : (!isUndefined(options.validateOnSet)) ? options.validateOnSet : this.validateOnSet,
                 twoWay: (!isUndefined(options.twoWay)) ? options.twoWay : this.twoWay,
                 autoUpdateModel: (!isUndefined(options.autoUpdateModel)) ? options.autoUpdateModel : this.autoUpdateModel,
+                fieldOrder: options.fieldOrder || this.fieldOrder,
                 fieldsWrapper: options.fieldsWrapper || this.fieldsWrapper
             });
-            this._defaultTemplateVars = this._defaultTemplateVars || { label: options.label };
+            this._setDefaultTemplateVars(this._defaultTemplateVars || { label: options.label });
             this.template = options.template || (isString(this.template) ? _.template(this.template) : this.template);
             this.subViewConfig = options.subViewConfig || null;
             if (schema) {
@@ -336,13 +346,13 @@
          * @return {Backbone.FormView}
          */
         render : function () {
-            var order = this.options.fieldOrder || this.fieldOrder;
+            var order = this.fieldOrder;
 
             this.subs.detachElems();
             if (!this.hasSetupFields()) {
                 this.setupFields();
             }
-            this.$el.html(this.template(this._getTemplateVars()));
+            this._setElHtml(this.template(this._getTemplateVars()));
 
             if (order && order.length) {
                 order = order.slice(0);
@@ -388,6 +398,7 @@
             }, this);
             return subViewConfig;
         },
+        _setDefaultTemplateVars: setDefaultTemplateVars,
         /**
          * A reference to the template vars function
          * @type {function}
@@ -512,7 +523,7 @@
             self.templateVars = !isUndefined(options.templateVars) ? options.templateVars : self.templateVars;
             self.rowWrapper = !isUndefined(options.rowWrapper) ? options.rowWrapper : self.rowWrapper;
             self.rowSchema = !isUndefined(options.rowSchema) ? options.rowSchema : self.rowSchema;
-            self._defaultTemplateVars = { label: options.label };
+            self._setDefaultTemplateVars(self._defaultTemplateVars || { label: options.label });
             self._setupRowConfig();
             if (self.setupOnInit) {
                 self.setupRows();
@@ -537,9 +548,10 @@
          * @return {Backbone.CollectionFormView}
          */
         render: function () {
-            this.subs.detachElems();
+            var rows = this.getRows();
+            this.subs.detachElems(rows);
             this._setElHtml(this.template(this._getTemplateVars()));
-            if (!this.getRows() || !this.getRows().length) {
+            if (!rows || !rows.length) {
                 this.setupRows();
             }
             this._renderRows();
@@ -679,6 +691,7 @@
         _setRowConfig: function (rowConfig) {
             this.subs.addConfig('row', rowConfig);
         },
+        _setDefaultTemplateVars: setDefaultTemplateVars,
         _getTemplateVars: getTemplateVars
     });
 
@@ -768,44 +781,41 @@
             }.bind(this)).object().value();
         },
         initialize: function (options) {
-            options = this.options = defaults(options || {}, this.options);
-            extend(this, {
+            var self = this;
+            options = self.options = defaults(options || {}, self.options);
+
+            extend(self, {
                 _updateEvents: options.updateEvents || defaultUpdateEvents.concat(),
-                templateVars : options.templateVars || this.templateVars || {},
-                fieldName : options.fieldName || this.fieldName || options.schemaKey,
-                elementType : options.elementType || this.elementType,
-                template : options.template || this.template,
-                setOpts : defaults(options.setOpts || {}, this.setOpts),
-                twoWay : !isUndefined(options.twoWay) ? options.twoWay : this.twoWay,
-                inputAttrs: options.inputAttrs || this.inputAttrs,
-                placeholder: options.placeholder || this.placeholder,
-                inputClass: options.inputClass || this.inputClass,
-                addId: !isUndefined(options.addId) ? options.addId : this.addId,
-                label: !isUndefined(options.label) ? options.label : this.label,
-                inputWrapper: options.inputWrapper || this.inputWrapper,
-                inputId: options.inputId || this.inputId
+                templateVars : options.templateVars || self.templateVars || {},
+                fieldName : options.fieldName || self.fieldName || options.schemaKey,
+                elementType : options.elementType || self.elementType,
+                template : options.template || self.template,
+                setOpts : defaults(options.setOpts || {}, self.setOpts),
+                twoWay : !isUndefined(options.twoWay) ? options.twoWay : self.twoWay,
+                inputAttrs: options.inputAttrs || self.inputAttrs,
+                placeholder: options.placeholder || self.placeholder,
+                inputClass: options.inputClass || self.inputClass,
+                addId: !isUndefined(options.addId) ? options.addId : self.addId,
+                label: !isUndefined(options.label) ? options.label : self.label,
+                inputWrapper: options.inputWrapper || self.inputWrapper,
+                inputId: options.inputId || self.inputId
             });
-            this.inputId = this.addId ? this._getInputId() : false;
-            this.template = isString(this.template) ? _.template(this.template) : this.template;
-            this._defaultTemplateVars = this._defaultTemplateVars || {
-                inputId : this.inputId,
+
+            self.inputId = self.addId ? self._getInputId() : false;
+            self.template = isString(self.template) ? _.template(self.template) : self.template;
+
+            self._setDefaultTemplateVars(self._defaultTemplateVars || {
+                inputId : self.inputId,
                 help : options.help,
-                fieldName : this.fieldName,
-                label : this.label
-            };
+                fieldName : self.fieldName,
+                label : self.label
+            });
 
-            // If there is no class name specified, then we create one with the 'classDefaults' property
-            // and another class based on the fieldPrefix and fieldName properties
-            if (isUndefined(this.className)) {
-                this.$el.addClass(this.fieldPrefix + this.fieldName);
-                this.$el.addClass(this.classDefaults);
-            }
-
-            // Add data attribute to view element to indicate that it's a FormView field
-            this.$el.attr('data-field', '');
+            self._setDefaultClasses();
+            self._setFieldDataAttr();
 
             // If the twoWay option is true, then setup the events to make the field/model-attribute changes twoWay
-            if (this.twoWay && this.setupTwoWay) {  this.setupTwoWay(); }
+            if (self.twoWay && self.setupTwoWay) {  self.setupTwoWay(); }
         },
         /**
          * Sets up two way updating. The view updates the model by default, and this
@@ -1018,6 +1028,32 @@
          */
         _shouldSetValueOnInput: function (valueForInput) {
             return !!valueForInput || valueForInput === 0;
+        },
+        /**
+         * @param {object} defaultTemplateVars
+         * @private
+         */
+        _setDefaultTemplateVars: setDefaultTemplateVars,
+        /**
+         * Handle setting the element (.el) class attributes.
+         * If there is a "className" property specified, this
+         * method doesn't do anything.
+         * @private
+         */
+        _setDefaultClasses: function () {
+            // If there is no class name specified, then we create one with the 'classDefaults' property
+            // and another class based on the fieldPrefix and fieldName properties
+            if (isUndefined(this.className)) {
+                this.$el.addClass(this.fieldPrefix + this.fieldName);
+                this.$el.addClass(this.classDefaults);
+            }
+        },
+        /**
+         * Define data attribute to identify the "el" element as a FormView field
+         * @private
+         */
+        _setFieldDataAttr: function () {
+            this.$el.attr('data-field', '');
         }
     }, {
         /**
@@ -1500,7 +1536,7 @@
             options = this.options = defaults(options || {}, this.options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
             FieldSetView.__super__.initialize.call(this, options);
-            this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
+            this._setDefaultClasses();
         },
         /**
          * Returns a prefix that the fieldset fields can use to create
@@ -1510,7 +1546,10 @@
          */
         getFieldPrefix: getFieldPrefix,
         template: _.template('<% if(obj && obj.label) { %><label class="fieldset-label">' +
-            '<strong><%= obj.label %></strong></label><% } %><fieldset data-fields=""></fieldset>')
+            '<strong><%= obj.label %></strong></label><% } %><fieldset data-fields=""></fieldset>'),
+        _setDefaultClasses: function () {
+            this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
+        }
     });
 
     /**
@@ -1530,7 +1569,7 @@
             options = this.options = defaults(options || {}, this.options);
             this.fieldSetName = options.fieldSetName || this.fieldSetName || options.schemaKey;
             CollectionFieldSetView.__super__.initialize.call(this, options);
-            this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
+            this._setDefaultClasses();
             return this;
         },
         /**
@@ -1539,7 +1578,10 @@
          * @memberOf Backbone.CollectionFieldSetView#
          * @return {string}
          */
-        getFieldPrefix: getFieldPrefix
+        getFieldPrefix: getFieldPrefix,
+        _setDefaultClasses: function () {
+            this.$el.addClass(this.className || ('fieldset fieldset-' + this.fieldSetName));
+        }
     });
 
 }(this));
