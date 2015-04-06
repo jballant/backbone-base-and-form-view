@@ -806,6 +806,52 @@
                 });
             });
 
+            describe('"assignTreeOptions" method', function () {
+                it('should assign the param object properties onto the "treeOptions" property', function () {
+                    var view = new Backbone.BaseView();
+                    var initialTreeOptions = {};
+                    var newTreeOptions = {
+                        foo: 1,
+                        bar: 2
+                    };
+                    view.subs.treeOptions = initialTreeOptions;
+                    view.subs.assignTreeOptions(newTreeOptions);
+                    expect(view.subs.treeOptions).toEqual(newTreeOptions);
+                });
+            });
+        });
+
+        describe('treeOptions', function () {
+            it('should be passed to all of a views descendants unless modified', function () {
+                var top = new Backbone.BaseView();
+                var aInit = jasmine.createSpy('Subview A init spy');
+                var bInit = jasmine.createSpy('Subview B init spy');
+                var cInit = jasmine.createSpy('Subview C init spy');
+                var extraTreeOptions = {extra: 'another tree option'};
+                var A = Backbone.BaseView.extend({
+                    initialize: aInit
+                });
+                var C = Backbone.Baseview.extend({
+                    initialze: cInit
+                });
+                var B = Backbone.BaseView.extend({
+                    initialize: bInit,
+                    addC: function () {
+                        this.subs.createWithConfig('c', { construct: C, singleton: true });
+                    }
+                });
+                var treeOpts = { foo: 123, bar: 'some string' };
+                var otherOptions = { bar: 'some other string', baz: true };
+                var finalOptions = _.extend({}, treeOpts, otherOptions);
+                top.subs.assignTreeOptions(treeOpts);
+                top.subs.addConfig('a', {construct: Backbone.BaseView, singleton: true});
+                top.subs.addConfig('b', {construct: Backbone.BaseView, singleton: true});
+                top.subs.createFromKeys(['a', 'b'], otherOptions);
+                expect(aInit.calls.mostRecent().args[0]).toEqual(finalOptions);
+                expect(bInit.calls.mostRecent().args[0]).toEqual(finalOptions);
+                top.subs.get('b').subs.assignTreeOptions(extraTreeOptions);
+                expect(cInit.calls.mostRecent().args[0]).toEqual(_.extend(finalOptions, extraTreeOptions));
+            });
         });
 
         describe('"place" method', function () {
@@ -1235,6 +1281,18 @@
                 });
             });
 
+            describe('isRendering', function () {
+                it('should return true only if the render method has be invoked but not finished yet', function () {
+                    var view = new (Backbone.BaseView.extend({
+                        render: function () {
+                            expect(this.isRendering()).toBe(true);
+                        }
+                    }))();
+                    expect(view.isRendering()).toBe(false);
+                    view.render();
+                    expect(view.isRendering()).toBe(false);
+                });
+            });
         });
         describe('Built-in events', function () {
             it('should trigger an event before and after a view is rendered', function () {
