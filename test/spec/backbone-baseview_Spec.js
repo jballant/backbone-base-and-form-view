@@ -822,17 +822,16 @@
         });
 
         describe('treeOptions', function () {
-            it('should be passed to all of a views descendants unless modified', function () {
+            it('should be passed to all of a views descendants as options on init unless modified', function () {
                 var top = new Backbone.BaseView();
                 var aInit = jasmine.createSpy('Subview A init spy');
                 var bInit = jasmine.createSpy('Subview B init spy');
                 var cInit = jasmine.createSpy('Subview C init spy');
-                var extraTreeOptions = {extra: 'another tree option'};
                 var A = Backbone.BaseView.extend({
                     initialize: aInit
                 });
-                var C = Backbone.Baseview.extend({
-                    initialze: cInit
+                var C = Backbone.BaseView.extend({
+                    initialize: cInit
                 });
                 var B = Backbone.BaseView.extend({
                     initialize: bInit,
@@ -843,14 +842,32 @@
                 var treeOpts = { foo: 123, bar: 'some string' };
                 var otherOptions = { bar: 'some other string', baz: true };
                 var finalOptions = _.extend({}, treeOpts, otherOptions);
+                var extraTreeOptions = {extra: 'another tree option'};
                 top.subs.assignTreeOptions(treeOpts);
-                top.subs.addConfig('a', {construct: Backbone.BaseView, singleton: true});
-                top.subs.addConfig('b', {construct: Backbone.BaseView, singleton: true});
+                top.subs.addConfig('a', {construct: A, singleton: true});
+                top.subs.addConfig('b', {construct: B, singleton: true});
                 top.subs.createFromKeys(['a', 'b'], otherOptions);
+                expect(aInit).toHaveBeenCalled();
                 expect(aInit.calls.mostRecent().args[0]).toEqual(finalOptions);
+                expect(bInit).toHaveBeenCalled();
                 expect(bInit.calls.mostRecent().args[0]).toEqual(finalOptions);
                 top.subs.get('b').subs.assignTreeOptions(extraTreeOptions);
-                expect(cInit.calls.mostRecent().args[0]).toEqual(_.extend(finalOptions, extraTreeOptions));
+                top.subs.get('b').addC();
+                expect(cInit.calls.mostRecent().args[0]).toEqual(_.extend(treeOpts, extraTreeOptions));
+            });
+            it('should pass treeOptions to a BaseView instance "assignTreeOptions" method when a view instance is added', function () {
+                var top = new Backbone.BaseView();
+                var treeOpts = { foo: 123, bar: 'some string' };
+                var a = new Backbone.BaseView();
+                spyOn(a, 'assignTreeOptions').and.callThrough();
+                spyOn(a.subs, 'assignTreeOptions');
+                top.subs.assignTreeOptions(treeOpts);
+                expect(top.subs.treeOptions).toEqual(treeOpts);
+                top.subs.addInstance('a', a);
+                expect(a.assignTreeOptions).toHaveBeenCalled();
+                expect(a.assignTreeOptions.calls.mostRecent().args[0]).toEqual(treeOpts);
+                expect(a.subs.assignTreeOptions).toHaveBeenCalled();
+                expect(a.subs.assignTreeOptions.calls.mostRecent().args[0]).toEqual(treeOpts);
             });
         });
 

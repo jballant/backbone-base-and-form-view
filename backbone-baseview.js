@@ -38,10 +38,7 @@
         eventViewAppendedToDOM = 'viewAppendedToDOM',
         eventViewRenderFailure = 'viewRenderFailure',
         eventViewDidInitialize = 'viewDidInitialize',
-    // Event bubbling options
-        shouldTriggerNoViewPath = 1,
-        shouldTriggerWithViewPath = 2,
-        shouldTriggerBoth = 3,
+        eventViewAddedAsSubView = 'viewAddedAsSubView',
     // BaseView local reference
         BaseView,
         /**
@@ -841,6 +838,18 @@
             _.extend(this.treeOptions, options);
             return this;
         },
+        /**
+         * Get an options for a subview type that includes config options
+         * and treeOptions.
+         * @memberOf SubViewManager#
+         * @param {string} key
+         * @param {object} additionalOptions
+         * @returns {object}
+         */
+        getOptionsForKey: function (key, additionalOptions) {
+            var config = key && this.config[key] ? this.config[key] : {};
+            return _.extend({}, this.treeOptions || {}, config.options || {}, additionalOptions || {});
+        },
         _render : function (subViews, place, clearLocations) {
             var $appendTo,
                 i = -1,
@@ -985,8 +994,11 @@
                 this._subViewsByType[key].push(instance);
             }
             this.newest = instance;
+            if (instance instanceof BaseView && this.treeOptions) {
+                instance.assignTreeOptions(this.treeOptions);
+            }
             if (!silent) {
-                instance.trigger('addedAsSubView');
+                instance.trigger(eventViewAddedAsSubView);
                 return this.trigger('add', instance).trigger('add:' + key, instance);
             }
             return this;
@@ -1000,7 +1012,7 @@
                 return undefined;
             }
 
-            options = _.extend({}, this.treeOptions || {}, config.options || {}, options || {});
+            options = this.getOptionsForKey(key, options);
 
             Construct = (typeof Construct === 'string') ? stringToObj(Construct) : Construct;
             if (!Construct) {
@@ -1065,7 +1077,8 @@
      *      Options that will be passed to subviews and their descendants on initialize. Can be
      *      used to pass configuration should be shared for the entire tree. Subviews have the
      *      ability to modify the options for their descendants without affecting the parent or
-     *      siblings.
+     *      siblings. Note that if you add a subview instance that was created already, treeOptions
+     *      will only passed to "assignTreeOptions" method.
      * @property {function(new:SubViewManager)} SubViewManager
      */
     BaseView = Backbone.BaseView = View.extend({
@@ -1131,11 +1144,21 @@
             this.trigger(eventViewDidInitialize);
         },
         /**
+         * Assign tree options to this view's subview
+         * hierarchy.
+         * @param {object} options
+         */
+        assignTreeOptions : function (options) {
+            this.subs.assignTreeOptions(options);
+            return this;
+        },
+        /**
          * A basic render function that looks for a template
          * function, calls the template with the result of
          * the 'templateVars' property, and then set the html
          * to the result. Then, subviews are rendered and then
          * appended to their locations.
+         * @override
          * @memberOf Backbone.BaseView#
          * @return {Backbone.BaseView}
          */
@@ -1186,6 +1209,7 @@
          * Overrides Backbone.View#remove in order
          * to remove SubViews as well, in order to
          * prevent memory leaks.
+         * @override
          * @memberOf Backbone.BaseView#
          * @return {Backbone.BaseView}
          */
@@ -1222,7 +1246,7 @@
          * @return {Backbone.BaseView}
          */
         triggerBubble: function (event) {
-            triggerBubble(this, event, slice.call(arguments, 1), shouldTriggerBoth);
+            triggerBubble(this, event, slice.call(arguments, 1));
             return this;
         },
         /**
@@ -1234,7 +1258,7 @@
          * @returns {Backbone.BaseView}
          */
         triggerBubbleNamespaced: function (event) {
-            triggerBubble(this, event, slice.call(arguments, 1), shouldTriggerWithViewPath);
+            triggerBubble(this, event, slice.call(arguments, 1), true);
             return this;
         },
         /**
@@ -1374,13 +1398,14 @@
          * as a cascading event, where it will
          * trigger an ascending event that is
          * namespaced with subview types.
+         * @override
          * @param {string} event
          * @param {..*} [args]
          * @returns {Backbone.BaseView}
          */
         trigger: function (event) {
             if (eventSettings.isAutoBubbleEvent(event)) {
-                return triggerBubble(this, event, slice.call(arguments, 1), shouldTriggerWithViewPath);
+                return triggerBubble(this, event, slice.call(arguments, 1), true);
             }
             var args = arguments, a1 = args[1], a2 = args[2], a3 = args[3],
                 len = args.length;
@@ -1496,13 +1521,11 @@
     }
 
     // triggers events on a view and than each of it's ancestors in
-    // ascending order. If useViewPathNamespacing is true, instead
-    // of triggering the same exact event, uses the viewpath to
-    // namespace the event.
-    function triggerBubble(view, event, args, viewPathNameSpacing) {
+    // ascending order. If onlyTriggerNamespaced param is true, then
+    // only the viewPath namespaced event will be triggered.
+    function triggerBubble(view, event, args, onlyTriggerNamespaced) {
         var stopPropagation,
-            viewPath = viewPathNameSpacing > 1 ? view.getViewPath() : null,
-            triggerWithoutViewPath = viewPathNameSpacing % 2 === 1,
+            viewPath = view.getViewPath(),
             ancestor;
         args.unshift(event);
         args.push(view);
@@ -1513,7 +1536,7 @@
                 // event with the view path for namespacing
                 triggerBubbledEventWithPath(ancestor, args, viewPath);
             }
-            if (triggerWithoutViewPath) {
+            if (!onlyTriggerNamespaced) {
                 _trigger.apply(ancestor, args);
             }
             // If the current ancestor calls stopEvent with
