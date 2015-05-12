@@ -680,8 +680,9 @@
             if (!rowOpts) {
                 rowOpts = (isFunction(rowConfig.options)) ? rowConfig.options.call(self) : rowConfig.options;
             }
+            rowOpts = rowOpts || {};
             rowConfig.construct = self.rowConstruct;
-            rowConfig.options = rowOpts || {};
+            rowConfig.options = rowOpts;
             rowConfig.location = self.rowWrapper;
             rowConfig.singleton = false;
             rowSchema = self.rowSchema || rowOpts.schema;
