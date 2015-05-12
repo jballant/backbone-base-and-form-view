@@ -890,7 +890,7 @@
             if (subView instanceof BaseView) {
                 subView.place($location);
             } else {
-                subView.appendTo($location);
+                subView.$el.appendTo($location);
             }
         },
         _addInstance : function (key, subViews, singleton) {
