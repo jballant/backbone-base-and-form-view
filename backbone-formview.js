@@ -44,6 +44,7 @@
         isString = _.isString,
         result = _.result,
         toStr = String,
+        defaultUpdateEvents = ['blur'],
 
         // Form Disable Mixin -- added to FormView prototype's
         // in order to allow disabling and enabling fields.
@@ -724,6 +725,7 @@
      * @property {object} [options.inputAttrs] Object with attributes to set on the input element
      * @property {object} [options.setOpts] Options you would like to pass when model.set is called (e.g. silent, validate)
      * @property {string} [options.placeholder] Placeholder text for the input
+     * @property {array<string>} [options.updateEvents] array of event names on which to call onUserUpdate (defaults to ['blur'])
      * @property {boolean} [options.twoWay]
      *      If you would like this field to re-render the input when model is updated by something other
      *      than this view, in addition to the normal behavior of the view updating the model
@@ -739,13 +741,14 @@
         inputWrapper: '[data-input]:first',
         disabledDataKey: 'formViewDisabled',
         events: function () {
-            var events = {};
-            events['blur ' + this.elementType] = 'onUserUpdate';
-            return events;
+            return _.chain(this._updateEvents).map(function (eventName) {
+                return [eventName + ' ' + this.elementType, 'onUserUpdate'];
+            }.bind(this)).object().value();
         },
         initialize: function (options) {
             options = this.options = defaults(options || {}, this.options);
             extend(this, {
+                _updateEvents: options.updateEvents || defaultUpdateEvents.concat(),
                 templateVars : options.templateVars || this.templateVars || {},
                 fieldName : options.fieldName || this.fieldName || options.schemaKey,
                 elementType : options.elementType || this.elementType,
