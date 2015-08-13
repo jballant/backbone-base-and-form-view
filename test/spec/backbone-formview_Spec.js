@@ -663,6 +663,22 @@
                     expect(testField.model.get(testField.fieldName)).toBe(testVal);
                     Backbone.fields.FieldView.prototype.setModelAttrs = old;
                 });
+                it('should happen according to options.updateEvents when specified', function () {
+                    var myModel = new Backbone.Model({foo: 'bar'});
+                    var $input;
+                    var myFieldView;
+                    spyOn(Backbone.fields.FieldView.prototype, 'onUserUpdate');
+                    myFieldView = new Backbone.fields.FieldView({
+                        fieldName: 'foo',
+                        updateEvents: ['keyup'],
+                        model: myModel
+                    });
+                    myFieldView.render();
+                    $input = myFieldView.$('input');
+                    $input.val('baz');
+                    $input.trigger('keyup');
+                    expect(myFieldView.onUserUpdate).toHaveBeenCalled();
+                });
             });
         });
 
